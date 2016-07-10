@@ -1,8 +1,13 @@
+BUILD_DIR=_build
+CFLAGS=-warn-error,A
+SRC=src
+
 all:
-	corebuild main.native -cflags -warn-error,A -build-dir bin -I src
-	ln -fs ./bin/src/main.native main.exe # TODO a better way to do this?
+	corebuild -cflags $(CFLAGS) -I $(SRC) -build-dir $(BUILD_DIR) main.native
+	ln -fs ./$(BUILD_DIR)/$(SRC)/main.native main.exe # TODO a better way to do this?
 
 clean:
-	rm -rf bin main.exe
+	corebuild -build-dir $(BUILD_DIR) -clean
+	rm main.exe
 
 .PHONY: clean

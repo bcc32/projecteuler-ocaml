@@ -1,4 +1,4 @@
-S *
-B _build
+S src
+B bin/src
 PKG core
 PKG ppx_jane

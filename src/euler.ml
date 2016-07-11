@@ -1,4 +1,5 @@
 open Core.Std
+open Bignum.Std
 
 (* run length encoding (item, count) *)
 let rec run_length_encode lst =
@@ -41,6 +42,21 @@ let digits_of_string n =
   let zero = Char.to_int '0' in
   String.to_list_rev n
   |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
+
+let sum_digits ?(base = Bigint.of_int 10) n =
+  let open Bigint in
+  let rec iter n acc =
+    if n = zero
+    then acc
+    else iter (n / base) (n % base + acc)
+  in
+  iter n zero
+
+let factorial n =
+  Sequence.range 2 n
+  |> Sequence.fold ~init:Bigint.one ~f:(fun acc x ->
+    Bigint.(acc * of_int x)
+  )
 
 (* returns true iff the argument is prime *)
 let is_prime =
@@ -91,8 +107,11 @@ let prime_factor n = run_length_encode (factor n)
 (* return a (non-sorted) list of divisors of n *)
 let divisors n =
   let mult_aux p a lst =
-    let powers = (List.map ~f:(fun k -> Int.pow p k) (List.range 0 a)) in
-    ListLabels.flatten begin
+    let powers =
+      List.range ~stop:`inclusive 0 a
+      |> List.map ~f:(Int.pow p)
+    in
+    List.concat begin
       List.map ~f:(fun pp -> List.map ~f:(fun x -> pp * x) lst) powers
     end
   in

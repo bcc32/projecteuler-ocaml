@@ -1,4 +1,5 @@
 open Core.Std
+open Bignum.Std
 
 (* Utility *)
 val run_length_encode : 'a list -> ('a * int) list
@@ -6,6 +7,8 @@ val run_length_encode : 'a list -> ('a * int) list
 (* Number Theory *)
 val digits_of_int : int -> int list
 val digits_of_string : string -> int list
+val sum_digits : ?base:Bigint.t -> Bigint.t -> Bigint.t
+val factorial : int -> Bigint.t
 val is_prime : int -> bool
 val next_probable_prime : int -> int
 val next_prime : int -> int

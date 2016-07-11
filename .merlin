@@ -1,4 +1,5 @@
 S src
-B bin/src
+B _build/src
 PKG core
+PKG bignum
 PKG ppx_jane

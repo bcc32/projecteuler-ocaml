@@ -3,9 +3,10 @@ open Bignum.Std
 
 (* Utility *)
 val run_length_encode : 'a list -> ('a * int) list
+val is_palindrome : 'a list -> equal:('a -> 'a -> bool) -> bool
 
 (* Number Theory *)
-val digits_of_int : int -> int list
+val digits_of_int : ?base:int -> int -> int list
 val digits_of_string : string -> int list
 val sum_digits : ?base:Bigint.t -> Bigint.t -> Bigint.t
 val factorial : int -> Bigint.t

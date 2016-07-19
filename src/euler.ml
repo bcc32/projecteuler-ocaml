@@ -19,24 +19,19 @@ let rec run_length_encode lst =
   | [] -> []
   | (hd::_) -> (hd, count hd lst 0) :: run_length_encode (drop hd lst)
 
+let is_palindrome l ~equal =
+  List.equal ~equal l (List.rev l)
+
 (** NUMBER THEORY **)
 
 (* returns the digits of the number *)
-let digits_of_int n =
-  let rec aux n d = if n = 0 then d else aux (n / 10) (n mod 10 :: d) in
+let digits_of_int ?(base = 10) n =
+  let rec aux n d =
+    if n = 0
+    then d
+    else aux (n / base) (n mod base :: d)
+  in
   aux n []
-
-(* XXX deprecated
-   let digits_of_big_int n =
-   let big_ten = Big_int.big_int_of_int 10 in
-   let rec aux n d =
-   if Big_int.eq_big_int n Big_int.zero_big_int then
-   d
-   else
-   let (q, r) = Big_int.quomod_big_int n big_ten in
-   aux q (Big_int.int_of_big_int r :: d)
-   in aux n []
-*)
 
 let digits_of_string n =
   let zero = Char.to_int '0' in

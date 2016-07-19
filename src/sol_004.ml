@@ -3,14 +3,12 @@ open Core.Std
 module M = struct
   let problem_number = 4
 
-  let is_palindrome s =
-    s = String.rev s
-
   let main () =
     let ans = ref 0 in
     for i = 100 to 999 do
       for j = 100 to 999 do
-        if is_palindrome (Int.to_string (i * j)) && i * j > !ans
+        let digits = i * j |> Euler.digits_of_int in
+        if Euler.is_palindrome ~equal:Int.equal digits && i * j > !ans
         then ans := i * j
       done
     done;

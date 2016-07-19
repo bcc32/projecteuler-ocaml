@@ -21,6 +21,7 @@ let command =
     ; "20"    , Sol_020     .command
     ; "21"    , Sol_021     .command
     ; "25"    , Sol_025     .command
+    ; "29"    , Sol_029     .command
     ]
 
 let () =

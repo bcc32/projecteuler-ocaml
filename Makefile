@@ -4,13 +4,13 @@ PKGS=core,async,bignum
 SRC=src
 
 all:
-	corebuild \
-		-cflags $(CFLAGS) \
-		-I $(SRC) \
-		-pkgs $(PKGS) \
+	corebuild                 \
+		-cflags    $(CFLAGS)    \
+		-I         $(SRC)       \
+		-pkgs      $(PKGS)      \
 		-build-dir $(BUILD_DIR) \
 		main.native
-	ln -fs ./$(BUILD_DIR)/$(SRC)/main.native main.exe # TODO a better way to do this?
+	cp -f ./$(BUILD_DIR)/$(SRC)/main.native main.exe
 
 clean:
 	corebuild -build-dir $(BUILD_DIR) -clean

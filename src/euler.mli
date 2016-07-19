@@ -17,6 +17,7 @@ val factor : int -> int list
 val prime_factor : int -> (int * int) list
 val divisors : int -> int list
 val num_divisors : int -> int
+val fibonacci : Bigint.t Sequence.t
 
 (* Geometry *)
 val is_pythagorean_triple : int -> int -> int -> bool

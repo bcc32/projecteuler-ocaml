@@ -126,5 +126,10 @@ let divisors n =
 let num_divisors n =
   List.fold_left ~f:(fun acc (_, a) -> acc * (a + 1)) ~init:1 (prime_factor n)
 
+let fibonacci =
+  Sequence.unfold ~init:(Bigint.one, Bigint.one) ~f:(fun (a, b) ->
+    Some (a, (b, Bigint.(a + b)))
+  )
+
 (** GEOMETRY **)
 let is_pythagorean_triple a b c = a * a + b * b = c * c

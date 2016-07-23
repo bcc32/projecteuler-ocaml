@@ -126,5 +126,13 @@ let fibonacci =
     Some (a, (b, Bigint.(a + b)))
   )
 
+let binomial n r =
+  let top    = Sequence.range ~stop:`inclusive (r + 1) n in
+  let bottom = Sequence.range ~stop:`inclusive 1 (n - r) in
+  Sequence.zip top bottom
+  |> Sequence.fold ~init:Bigint.one ~f:(fun acc (t, b) ->
+    Bigint.(acc * of_int t / of_int b)
+  )
+
 (** GEOMETRY **)
 let is_pythagorean_triple a b c = a * a + b * b = c * c

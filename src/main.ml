@@ -17,6 +17,7 @@ let command =
     ; "10-mut", Sol_010_mut .command
     ; "11"    , Sol_011     .command
     ; "12"    , Sol_012     .command
+    ; "13"    , Sol_013     .command
     ; "14"    , Sol_014     .command
     ; "15"    , Sol_015     .command
     ; "16"    , Sol_016     .command

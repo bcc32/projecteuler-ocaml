@@ -15,6 +15,7 @@ let command =
     ; "10"    , Sol_010     .command
     ; "10-alt", Sol_010_alt .command
     ; "10-mut", Sol_010_mut .command
+    ; "11"    , Sol_011     .command
     ; "12"    , Sol_012     .command
     ; "14"    , Sol_014     .command
     ; "15"    , Sol_015     .command

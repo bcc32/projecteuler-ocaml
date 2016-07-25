@@ -2,4 +2,5 @@ S src
 B _build/src
 PKG core
 PKG bignum
+PKG re2
 PKG ppx_jane

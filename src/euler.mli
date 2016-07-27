@@ -4,6 +4,7 @@ open Bignum.Std
 (* Utility *)
 val run_length_encode : 'a list -> ('a * int) list
 val is_palindrome : 'a list -> equal:('a -> 'a -> bool) -> bool
+val permutations : cmp:('a -> 'a -> int) -> 'a list -> 'a list Sequence.t
 
 (* Number Theory *)
 val digits_of_int : ?base:int -> int -> int list

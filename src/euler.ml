@@ -134,5 +134,8 @@ let binomial n r =
     Bigint.(acc * of_int t / of_int b)
   )
 
+let natural_numbers ?(init = 0) () =
+  Sequence.unfold ~init ~f:(fun n -> Some (n, n + 1))
+
 (** GEOMETRY **)
 let is_pythagorean_triple a b c = a * a + b * b = c * c

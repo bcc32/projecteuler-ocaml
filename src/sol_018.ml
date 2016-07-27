@@ -21,7 +21,7 @@ module M = struct
         let max = t + Int.max b1 b2 in
         iter (b2 :: bs) ts (max :: acc)
       | _, [] -> acc
-      | _ -> failwiths "length mismatched" (bot, top)
+      | _ -> Error.failwiths "length mismatched" (bot, top)
                [%sexp_of: int list * int list]
     in
     iter bot top []

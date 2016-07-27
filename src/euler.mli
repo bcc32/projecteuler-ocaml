@@ -20,6 +20,7 @@ val divisors : int -> int list
 val num_divisors : int -> int
 val fibonacci : Bigint.t Sequence.t
 val binomial : int -> int -> Bigint.t
+val natural_numbers : ?init:int -> unit -> int Sequence.t
 
 (* Geometry *)
 val is_pythagorean_triple : int -> int -> int -> bool

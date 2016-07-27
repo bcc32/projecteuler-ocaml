@@ -1,6 +1,6 @@
 BUILD_DIR=_build
 CFLAGS=-warn-error,A
-PKGS=core,async,bignum,re2
+PKGS=core,core_extended,async,bignum,re2
 SRC=src
 
 all:

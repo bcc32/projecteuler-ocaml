@@ -83,14 +83,18 @@ let factorial n =
   )
 
 (* returns true iff the argument is prime *)
-let is_prime =
-  let rec aux i n =
-    match i with
-    | _ when i * i > n -> true
-    | _ when n mod i = 0 -> false
-    | 2 -> aux 3 n
-    | _ -> aux (i + 2) n
-  in aux 2
+let is_prime n =
+  if n < 2
+  then false
+  else (
+    let rec aux i =
+      match i with
+      | _ when i * i > n   -> true
+      | _ when n mod i = 0 -> false
+      | 2 -> aux 3
+      | _ -> aux (i + 2)
+    in aux 2
+  )
 
 let next_probable_prime n =
   match n mod 6 with

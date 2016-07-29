@@ -35,6 +35,7 @@ let command =
     ; "34"    , Sol_034     .command
     ; "35"    , Sol_035     .command
     ; "36"    , Sol_036     .command
+    ; "39"    , Sol_039     .command
     ; "48"    , Sol_048     .command
     ; "67"    , Sol_067     .command
     ]

@@ -9,6 +9,7 @@ val permutations : cmp:('a -> 'a -> int) -> 'a list -> 'a list Sequence.t
 (* Number Theory *)
 val digits_of_int : ?base:int -> int -> int list
 val digits_of_string : string -> int list
+val int_of_digits : ?base:int -> int Sequence.t -> int
 val sum_digits : ?base:Bigint.t -> Bigint.t -> Bigint.t
 val factorial : int -> int
 val factorial' : int -> Bigint.t

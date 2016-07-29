@@ -30,7 +30,7 @@ let next_permutation ~cmp a =
       then (
         let min_index = ref (i + 1) in
         for j = i + 2 to Array.length a - 1 do
-          if a.(i) < a.(j) && a.(j) < a.(!min_index)
+          if cmp a.(i) a.(j) < 0 && cmp a.(j) a.(!min_index) < 0
           then min_index := j
         done;
         Array.swap a i !min_index;
@@ -66,6 +66,9 @@ let digits_of_string n =
   let zero = Char.to_int '0' in
   String.to_list_rev n
   |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
+
+let int_of_digits ?(base = 10) ds =
+  Sequence.fold ds ~init:0 ~f:(fun acc n -> base * acc + n)
 
 let sum_digits ?(base = Bigint.of_int 10) n =
   let open Bigint in

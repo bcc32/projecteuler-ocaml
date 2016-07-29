@@ -10,7 +10,8 @@ val permutations : cmp:('a -> 'a -> int) -> 'a list -> 'a list Sequence.t
 val digits_of_int : ?base:int -> int -> int list
 val digits_of_string : string -> int list
 val sum_digits : ?base:Bigint.t -> Bigint.t -> Bigint.t
-val factorial : int -> Bigint.t
+val factorial : int -> int
+val factorial' : int -> Bigint.t
 val is_prime : int -> bool
 val next_probable_prime : int -> int
 val next_prime : int -> int

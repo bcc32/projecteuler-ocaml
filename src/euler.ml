@@ -77,7 +77,11 @@ let sum_digits ?(base = Bigint.of_int 10) n =
   iter n zero
 
 let factorial n =
-  Sequence.range 2 n
+  Sequence.range ~stop:`inclusive 2 n
+  |> Sequence.fold ~init:1 ~f:( * )
+
+let factorial' n =
+  Sequence.range ~stop:`inclusive 2 n
   |> Sequence.fold ~init:Bigint.one ~f:(fun acc x ->
     Bigint.(acc * of_int x)
   )

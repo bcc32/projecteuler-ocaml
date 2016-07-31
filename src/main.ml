@@ -40,7 +40,8 @@ let command =
     ; "42"    , Sol_042     .command
     ; "48"    , Sol_048     .command
     ; "67"    , Sol_067     .command
+    ; "bench" , Benchmark   .command
     ]
 
 let () =
-  Command.run ~version:"0.0.1" command
+  Command.run ~version:"0.0.2" command

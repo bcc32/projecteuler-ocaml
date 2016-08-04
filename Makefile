@@ -14,6 +14,6 @@ all:
 
 clean:
 	corebuild -build-dir $(BUILD_DIR) -clean
-	rm main.exe
+	rm -f main.exe
 
 .PHONY: clean

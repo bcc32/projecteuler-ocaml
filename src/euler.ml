@@ -54,77 +54,10 @@ let permutations ~cmp l =
 (** NUMBER THEORY **)
 
 (* returns the digits of the number *)
-let digits_of_int ?(base = 10) n =
-  let rec aux n d =
-    if n = 0
-    then d
-    else aux (n / base) (n mod base :: d)
-  in
-  aux n []
-
 let digits_of_string n =
   let zero = Char.to_int '0' in
   String.to_list_rev n
   |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
-
-let int_of_digits ?(base = 10) ds =
-  Sequence.fold ds ~init:0 ~f:(fun acc n -> base * acc + n)
-
-let sum_digits ?(base = Bigint.of_int 10) n =
-  let open Bigint in
-  let rec iter n acc =
-    if n = zero
-    then acc
-    else iter (n / base) (n % base + acc)
-  in
-  iter n zero
-
-let factorial n =
-  Sequence.range ~stop:`inclusive 2 n
-  |> Sequence.fold ~init:1 ~f:( * )
-
-let factorial' n =
-  Sequence.range ~stop:`inclusive 2 n
-  |> Sequence.fold ~init:Bigint.one ~f:(fun acc x ->
-    Bigint.(acc * of_int x)
-  )
-
-(* returns true iff the argument is prime *)
-let is_prime n =
-  if n < 2
-  then false
-  else (
-    let rec aux i =
-      match i with
-      | _ when i * i > n   -> true
-      | _ when n mod i = 0 -> false
-      | 2 -> aux 3
-      | _ -> aux (i + 2)
-    in aux 2
-  )
-
-let next_probable_prime n =
-  match n mod 6 with
-  | 1 -> n + 4
-  | 5 -> n + 2
-  | 0 -> n + 1
-  | 2 -> n + 1
-  | 3 -> n + 2
-  | 4 -> n + 1
-  | _ -> assert false
-
-(* return the smallest prime greater than the argument *)
-let rec next_prime n =
-  let next = next_probable_prime n in
-  if is_prime next
-  then next
-  else next_prime next
-
-let primes =
-  Sequence.unfold ~init:2 ~f:(fun p ->
-    let next = next_prime p in
-    Some (next, next)
-  )
 
 (* return a list of the prime factors of n *)
 let factor =
@@ -161,21 +94,141 @@ let divisors n =
 let num_divisors n =
   List.fold_left ~f:(fun acc (_, a) -> acc * (a + 1)) ~init:1 (prime_factor n)
 
-let fibonacci =
-  Sequence.unfold ~init:(Bigint.one, Bigint.one) ~f:(fun (a, b) ->
-    Some (a, (b, Bigint.(a + b)))
-  )
-
-let binomial n r =
-  let top    = Sequence.range ~stop:`inclusive (r + 1) n in
-  let bottom = Sequence.range ~stop:`inclusive 1 (n - r) in
-  Sequence.zip top bottom
-  |> Sequence.fold ~init:Bigint.one ~f:(fun acc (t, b) ->
-    Bigint.(acc * of_int t / of_int b)
-  )
-
-let natural_numbers ?(init = 0) () =
-  Sequence.unfold ~init ~f:(fun n -> Some (n, n + 1))
-
 (** GEOMETRY **)
 let is_pythagorean_triple a b c = a * a + b * b = c * c
+
+module Number_theory = struct
+  module type S = sig
+    type int
+    val range
+      :  ?stride:int
+      -> ?start:[ `inclusive | `exclusive ]
+      -> ?stop:[ `exclusive | `inclusive ]
+      -> int -> int -> int Sequence.t
+    val digits_of_int : ?base:int -> int -> int list
+    val int_of_digits : ?base:int -> int Sequence.t -> int
+    val sum_digits : ?base:int -> int -> int
+    val factorial : int -> int
+    val is_prime : int -> bool
+    val next_probable_prime : int -> int
+    val next_prime : int -> int
+    val primes : int Sequence.t
+    val fibonacci : int Sequence.t
+    val binomial : int -> int -> int
+    val natural_numbers : ?init:int -> unit -> int Sequence.t
+  end
+
+  module Make(Int : Int_intf.S) : S with type int = Int.t = struct
+    open Int.O
+
+    type int = Int.t
+
+    let one  = Int.one
+    let two  = of_int_exn 2
+    let four = of_int_exn 4
+
+    let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
+      let init =
+        match start with
+        | `inclusive -> a
+        | `exclusive -> a + stride
+      in
+      let (<=) =
+        match stop with
+        | `inclusive -> (<=)
+        | `exclusive -> (<)
+      in
+      let (<=) left right =
+        match Int.sign stride with
+        | Neg -> right <= left
+        | Pos -> left  <= right
+        | Zero -> invalid_arg "stride is zero"
+      in
+      Sequence.unfold ~init ~f:(fun n ->
+        if n <= b
+        then Some (n, n + stride)
+        else None)
+
+    let digits_of_int ?(base = of_int_exn 10) n =
+      let rec aux n d =
+        if n = zero
+        then d
+        else aux (n / base) (n % base :: d)
+      in
+      aux n []
+
+    let int_of_digits ?(base = of_int_exn 10) ds =
+      Sequence.fold ds ~init:zero ~f:(fun acc n -> base * acc + n)
+
+    let sum_digits ?(base = of_int_exn 10) n =
+      let rec iter n acc =
+        if n = zero
+        then acc
+        else iter (n / base) (n % base + acc)
+      in
+      iter n zero
+
+    let factorial n =
+      Sequence.unfold ~init:two ~f:(fun s -> Some (s, Int.succ s))
+      |> Sequence.take_while ~f:((>=) n)
+      |> Sequence.fold ~init:one ~f:( * )
+
+    let next_probable_prime n =
+      match n % of_int_exn 6 |> Int.to_int_exn with
+      | 1 -> n + four
+      | 5 -> n + two
+      | 0 -> Int.succ n
+      | 2 -> Int.succ n
+      | 3 -> n + two
+      | 4 -> Int.succ n
+      | _ -> assert false
+
+    let is_prime n =
+      if n <= one
+      then false
+      else (
+        let rec aux i =
+          if i * i > n
+          then true
+          else if n % i = zero
+          then false
+          else aux (next_probable_prime i)
+        in aux (of_int_exn 2))
+
+    let rec next_prime n =
+      let next = next_probable_prime n in
+      if is_prime next
+      then next
+      else next_prime next
+
+    let primes =
+      Sequence.unfold ~init:two ~f:(fun p ->
+        let next = next_prime p in
+        Some (next, next))
+
+    let fibonacci =
+      Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
+
+    let binomial n r =
+      let top    = range ~stop:`inclusive (r + one) n in
+      let bottom = range ~stop:`inclusive one (n - r) in
+      Sequence.zip top bottom
+      |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
+
+    let natural_numbers ?(init = zero) () =
+      Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
+  end
+end
+
+module Int    = Number_theory.Make(Int)
+module Bigint = Number_theory.Make(
+struct
+  include Bigint
+  let num_bits = 0
+  let min_value = zero
+  let max_value = zero
+  let shift_right_logical _t _b =
+    raise_s [%message "unimplemented" "shift_right_logical"]
+  let to_int64 _t =
+    raise_s [%message "unimplemented" "to_int64"]
+end)

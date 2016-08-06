@@ -42,6 +42,7 @@ let command =
     ; "46"    , Sol_046     .command
     ; "47"    , Sol_047     .command
     ; "48"    , Sol_048     .command
+    ; "52"    , Sol_052     .command
     ; "55"    , Sol_055     .command
     ; "56"    , Sol_056     .command
     ; "67"    , Sol_067     .command

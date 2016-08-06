@@ -7,7 +7,7 @@ module M = struct
     let ans = ref 0 in
     for i = 100 to 999 do
       for j = 100 to 999 do
-        let digits = i * j |> Euler.digits_of_int in
+        let digits = i * j |> Euler.Int.digits_of_int in
         if Euler.is_palindrome ~equal:Int.equal digits && i * j > !ans
         then ans := i * j
       done

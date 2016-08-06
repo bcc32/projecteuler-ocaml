@@ -5,11 +5,10 @@ module M = struct
   let problem_number = 25
 
   let main () =
-    Sequence.findi Euler.fibonacci ~f:(fun _ f ->
-      String.length (Bigint.to_string f) >= 1000
-    )
+    Sequence.findi Euler.Bigint.fibonacci ~f:(fun _ f ->
+      String.length (Bigint.to_string f) >= 1000)
     |> Option.value_exn
-    |> fst
+    |> Tuple2.get1
     |> succ
     |> printf "%d\n"
 end

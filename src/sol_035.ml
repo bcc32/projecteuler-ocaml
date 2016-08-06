@@ -9,13 +9,13 @@ module M = struct
     |> Doubly_linked.move_to_front ds
 
   let prime_circle n =
-    let digits = Euler.digits_of_int n |> Doubly_linked.of_list in
+    let digits = Euler.Int.digits_of_int n |> Doubly_linked.of_list in
     let len = Doubly_linked.length digits in
     let results = Array.create n ~len in
     with_return (fun { return } ->
       for i = 0 to len - 1 do
-        let n = Doubly_linked.to_sequence digits |> Euler.int_of_digits in
-        if Euler.is_prime n
+        let n = Doubly_linked.to_sequence digits |> Euler.Int.int_of_digits in
+        if Euler.Int.is_prime n
         then (
           results.(i) <- n;
           rotate digits

@@ -6,7 +6,7 @@ module M = struct
   let main () =
     let f n = n |> Euler.prime_factor |> List.length |> Int.equal 4 in
     let numbers =
-      Euler.natural_numbers ~init:1 ()
+      Euler.Int.natural_numbers ~init:1 ()
       |> Sequence.unfold_with ~init:0 ~f:(fun s n ->
         let consec_ok = if f n then s + 1 else 0 in
         Yield ((n, consec_ok), consec_ok))

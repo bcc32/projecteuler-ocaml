@@ -14,9 +14,8 @@ module M = struct
 
   let abundant_numbers =
     lazy (
-      Euler.natural_numbers ~init:12 ()
+      Sequence.range 12 limit ~stop:`inclusive
       |> Sequence.filter ~f:is_abundant
-      |> Sequence.take_while ~f:((>=) limit)
       |> Sequence.to_list
     )
 

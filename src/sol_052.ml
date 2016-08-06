@@ -5,7 +5,7 @@ module M = struct
 
   let same_digits n =
     let sort_digits n =
-      Euler.digits_of_int n
+      Euler.Int.digits_of_int n
       |> List.sort ~cmp:Int.compare
     in
     let n_digits = sort_digits n in
@@ -15,7 +15,7 @@ module M = struct
     |> List.for_all ~f:(List.equal ~equal:Int.equal n_digits)
 
   let main () =
-    Euler.natural_numbers ~init:1 ()
+    Euler.Int.natural_numbers ~init:1 ()
     |> Sequence.find ~f:same_digits
     |> Option.value_exn
     |> printf "%d\n"

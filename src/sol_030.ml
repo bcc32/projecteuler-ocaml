@@ -9,10 +9,9 @@ module M = struct
   let main () =
     Sequence.range 2 (Int.pow 10 max_digits)
     |> Sequence.filter ~f:(fun n ->
-      Euler.digits_of_int n
+      Euler.Int.digits_of_int n
       |> List.sum (module Int) ~f:(Fn.flip Int.pow 5)
-      |> (=) n
-    )
+      |> Int.equal n)
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
 end

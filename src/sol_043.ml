@@ -23,7 +23,7 @@ module M = struct
     |> Euler.permutations ~cmp:Int.compare
     |> Sequence.filter ~f:check_digits
     |> Sequence.sum (module Int)
-         ~f:(fun d -> Euler.int_of_digits (Sequence.of_list d))
+         ~f:(fun d -> Euler.Int.int_of_digits (Sequence.of_list d))
     |> printf "%d\n"
 end
 

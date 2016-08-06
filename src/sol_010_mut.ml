@@ -23,7 +23,7 @@ module M = struct
     then (
       if is_prime p
       then mark p (p * p);
-      sieve (Euler.next_probable_prime p)
+      sieve (Euler.Int.next_probable_prime p)
     )
 
   let main () =
@@ -33,8 +33,7 @@ module M = struct
     Array.foldi primes ~init:0 ~f:(fun n acc is_prime ->
       if is_prime
       then acc + n
-      else acc
-    )
+      else acc)
     |> printf "%d\n"
 end
 

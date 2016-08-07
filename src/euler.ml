@@ -232,3 +232,41 @@ struct
   let to_int64 _t =
     raise_s [%message "unimplemented" "to_int64"]
 end)
+
+module Numerics = struct
+  module type Real_intf = sig
+    type t
+    val abs : t -> t
+    val (+)   : t -> t -> t
+    val (-)   : t -> t -> t
+    val ( * ) : t -> t -> t
+    val (/)   : t -> t -> t
+
+    include Comparable.S with type t := t
+  end
+
+  module type S = sig
+    type real
+    val newton's_method
+      :  f:(real -> real)
+      -> f':(real -> real)
+      -> epsilon:real
+      -> init:real
+      -> real
+  end
+
+  module Make(Real : Real_intf) : S with type real = Real.t = struct
+    open Real
+
+    type real = Real.t
+
+    let rec newton's_method ~f ~f' ~epsilon ~init =
+      let delta = f init / f' init in
+      if abs delta < epsilon
+      then init
+      else newton's_method ~f ~f' ~epsilon ~init:(init - delta)
+  end
+end
+
+module Float  = Numerics.Make(Float)
+module Bignum = Numerics.Make(Bignum)

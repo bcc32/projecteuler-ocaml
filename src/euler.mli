@@ -42,3 +42,31 @@ end
 
 module Int    : Number_theory.S with type int = int
 module Bigint : Number_theory.S with type int = Bigint.t
+
+module Numerics : sig
+  module type Real_intf = sig
+    type t
+    val abs : t -> t
+    val (+)   : t -> t -> t
+    val (-)   : t -> t -> t
+    val ( * ) : t -> t -> t
+    val (/)   : t -> t -> t
+
+    include Comparable.S with type t := t
+  end
+
+  module type S = sig
+    type real
+    val newton's_method
+      :  f:(real -> real)
+      -> f':(real -> real)
+      -> epsilon:real
+      -> init:real
+      -> real
+  end
+
+  module Make(Real : Real_intf) : S
+end
+
+module Float  : Numerics.S with type real = float
+module Bignum : Numerics.S with type real = Bignum.t

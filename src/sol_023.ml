@@ -7,8 +7,8 @@ module M = struct
 
   let is_abundant n =
     let divisor_sum =
-      Euler.divisors n
-      |> List.fold ~init:0 ~f:(+)
+      Euler.Int.divisors n
+      |> List.sum (module Int) ~f:Fn.id
     in
     divisor_sum > 2 * n
 

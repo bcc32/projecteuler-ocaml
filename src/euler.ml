@@ -51,77 +51,44 @@ let permutations ~cmp l =
   in
   Sequence.shift_right next_permutations (Array.to_list a)
 
-(** NUMBER THEORY **)
-
 (* returns the digits of the number *)
 let digits_of_string n =
   let zero = Char.to_int '0' in
   String.to_list_rev n
   |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
 
-(* return a list of the prime factors of n *)
-let factor =
-  let rec aux i n =
-    match i with
-    | _ when i * i > n -> if n > 1 then [n] else []
-    | _ when n mod i = 0 -> i :: aux i (n / i)
-    | 2 -> aux 3 n
-    | _ -> aux (i + 2) n
-  in aux 2
-
-(* return a list of the prime factors of n with multiplicities *)
-let prime_factor n = run_length_encode (factor n)
-
-(* return a (non-sorted) list of divisors of n *)
-let divisors n =
-  let mult_aux p a lst =
-    let powers =
-      List.range ~stop:`inclusive 0 a
-      |> List.map ~f:(Int.pow p)
-    in
-    List.concat begin
-      List.map ~f:(fun pp -> List.map ~f:(fun x -> pp * x) lst) powers
-    end
-  in
-  let rec div_aux pfs lst =
-    match pfs with
-    | [] -> lst
-    | ((p, a)::tl) ->
-      div_aux tl (mult_aux p a lst)
-  in div_aux (prime_factor n) [1]
-
-(* [num_divisors n] returns the number of divisors of n *)
-let num_divisors n =
-  List.fold_left ~f:(fun acc (_, a) -> acc * (a + 1)) ~init:1 (prime_factor n)
-
 (** GEOMETRY **)
 let is_pythagorean_triple a b c = a * a + b * b = c * c
 
 module Number_theory = struct
   module type S = sig
-    type int
+    type integer
     val range
-      :  ?stride:int
+      :  ?stride:integer
       -> ?start:[ `inclusive | `exclusive ]
       -> ?stop:[ `exclusive | `inclusive ]
-      -> int -> int -> int Sequence.t
-    val digits_of_int : ?base:int -> int -> int list
-    val int_of_digits : ?base:int -> int Sequence.t -> int
-    val sum_digits : ?base:int -> int -> int
-    val factorial : int -> int
-    val is_prime : int -> bool
-    val next_probable_prime : int -> int
-    val next_prime : int -> int
-    val primes : int Sequence.t
-    val fibonacci : int Sequence.t
-    val binomial : int -> int -> int
-    val natural_numbers : ?init:int -> unit -> int Sequence.t
+      -> integer -> integer -> integer Sequence.t
+    val digits_of_int : ?base:integer -> integer -> integer list
+    val int_of_digits : ?base:integer -> integer Sequence.t -> integer
+    val sum_digits : ?base:integer -> integer -> integer
+    val factorial : integer -> integer
+    val is_prime : integer -> bool
+    val next_probable_prime : integer -> integer
+    val next_prime : integer -> integer
+    val primes : integer Sequence.t
+    val fibonacci : integer Sequence.t
+    val binomial : integer -> integer -> integer
+    val natural_numbers : ?init:integer -> unit -> integer Sequence.t
+    val factor : integer -> integer list
+    val prime_factor : integer -> (integer * int) list
+    val divisors : integer -> integer list
+    val num_divisors : integer -> integer
   end
 
-  module Make(Int : Int_intf.S) : S with type int = Int.t = struct
+  module Make(Int : Int_intf.S) : S with type integer = Int.t = struct
     open Int.O
 
-    type int = Int.t
+    type integer = Int.t
 
     let one  = Int.one
     let two  = of_int_exn 2
@@ -217,6 +184,40 @@ module Number_theory = struct
 
     let natural_numbers ?(init = zero) () =
       Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
+
+    let factor =
+      let rec aux i n =
+        match i with
+        | _ when i * i > n -> if n > one then [n] else []
+        | _ when n % i = zero -> i :: aux i (n / i)
+        | i -> aux (next_probable_prime i) n
+      in
+      aux two
+
+    let prime_factor n = run_length_encode (factor n)
+
+    let divisors n =
+      let mult_aux p a lst =
+        let powers =
+          Sequence.range ~stop:`inclusive 0 a
+          |> Sequence.map ~f:of_int_exn
+          |> Sequence.map ~f:(Int.pow p)
+          |> Sequence.to_list
+        in
+        List.map ~f:(fun pp -> List.map ~f:(fun x -> pp * x) lst) powers
+        |> List.concat
+      in
+      let rec div_aux pfs lst =
+        match pfs with
+        | [] -> lst
+        | ((p, a)::tl) ->
+          div_aux tl (mult_aux p a lst)
+      in
+      div_aux (prime_factor n) [one]
+
+    let num_divisors n =
+      prime_factor n
+      |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (of_int_exn a + one))
   end
 end
 

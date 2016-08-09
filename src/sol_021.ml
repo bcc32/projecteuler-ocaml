@@ -4,7 +4,7 @@ module M = struct
   let problem_number = 21
 
   let sum_proper_divisors n =
-    let sd = List.fold ~init:0 ~f:(+) (Euler.divisors n) in
+    let sd = List.sum (module Int) (Euler.Int.divisors n) ~f:Fn.id in
     sd - n
 
   (* TODO don't duplicate work *)

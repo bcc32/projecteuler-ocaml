@@ -8,7 +8,7 @@ module M = struct
 
   let main () =
     let i = ref 1 in
-    while (Euler.num_divisors (triangle !i)) <= 500 do
+    while (Euler.Int.num_divisors (triangle !i)) <= 500 do
       Int.incr i
     done;
     printf "%d\n" (triangle !i)

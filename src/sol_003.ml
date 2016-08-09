@@ -4,7 +4,7 @@ module M = struct
   let problem_number = 3
 
   let main () =
-    Euler.factor 600851475143
+    Euler.Int.factor 600851475143
     |> List.last_exn
     |> printf "%d\n"
 end

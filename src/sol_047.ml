@@ -4,7 +4,7 @@ module M = struct
   let problem_number = 47
 
   let main () =
-    let f n = n |> Euler.prime_factor |> List.length |> Int.equal 4 in
+    let f n = n |> Euler.Int.prime_factor |> List.length |> Int.equal 4 in
     let numbers =
       Euler.Int.natural_numbers ~init:1 ()
       |> Sequence.unfold_with ~init:0 ~f:(fun s n ->

@@ -50,6 +50,7 @@ let command =
     ; "67"    , Sol_067     .command
     ; "80"    , Sol_080     .command
     ; "205"   , Sol_205     .command
+    ; "206"   , Sol_206     .command
     ; "bench" , Benchmark   .command
     ]
 

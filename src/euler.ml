@@ -171,7 +171,7 @@ module Number_theory = struct
     let primes =
       Sequence.unfold ~init:two ~f:(fun p ->
         let next = next_prime p in
-        Some (next, next))
+        Some (p, next))
 
     let fibonacci =
       Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))

@@ -83,6 +83,7 @@ module Number_theory = struct
     val prime_factor : integer -> (integer * int) list
     val divisors : integer -> integer list
     val num_divisors : integer -> integer
+    val totient : integer -> integer
   end
 
   module Make(Int : Int_intf.S) : S with type integer = Int.t = struct
@@ -218,6 +219,12 @@ module Number_theory = struct
     let num_divisors n =
       prime_factor n
       |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (of_int_exn a + one))
+
+    let totient n =
+      prime_factor n
+      |> List.fold ~init:one ~f:(fun acc (p, a) ->
+        let pam1 = Int.pow p (of_int_exn a - one) in
+        acc * pam1 * (p - one))
   end
 end
 
@@ -233,6 +240,29 @@ struct
   let to_int64 _t =
     raise_s [%message "unimplemented" "to_int64"]
 end)
+
+let prime_sieve limit =
+  let len = limit + 1 in
+  let primes = Array.create ~len true in
+  let rec mark p n =
+    if n < len
+    then (
+      primes.(n) <- false;
+      mark p (n + p)
+    )
+  in
+  let rec sieve p =
+    if p * p < len
+    then (
+      if primes.(p)
+      then mark p (p * p);
+      sieve (Int.next_probable_prime p)
+    )
+  in
+  primes.(0) <- false;
+  primes.(1) <- false;
+  sieve 2;
+  primes
 
 module Numerics = struct
   module type Real_intf = sig

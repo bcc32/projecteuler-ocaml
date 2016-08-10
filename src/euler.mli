@@ -10,6 +10,9 @@ val digits_of_string : string -> int list
 (* Geometry *)
 val is_pythagorean_triple : int -> int -> int -> bool
 
+(* Number Theory *)
+val prime_sieve : int -> bool array
+
 module Number_theory : sig
   module type S = sig
     type integer
@@ -33,6 +36,7 @@ module Number_theory : sig
     val prime_factor : integer -> (integer * int) list
     val divisors : integer -> integer list
     val num_divisors : integer -> integer
+    val totient : integer -> integer
   end
 
   module Make(Int : Int_intf.S) : S

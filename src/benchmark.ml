@@ -3,15 +3,18 @@ open Core_bench.Std
 
 let divisors_group =
   let open Bench.Test in
-  let divisors = Euler.Int.divisors in
-  create_group ~name:"Euler.divisors"
-    [ create ~name:"small prime: 17" (fun () ->
-        divisors 17)
-    ; create ~name:"small composite: 60" (fun () ->
-        divisors 60)
-    ; create ~name:"ProjectEuler problem 3: 600851475143" (fun () ->
-        divisors 600851475143)
+  let tests =
+    [ 17          , "small prime            :           17"
+    ; 60          , "small composite        :           60"
+    ; 100003      , "large prime            :       100003"
+    ; 120000      , "large composite        :       120000"
+    ; 600851475143, "ProjectEuler problem 3 : 600851475143"
     ]
+  in
+  List.map tests ~f:(fun (n, name) ->
+    create ~name (fun () -> Euler.Int.divisors n))
+  |>
+  create_group ~name:"Euler.divisors"
 
 let sqrt_group =
   let open Bench.Test in

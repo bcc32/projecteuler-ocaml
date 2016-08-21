@@ -22,13 +22,13 @@ let sqrt_group =
     Euler.Float.newton's_method
       ~f:(fun y -> Float.(y * y - x))
       ~f':(Float.( * ) 2.0)
-      ~epsilon:1e-6
+      ~epsilon:1e-12
       ~init:1.0
   in
   let sqrt_bisect x =
     Euler.Float.bisect
       ~f:(fun y -> Float.(y * y - x))
-      ~epsilon:1e-6
+      ~epsilon:1e-12
       ~low:1.0
       ~high:x
   in

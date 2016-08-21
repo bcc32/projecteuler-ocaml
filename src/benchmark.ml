@@ -13,7 +13,40 @@ let divisors_group =
         divisors 600851475143)
     ]
 
-let command =
-  Bench.make_command
-    [ divisors_group
+let sqrt_group =
+  let open Bench.Test in
+  let sqrt_newton x =
+    Euler.Float.newton's_method
+      ~f:(fun y -> Float.(y * y - x))
+      ~f':(Float.( * ) 2.0)
+      ~epsilon:1e-6
+      ~init:1.0
+  in
+  let sqrt_bisect x =
+    Euler.Float.bisect
+      ~f:(fun y -> Float.(y * y - x))
+      ~epsilon:1e-6
+      ~low:1.0
+      ~high:x
+  in
+  let nums = [ 1.0; 1.5; 2.0; 3.0; 100.0; 20_000.0 ] in
+  let methods =
+    [ sqrt_newton, "Newton's method"
+    ; sqrt_bisect, "bisection"
     ]
+  in
+  List.map methods ~f:(fun (f, name) ->
+    List.map nums ~f:(fun x ->
+      create ~name:(Float.to_string x) (fun () -> f x))
+    |> create_group ~name)
+  |>
+  create_group ~name:"sqrt"
+
+let command =
+  let groups =
+    [ "divisors", divisors_group
+    ; "sqrt"    , sqrt_group
+    ]
+  in
+  List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))
+  |> Command.group ~summary:"Benchmarking Euler"

@@ -273,16 +273,26 @@ module Numerics = struct
     val ( * ) : t -> t -> t
     val (/)   : t -> t -> t
 
+    val of_int : int -> t
+
+    val sign : t -> Sign.t
+
     include Comparable.S with type t := t
   end
 
   module type S = sig
     type real
+    val bisect
+      : f : (real -> real)
+      -> epsilon : real
+      -> low     : real
+      -> high    : real
+      -> real
     val newton's_method
-      :  f:(real -> real)
-      -> f':(real -> real)
-      -> epsilon:real
-      -> init:real
+      :  f  : (real -> real)
+      -> f' : (real -> real)
+      -> epsilon : real
+      -> init    : real
       -> real
   end
 
@@ -290,6 +300,35 @@ module Numerics = struct
     open Real
 
     type real = Real.t
+
+    let bisect =
+      let two = of_int 2 in
+      fun ~f ~epsilon ~low:x_low ~high:x_high ->
+        let rec loop x_low x_high y_low y_high =
+          let x_mid = (x_low + x_high) / two in
+          if x_high - x_low < epsilon
+          then x_mid
+          else (
+            let y_mid = f x_mid in
+            match sign y_mid with
+            | Zero -> x_mid
+            | Neg ->
+              begin match sign y_low with
+              | Neg -> loop x_mid x_high y_mid y_high
+              | Pos -> loop x_low x_mid  y_low y_mid
+              | Zero -> raise (Bug "zero y-value endpoint")
+              end
+            | Pos ->
+              begin match sign y_low with
+              | Neg -> loop x_low x_mid  y_low y_mid
+              | Pos -> loop x_mid x_high y_mid y_high
+              | Zero -> raise (Bug "zero y-value endpoint")
+              end
+          )
+        in
+        let y_low  = f x_low  in
+        let y_high = f x_high in
+        loop x_low x_high y_low y_high
 
     let rec newton's_method ~f ~f' ~epsilon ~init =
       let delta = f init / f' init in
@@ -300,4 +339,7 @@ module Numerics = struct
 end
 
 module Float  = Numerics.Make(Float)
-module Bignum = Numerics.Make(Bignum)
+module Bignum = Numerics.Make(struct
+    include Bignum
+    let sign = Fn.compose Sign.of_int sign
+  end)

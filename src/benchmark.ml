@@ -9,7 +9,6 @@ let divisors_group =
     (fun n -> stage (fun () -> Euler.Int.divisors n))
 
 let sqrt_group =
-  let open Bench.Test in
   let sqrt_newton x =
     Euler.Float.newton's_method
       ~f:(fun y -> Float.(y * y - x))
@@ -30,12 +29,13 @@ let sqrt_group =
     ; sqrt_bisect, "bisection"
     ]
   in
-  List.map methods ~f:(fun (f, name) ->
-    List.map nums ~f:(fun x ->
-      create ~name:(Float.to_string x) (fun () -> f x))
-    |> create_group ~name)
-  |>
-  create_group ~name:"sqrt"
+  Bench.Test.(
+    List.map methods ~f:(fun (f, name) ->
+      List.map nums ~f:(fun x ->
+        create ~name:(Float.to_string x) (fun () -> f x))
+      |> create_group ~name)
+    |> create_group ~name:"sqrt"
+  )
 
 let command =
   let groups =

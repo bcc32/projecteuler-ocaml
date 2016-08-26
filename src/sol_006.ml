@@ -13,8 +13,8 @@ module M = struct
     x * x
 
   let main () =
-   sqr (sum hund) - sum (List.map ~f:sqr hund)
-   |> printf "%d\n"
+    sqr (sum hund) - sum (List.map ~f:sqr hund)
+    |> printf "%d\n"
 end
 
 include Solution.Make(M)

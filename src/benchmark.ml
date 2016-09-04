@@ -27,6 +27,7 @@ let sqrt_group =
   let methods =
     [ sqrt_newton, "Newton's method"
     ; sqrt_bisect, "bisection"
+    ; sqrt       , "built-in [sqrt] function"
     ]
   in
   Bench.Test.(

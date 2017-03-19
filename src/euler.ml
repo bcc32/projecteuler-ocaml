@@ -86,7 +86,7 @@ module Number_theory = struct
     val totient : integer -> integer
   end
 
-  module Make(Int : Int_intf.S) : S with type integer = Int.t = struct
+  module Make(Int : Int_intf.S_unbounded) : S with type integer = Int.t = struct
     open Int.O
 
     type integer = Int.t
@@ -229,14 +229,9 @@ module Number_theory = struct
 end
 
 module Int    = Number_theory.Make(Int)
-module Bigint = Number_theory.Make(
-struct
+module Bigint = Number_theory.Make(struct
   include Bigint
-  let num_bits = 0
-  let min_value = zero
-  let max_value = zero
-  let shift_right_logical _t _b =
-    raise_s [%message "unimplemented" "shift_right_logical"]
+  (* different signature in Int_intf.S_unbounded *)
   let to_int64 _t =
     raise_s [%message "unimplemented" "to_int64"]
 end)
@@ -341,5 +336,5 @@ end
 module Float  = Numerics.Make(Float)
 module Bignum = Numerics.Make(struct
     include Bignum
-    let sign = Fn.compose Sign.of_int sign
+    let sign t = Sign.of_int (sign t)
   end)

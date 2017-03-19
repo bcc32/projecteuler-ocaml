@@ -1,5 +1,5 @@
 BUILD_DIR=_build
-CFLAGS=-warn-error,A
+CFLAGS=-warn-error,A,-safe-string
 PKGS=core,core_bench,async,bignum,re2
 SRC=src
 

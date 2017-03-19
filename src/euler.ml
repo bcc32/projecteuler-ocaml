@@ -1,4 +1,4 @@
-open Core.Std
+open Core
 open Bignum.Std
 
 (* run length encoding (item, count) *)

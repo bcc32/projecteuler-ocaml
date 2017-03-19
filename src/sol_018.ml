@@ -1,4 +1,4 @@
-open Core.Std
+open Core
 
 module M = struct
   let problem_number = 18

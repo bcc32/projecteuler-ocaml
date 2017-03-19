@@ -1,4 +1,4 @@
-open Core.Std
+open Core
 open Bignum.Std
 
 module M = struct

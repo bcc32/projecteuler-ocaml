@@ -76,14 +76,14 @@ module Number_theory = struct
     val next_probable_prime : integer -> integer
     val next_prime : integer -> integer
     val primes : integer Sequence.t
-    val fibonacci : integer Sequence.t
-    val binomial : integer -> integer -> integer
-    val natural_numbers : ?init:integer -> unit -> integer Sequence.t
     val factor : integer -> integer list
     val prime_factor : integer -> (integer * int) list
     val divisors : integer -> integer list
     val num_divisors : integer -> integer
     val totient : integer -> integer
+    val binomial : integer -> integer -> integer
+    val fibonacci : integer Sequence.t
+    val natural_numbers : ?init:integer -> unit -> integer Sequence.t
   end
 
   module Make(Int : Int_intf.S_unbounded) : S with type integer = Int.t = struct
@@ -174,18 +174,6 @@ module Number_theory = struct
         let next = next_prime p in
         Some (p, next))
 
-    let fibonacci =
-      Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
-
-    let binomial n r =
-      let top    = range ~stop:`inclusive (r + one) n in
-      let bottom = range ~stop:`inclusive one (n - r) in
-      Sequence.zip top bottom
-      |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
-
-    let natural_numbers ?(init = zero) () =
-      Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
-
     let factor =
       let rec aux i n =
         match i with
@@ -225,6 +213,18 @@ module Number_theory = struct
       |> List.fold ~init:one ~f:(fun acc (p, a) ->
         let pam1 = Int.pow p (of_int_exn a - one) in
         acc * pam1 * (p - one))
+
+    let binomial n r =
+      let top    = range ~stop:`inclusive (r + one) n in
+      let bottom = range ~stop:`inclusive one (n - r) in
+      Sequence.zip top bottom
+      |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
+
+    let fibonacci =
+      Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
+
+    let natural_numbers ?(init = zero) () =
+      Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
   end
 end
 

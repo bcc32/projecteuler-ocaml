@@ -17,7 +17,6 @@ module M = struct
       incr i;
       work ubound
     )
-  ;;
 
   (* let is_perfect_square = Hash_set.mem squares *)
 
@@ -27,7 +26,6 @@ module M = struct
   let is_perfect_square x =
     let y = sqrt (float x) |> Int.of_float_unchecked in
     y * y = x
-  ;;
 
   let main () =
     let rec loop return x =
@@ -50,7 +48,6 @@ module M = struct
     in
     with_return (fun { return } -> loop return 1)
     |> printf "%d\n"
-  ;;
 end
 
 include Solution.Make(M)

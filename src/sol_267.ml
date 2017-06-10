@@ -42,10 +42,8 @@ module M = struct
       value := Bignum.(!value * ratio)
     done;
     Bignum.(of_bigint !accum / denominator)
-  ;;
 
   let main () =
     failwith "unimplemented"
-  ;;
 end
 include Solution.Make(M)

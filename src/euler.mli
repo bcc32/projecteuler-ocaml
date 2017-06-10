@@ -43,6 +43,9 @@ module Number_theory : sig
 
     val fibonacci : integer Sequence.t
     val natural_numbers : ?init:integer -> unit -> integer Sequence.t
+
+    val isqrt : integer -> integer
+    val is_perfect_square : integer -> bool
   end
 
   module Make(Int : Int_intf.S) : S

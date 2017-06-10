@@ -84,6 +84,8 @@ module Number_theory = struct
     val binomial : integer -> integer -> integer
     val fibonacci : integer Sequence.t
     val natural_numbers : ?init:integer -> unit -> integer Sequence.t
+    val isqrt : integer -> integer
+    val is_perfect_square : integer -> bool
   end
 
   module Make(Int : Int_intf.S_unbounded) : S with type integer = Int.t = struct
@@ -225,6 +227,26 @@ module Number_theory = struct
 
     let natural_numbers ?(init = zero) () =
       Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
+
+    let isqrt n =
+      let rec loop n =
+        if n < two
+        then n
+        else (
+          let small = loop (n asr 2) lsl 1 in
+          let large = small + one in
+          if large * large > n
+          then small
+          else large
+        )
+      in
+      if n < zero
+      then (failwiths "isqrt: negative number" n [%sexp_of: Int.t])
+      else loop n
+
+    let is_perfect_square n =
+      let sqrt = isqrt n in
+      sqrt * sqrt = n
   end
 end
 

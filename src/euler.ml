@@ -298,32 +298,32 @@ module Numerics = struct
 
     let bisect =
       let two = of_int 2 in
-      fun ~f ~epsilon ~low:x_low ~high:x_high ->
-        let rec loop x_low x_high y_low y_high =
-          let x_mid = (x_low + x_high) / two in
-          if x_high - x_low < epsilon
-          then x_mid
+      fun ~f ~epsilon ~low:x_lo ~high:x_hi ->
+        let rec loop x_lo x_hi y_lo y_hi =
+          let x_mi = (x_lo + x_hi) / two in
+          if x_hi - x_lo < epsilon
+          then x_mi
           else (
-            let y_mid = f x_mid in
-            match sign y_mid with
-            | Zero -> x_mid
+            let y_mi = f x_mi in
+            match sign y_mi with
+            | Zero -> x_mi
             | Neg ->
-              begin match sign y_low with
-              | Neg -> loop x_mid x_high y_mid y_high
-              | Pos -> loop x_low x_mid  y_low y_mid
+              begin match sign y_lo with
+              | Neg -> loop x_mi x_hi y_mi y_hi
+              | Pos -> loop x_lo x_mi y_lo y_mi
               | Zero -> raise (Bug "zero y-value endpoint")
               end
             | Pos ->
-              begin match sign y_low with
-              | Neg -> loop x_low x_mid  y_low y_mid
-              | Pos -> loop x_mid x_high y_mid y_high
+              begin match sign y_lo with
+              | Neg -> loop x_lo x_mi y_lo y_mi
+              | Pos -> loop x_mi x_hi y_mi y_hi
               | Zero -> raise (Bug "zero y-value endpoint")
               end
           )
         in
-        let y_low  = f x_low  in
-        let y_high = f x_high in
-        loop x_low x_high y_low y_high
+        let y_lo = f x_lo in
+        let y_hi = f x_hi in
+        loop x_lo x_hi y_lo y_hi
 
     let rec newton's_method ~f ~f' ~epsilon ~init =
       let delta = f init / f' init in

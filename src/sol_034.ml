@@ -1,5 +1,4 @@
 open Core
-open Bignum.Std
 
 module M = struct
   let problem_number = 34

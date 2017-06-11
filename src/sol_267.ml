@@ -44,6 +44,7 @@ module M = struct
     Bignum.(of_bigint !accum / denominator)
 
   let main () =
+    let _ = p_billionaire in
     failwith "unimplemented"
 end
 include Solution.Make(M)

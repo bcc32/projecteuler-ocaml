@@ -1,9 +1,0 @@
-S src
-B _build/src
-PKG core
-PKG core_bench
-PKG core_extended
-PKG bignum
-PKG re2
-PKG ppx_jane
-REC

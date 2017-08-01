@@ -38,10 +38,34 @@ let sqrt_group =
     |> create_group ~name:"sqrt"
   )
 
+let primes_group =
+  let primes_sequence limit =
+    Euler.Int.primes
+    |> Sequence.take_while ~f:(fun x -> x < limit)
+    |> Sequence.iter ~f:(fun x -> ignore (Sys.opaque_identity x))
+  in
+  let primes_sieve limit =
+    ignore (Sys.opaque_identity (Euler.prime_sieve limit))
+  in
+  let limits = [ 1000; 10_000; 100_000; 1_000_000 ] in
+  let methods =
+    [ primes_sequence, "Sequence.t"
+    ; primes_sieve   , "Eratosthenes' sieve"
+    ]
+  in
+  Bench.Test.(
+    List.map methods ~f:(fun (f, name) ->
+      List.map limits ~f:(fun limit ->
+        create ~name:(Int.to_string limit) (fun () -> f limit))
+      |> create_group ~name)
+    |> create_group ~name:"primes"
+  )
+
 let command =
   let groups =
     [ "divisors", divisors_group
     ; "sqrt"    , sqrt_group
+    ; "primes"  , primes_group
     ]
   in
   List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))

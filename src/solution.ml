@@ -12,11 +12,11 @@ end
 module Make (M : Solution) : S = struct
   let time_unit f () =
     let start = Time.now () in
-    f ();
-    let finish = Time.now () in
-    Time.diff finish start
-    |> Time.Span.to_short_string
-    |> printf "%s\n"
+    protect ~f ~finally:(fun () ->
+      let finish = Time.now () in
+      Time.diff finish start
+      |> Time.Span.to_short_string
+      |> printf "%s\n")
 
   let command =
     let summary = sprintf "Problem %d" M.problem_number in

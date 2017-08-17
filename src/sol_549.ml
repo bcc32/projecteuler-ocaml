@@ -8,63 +8,55 @@ module M = struct
     | Some x -> Int.of_string x
     | None -> 100_000_000
 
-  let percent = limit / 100
-
-  let start = lazy (Time.now ())
-
-  let primes =
-    lazy (
-      Euler.prime_sieve limit
-      |> Array.filter_mapi ~f:(fun i p -> Option.some_if p i))
-
   let divide n p =
     let rec loop n ac =
       if n mod p = 0
-      then loop (n / p) (ac + 1)
-      else (n, ac)
+      then (loop (n / p) (ac + 1))
+      else ac
     in
     loop n 0
 
-  let s_prime_factor p k =
-    let rec loop p k n ac =
-      if ac >= k
-      then n
-      else (
-        let (_, a) = divide (n + p) p in
-        loop p k (n + p) (a + ac))
-    in
-    loop p k 0 0
-
-  let s n =
-    if n mod percent = 0
-    then (
-      let elapsed = Time.diff (Time.now ()) (force start) in
-      Debug.eprintf "%d%% %{sexp: Time.Span.t}" (n / percent) elapsed);
-    let max = ref 0 in
-    let n = ref n in
-    with_return (fun { return } ->
-      Array.iter (force primes) ~f:(fun p ->
-        if p * p > !n
-        then (return (Int.max !max !n))
-        else if !n mod p = 0
-        then (
-          let (n', k) = divide !n p in
-          max := Int.max !max (s_prime_factor p k);
-          n := n'));
-      !max)
-
-  let total_s n =
-    Sequence.range 2 n ~stop:`inclusive
-    |> Sequence.sum (module Int) ~f:s
+  (* Sieve inspired by Nore's solution at https://projecteuler.net/thread=549#235492. *)
+  let sieve n =
+    let m = Array.create 0 ~len:(n + 1) in
+    for p = 2 to n do
+      if m.(p) = 0              (* prime *)
+      then (
+        (* loop invariant: [smallest] is the smallest multiple of [p] such that
+           [power | smallest!]. [k] is incremented each loop and serves to
+           adjust [smallest] when needed. *)
+        let rec loop_powers power k smallest =
+          if power <= n
+          then (
+            (* Debug.eprintf "power %d" power; *)
+            let (k, smallest) =
+              let rec ensure_enough_p k smallest =
+                if k <= 0
+                then (k, smallest)
+                else (
+                  let smallest = smallest + p in
+                  ensure_enough_p (k - divide smallest p) smallest)
+              in
+              ensure_enough_p k smallest
+            in
+            let rec loop j =
+              if j <= n
+              then (
+                if smallest > m.(j)
+                then (m.(j) <- smallest);
+                loop (j + power))
+            in
+            loop power;
+            loop_powers (power * p) (k + 1) smallest)
+        in
+        loop_powers p 1 0)
+    done;
+    Array.sum (module Int) m ~f:Fn.id
 
   let main () =
-    Debug.eprint "precomputing primes...";
-    ignore (force primes : int array);
-    Debug.eprint "done";
-    ignore (force start : Time.t);
-    total_s limit
+    sieve limit
     |> printf "%d\n"
-    (* 476001479068717, 7.6m *)
+    (* 476001479068717, 9.4s *)
 end
 
 include Solution.Make(M)

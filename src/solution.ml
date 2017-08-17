@@ -16,7 +16,7 @@ module Make (M : Solution) : S = struct
       let finish = Time.now () in
       Time.diff finish start
       |> Time.Span.to_short_string
-      |> printf "%s\n")
+      |> print_endline)
 
   let command =
     let summary = sprintf "Problem %d" M.problem_number in

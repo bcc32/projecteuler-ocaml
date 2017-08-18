@@ -6,10 +6,10 @@ module M = struct
   let modulo = 500_500_507
 
   let power_of_two_divisors k =
-    (* We know [PrimePi[8_000_000] >= 500_500] so this includes all first
+    (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first
        500,000 primes, which is the upper bound on the primes used. *)
     let queue =
-      Euler.prime_sieve 8_000_000
+      Euler.prime_sieve 7_400_000
       |> Array.filter_mapi ~f:(fun i p -> Option.some_if p i)
       |> Heap.of_array ~cmp:Int.compare
     in
@@ -24,6 +24,6 @@ module M = struct
   let main () =
     power_of_two_divisors 500_500
     |> printf "%d\n"
-    (* 35407281, 672ms *)
+    (* 35407281, 575ms *)
 end
 include Solution.Make(M)

@@ -5,25 +5,26 @@ module M = struct
 
   let modulo = 500_500_507
 
-  let power_of_two_divisors k =
-    (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first
-       500,000 primes, which is the upper bound on the primes used. *)
+  (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first
+     500,000 primes, which is the upper bound on the primes used. *)
+  let upper_bound = 7_400_000
+
+  let main () =
     let queue =
-      Euler.prime_sieve 7_400_000
+      Euler.prime_sieve upper_bound
       |> Array.filter_mapi ~f:(fun i p -> Option.some_if p i)
       |> Heap.of_array ~cmp:Int.compare
     in
     let number = ref 1 in
-    for _ = 1 to k do
+    for _ = 1 to 500_500 do
       let factor = Heap.pop_exn queue in
       number := !number * factor mod modulo;
-      Heap.add queue (factor * factor)
+      let factor = factor * factor in
+      if factor < upper_bound
+      then (Heap.add queue factor)
     done;
     !number
-
-  let main () =
-    power_of_two_divisors 500_500
     |> printf "%d\n"
-    (* 35407281, 575ms *)
+    (* 35407281, 500ms *)
 end
 include Solution.Make(M)

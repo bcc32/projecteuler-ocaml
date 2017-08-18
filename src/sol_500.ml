@@ -1,9 +1,9 @@
 open Core
 
-let modulo = 500_500_507
-
 module M = struct
   let problem_number = 500
+
+  let modulo = 500_500_507
 
   let power_of_two_divisors k =
     (* We know [PrimePi[8_000_000] >= 500_500] so this includes all first

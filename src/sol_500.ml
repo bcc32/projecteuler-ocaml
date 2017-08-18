@@ -1,67 +1,66 @@
 open Core
-open Bignum.Std
 
-module Number = struct
+let modulo = 500_500_507
+
+module Factor = struct
   module T = struct
     type t =
-      { factors : int Bigint.Map.t
-      ; value : Bigint.t
-      ; lg2_divisors : int
+      { prime    : int
+      ; exponent : int
+      ; value    : int          (* modulo [modulo] *)
+      ; log      : float
       }
     [@@deriving sexp]
 
-    let compare { value = a; _ } { value = b; _ } =
-      Bigint.compare a b
+    let compare = Comparable.lift Float.compare ~f:(fun t -> t.log)
   end
+
   include T
-
-  let _invariant { factors; value; lg2_divisors = _ } =
-    Map.iter_keys factors ~f:(fun p -> assert (Euler.Bigint.is_prime p));
-    let prod =
-      Map.fold factors ~init:Bigint.one ~f:(fun ~key ~data ac ->
-        Bigint.(ac * pow key (of_int data))
-      )
-    in
-    assert (value = prod)
-      (* more stuff like all a should be 2^n-1, should have the right lg2_divisors *)
-
-  let one = { factors = Bigint.Map.empty; value = Bigint.one; lg2_divisors = 0 }
-
-  let double_divisors { factors; value; lg2_divisors } p =
-    let value = ref value in
-    let factors =
-      Map.update factors p ~f:(function
-        | None ->
-          value := Bigint.(!value * p);
-          1
-        | Some a ->
-          value := Bigint.(!value * pow p (of_int Int.(a + 1)));
-          a * 2 + 1)
-    in
-    { factors; value = !value; lg2_divisors = lg2_divisors + 1 }
-
-  (* reverse order *)
-  let eligible_primes { factors; _ } =
-    match Map.keys factors |> List.rev with
-    | [] -> [ Bigint.of_int 2 ]
-    | (hd :: _) as ps -> Euler.Bigint.next_prime hd :: ps
-
   include Comparable.Make(T)
+
+  let of_prime prime =
+    if not (Euler.Int.is_prime prime)
+    then (raise_s [%message "not a prime" (prime : int)]);
+    { prime
+    ; exponent = 1
+    ; value    = prime mod modulo
+    ; log      = Float.log (Float.of_int prime)
+    }
+
+  let next t =
+    { prime    = t.prime
+    ; exponent = 2 * t.exponent
+    ; value    = t.value * t.value mod modulo
+    ; log      = 2. *. t.log
+    }
 end
 
 module M = struct
   let problem_number = 500
 
-  let main () =
-    let n = ref Number.one in
-    while !n.lg2_divisors < 500_500 do
-      Debug.eprintf "%d" !n.lg2_divisors;
-      Number.eligible_primes !n
-      |> List.map ~f:(fun p -> Number.double_divisors !n p)
-      |> List.min_elt ~cmp:Number.compare
-      |> uw
-      |> (:=) n
+  let power_of_two_divisors k =
+    let queue = Heap.create ~cmp:Factor.compare () in
+    Heap.add queue (Factor.of_prime 2);
+    let number = ref 1 in
+    for i = 1 to k do
+      if i mod 1000 = 0
+      then (
+        Debug.eprintf "i %d" i
+      );
+      let factor = Heap.pop_exn queue in
+      number := !number * factor.value mod modulo;
+      Heap.add queue (Factor.next factor);
+      if factor.exponent = 1
+      then (
+        let prime = Euler.Int.next_prime factor.prime in
+        Heap.add queue (Factor.of_prime prime)
+      )
     done;
-    printf !"%{sexp: Number.t}\n" !n
+    !number
+
+  let main () =
+    power_of_two_divisors 500_500
+    |> printf "%d\n"
+    (* 35407281, 48s *)
 end
 include Solution.Make(M)

@@ -61,36 +61,8 @@ let digits_of_string n =
 let is_pythagorean_triple a b c = a * a + b * b = c * c
 
 module Number_theory = struct
-  module type S = sig
-    type integer
-    val range
-      :  ?stride:integer
-      -> ?start:[ `inclusive | `exclusive ]
-      -> ?stop:[ `exclusive | `inclusive ]
-      -> integer -> integer -> integer Sequence.t
-    val digits_of_int : ?base:integer -> integer -> integer list
-    val int_of_digits : ?base:integer -> integer Sequence.t -> integer
-    val sum_digits : ?base:integer -> integer -> integer
-    val gcd : integer -> integer -> integer
-    val lcm : integer -> integer -> integer
-    val factorial : integer -> integer
-    val is_prime : integer -> bool
-    val next_probable_prime : integer -> integer
-    val next_prime : integer -> integer
-    val primes : integer Sequence.t
-    val factor : integer -> integer list
-    val prime_factor : integer -> (integer * int) list
-    val divisors : integer -> integer list
-    val num_divisors : integer -> integer
-    val totient : integer -> integer
-    val binomial : integer -> integer -> integer
-    val fibonacci : integer Sequence.t
-    val natural_numbers : ?init:integer -> unit -> integer Sequence.t
-    val isqrt : integer -> integer
-    val is_perfect_square : integer -> bool
-  end
-
-  module Make(Int : Int_intf.S_unbounded) : S with type integer = Int.t = struct
+  module Make(Int : Int_intf.S_unbounded)
+    : Number_theory_intf.S with type integer = Int.t = struct
     open Int.O
 
     type integer = Int.t
@@ -292,38 +264,8 @@ let prime_sieve limit =
   primes
 
 module Numerics = struct
-  module type Real_intf = sig
-    type t
-    val abs : t -> t
-    val (+)   : t -> t -> t
-    val (-)   : t -> t -> t
-    val ( * ) : t -> t -> t
-    val (/)   : t -> t -> t
-
-    val of_int : int -> t
-
-    val sign : t -> Sign.t
-
-    include Comparable.S with type t := t
-  end
-
-  module type S = sig
-    type real
-    val bisect
-      : f : (real -> real)
-      -> epsilon : real
-      -> low     : real
-      -> high    : real
-      -> real
-    val newton's_method
-      :  f  : (real -> real)
-      -> f' : (real -> real)
-      -> epsilon : real
-      -> init    : real
-      -> real
-  end
-
-  module Make(Real : Real_intf) : S with type real = Real.t = struct
+  module Make(Real : Numerics_intf.Real)
+    : Numerics_intf.S with type real = Real.t = struct
     open Real
 
     type real = Real.t

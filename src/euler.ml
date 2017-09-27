@@ -71,6 +71,8 @@ module Number_theory = struct
     val digits_of_int : ?base:integer -> integer -> integer list
     val int_of_digits : ?base:integer -> integer Sequence.t -> integer
     val sum_digits : ?base:integer -> integer -> integer
+    val gcd : integer -> integer -> integer
+    val lcm : integer -> integer -> integer
     val factorial : integer -> integer
     val is_prime : integer -> bool
     val next_probable_prime : integer -> integer
@@ -137,6 +139,14 @@ module Number_theory = struct
         else iter (n / base) (n % base + acc)
       in
       iter n zero
+
+    let rec gcd a b =
+      if b = zero
+      then a
+      else gcd b (a % b)
+
+    let lcm a b =
+      a / (gcd a b) * b
 
     let factorial n =
       Sequence.unfold ~init:two ~f:(fun s -> Some (s, Int.succ s))
@@ -252,11 +262,11 @@ end
 
 module Int    = Number_theory.Make(Int)
 module Bigint = Number_theory.Make(struct
-  include Bigint
-  (* different signature in Int_intf.S_unbounded *)
-  let to_int64 _t =
-    raise_s [%message "unimplemented" "to_int64"]
-end)
+    include Bigint
+    (* different signature in Int_intf.S_unbounded *)
+    let to_int64 _t =
+      raise_s [%message "unimplemented" "to_int64"]
+  end)
 
 let prime_sieve limit =
   let len = limit + 1 in

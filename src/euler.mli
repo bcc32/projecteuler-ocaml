@@ -26,6 +26,9 @@ module Number_theory : sig
     val int_of_digits : ?base:integer -> integer Sequence.t -> integer
     val sum_digits : ?base:integer -> integer -> integer
 
+    val gcd : integer -> integer -> integer
+    val lcm : integer -> integer -> integer
+
     val factorial : integer -> integer
 
     val is_prime : integer -> bool

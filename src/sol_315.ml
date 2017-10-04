@@ -71,15 +71,16 @@ module M = struct
 
   let main () =
     let diff = ref 0 in
+    let primes = Euler.prime_sieve 20_000_000 in
     for i = 10_000_000 to 20_000_000 do
-      if Euler.Int.is_prime i
+      if primes.(i)
       then (
         let seq = digital_root_sequence i in
         diff := !diff + sam_cost seq - max_cost seq)
     done;
     printf "%d\n" !diff
 
-  (* 13625242 1.2m *)
+  (* 13625242 1s *)
 end
 
 include Solution.Make(M)

@@ -60,6 +60,7 @@ let command =
     ; "207"   , Sol_207     .command
     ; "214"   , Sol_214     .command
     ; "267"   , Sol_267     .command
+    ; "315"   , Sol_315     .command
     ; "323"   , Sol_323     .command
     ; "500"   , Sol_500     .command
     ; "504"   , Sol_504     .command

@@ -23,12 +23,19 @@ module M = struct
     done;
     sample_counts
 
+  let expectation sample_counts total =
+    let e = ref 0. in
+    Array.iteri sample_counts ~f:(fun i x ->
+      e := !e +. float i *. float x);
+    !e /. float total
+
   let main () =
     Random.self_init ();
     let times = 100_000_000 in
-    let bits = 2 in
-    simulate bits times
-    |> printf !"%{sexp: int array}\n"
+    let bits = 32 in
+    let samples = simulate bits times in
+    printf !"%{sexp: int array}\n" samples;
+    printf "%.10f\n" @@ expectation samples times
 end
 
 include Solution.Make(M)

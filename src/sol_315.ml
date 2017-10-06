@@ -25,9 +25,6 @@ module M = struct
 
   let distance s1 s2 = Int.popcount (s1 lxor s2)
 
-  let transition_cost_digits d1 d2 =
-    distance digit_segments.(d1) digit_segments.(d2)
-
   let transition_cost n1 n2 =
     let rec loop n1 n2 ac =
       match n1, n2 with

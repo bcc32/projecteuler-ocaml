@@ -1,6 +1,8 @@
 (jbuild_version 1)
 
-(executables
-  ((names (main))
-   (libraries (core core_bench bignum re2))
-   (preprocess (pps (ppx_jane)))))
+(library
+ ((name        euler)
+  (synopsis "a collection of utilities for solving ProjectEuler math problems")
+  (libraries (core
+              bignum))
+  (preprocess (pps (ppx_jane)))))

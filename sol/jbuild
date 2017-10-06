@@ -1,0 +1,9 @@
+(jbuild_version 1)
+
+(library
+ ((name        euler_solutions)
+  (synopsis "A collection of OCaml solutions to ProjectEuler problems")
+  (libraries (core
+              euler
+              re2))
+  (preprocess (pps (ppx_jane)))))

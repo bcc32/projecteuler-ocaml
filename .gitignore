@@ -1,3 +1,4 @@
+# Build artifacts
 _build
-.DS_Store
+*.install
 .merlin

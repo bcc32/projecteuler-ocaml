@@ -1,6 +1,8 @@
 open Core
 open Bignum.Std
 
+module Solution = Solution
+
 (* run length encoding (item, count) *)
 let rec run_length_encode lst =
   let rec count item lst foo =

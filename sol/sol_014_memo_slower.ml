@@ -1,4 +1,4 @@
-open Core
+open! Core
 
 let collatz n =
   if n mod 2 = 0

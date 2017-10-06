@@ -1,4 +1,4 @@
-open Core
+open! Core
 
 module type Real = sig
   type t

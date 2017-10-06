@@ -1,4 +1,4 @@
-open Core
+open! Core
 open Euler_solutions
 
 let command =

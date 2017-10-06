@@ -1,4 +1,4 @@
-open Core
+open! Core
 
 module type Solution = sig
   val problem_number : int

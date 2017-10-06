@@ -63,6 +63,7 @@ let command =
     ; "315"   , Sol_315     .command
     ; "323"   , Sol_323     .command
     ; "323-sim", Sol_323_sim.command
+    ; "348"   , Sol_348     .command
     ; "407"   , Sol_407     .command
     ; "500"   , Sol_500     .command
     ; "504"   , Sol_504     .command

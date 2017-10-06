@@ -1,5 +1,7 @@
+open! Core
+
 (* FIXME this is horrible... *)
-let modules : (string * (module Euler.Solution.S)) list =
+let modules : (string, (module Euler.Solution.S)) List.Assoc.t =
   [ "1"       , (module Sol_001)
   ; "2"       , (module Sol_002)
   ; "3"       , (module Sol_003)

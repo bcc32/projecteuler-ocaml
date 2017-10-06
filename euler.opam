@@ -1,6 +1,9 @@
 opam-version: "1.2"
+version: "0.1.0"
 maintainer: "Aaron L. Zeng <me@bcc32.com>"
 authors: "Aaron L. Zeng <me@bcc32.com>"
 homepage: "https://github.com/bcc32/projecteuler-ocaml"
 bug-reports: "https://github.com/bcc32/projecteuler-ocaml"
 dev-repo: "https://github.com/bcc32/projecteuler-ocaml"
+build: ["jbuilder" "build" "-p" name "-j" jobs]
+depends: ["bignum" "core" "core_bench" "re2"]

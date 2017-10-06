@@ -12,4 +12,4 @@ let command =
     ~preserve_subcommand_order:()
 
 let () =
-  Command.run ~version:"0.0.3" command
+  Command.run ~version:"0.1.0" command

@@ -10,12 +10,7 @@ let%test_unit "is_palindrome" =
       [%test_result: bool] (Euler.is_palindrome l ~equal:Int.equal) ~expect)
 
 let%test_unit "permutations" =
-  let gen =
-    List.gen' Int.gen ~length:(`At_most 5)
-    (* TODO get rid of this filter once the num_permutations below can handle
-       duplicates *)
-    |> Quickcheck.Generator.filter ~f:(fun l -> List.find_a_dup l = None)
-  in
+  let gen = List.gen' Int.gen ~length:(`At_most 5) in
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun l ->
@@ -24,14 +19,22 @@ let%test_unit "permutations" =
       let perms = Sequence.to_list seq in
       let elts = List.sort l ~cmp in
       (* expected number of permutations *)
-      let num_permutations = Euler.Int.factorial (List.length l) in
+      let num_permutations =
+        List.fold l ~init:Int.Map.empty ~f:(fun ac x ->
+          Map.update ac x ~f:(Option.value_map ~default:1 ~f:((+) 1)))
+        |> Map.data
+        |> Euler.multinomial
+      in
       [%test_result: int] (List.length perms) ~expect:num_permutations;
       (* permutations have the same elements as the original list *)
       List.iter perms ~f:(fun perm ->
         [%test_result: int list] (List.sort perm ~cmp) ~expect:elts);
       (* permutations should be in order *)
       [%test_result: int list list] ~expect:perms
-        (List.sort perms ~cmp:[%compare: int list]))
+        (List.sort perms ~cmp:[%compare: int list]);
+      (* permutations should be unique *)
+      [%test_result: int list option] ~expect:None
+        (List.find_a_dup perms ~compare:[%compare: int list]))
 
 let%test_unit "run_length_encode" =
   let gen = List.gen Int.gen in

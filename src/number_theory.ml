@@ -212,6 +212,7 @@ let prime_sieve limit =
   sieve 2;
   primes
 
+(* TODO functorize *)
 let multinomial xs =
   let p = ref 1 in
   let n = ref 1 in

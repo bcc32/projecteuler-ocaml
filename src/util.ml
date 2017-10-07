@@ -2,6 +2,7 @@ open! Core
 
 (* FIXME this module needs a better name *)
 
+(* FIXME don't use polymorphic compare *)
 (* run length encoding (item, count) *)
 let rec run_length_encode lst =
   let rec count item lst foo =

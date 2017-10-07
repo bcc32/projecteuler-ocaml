@@ -33,6 +33,11 @@ module type S = sig
   val num_divisors : integer -> integer
   val totient : integer -> integer
 
+  (* modular arithmetic *)
+  (** [bezout a b] returns [(s, t, g)] such that [g = gcd(a, b)] and [s * a + t
+     * b = g] *)
+  val bezout : integer -> integer -> integer * integer * integer
+
   (* miscellaneous sequences *)
   val fibonacci : integer Sequence.t
   val natural_numbers : ?init:integer -> unit -> integer Sequence.t

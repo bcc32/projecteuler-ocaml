@@ -143,6 +143,17 @@ module Make (Int : Int_intf.S_unbounded)
     Sequence.zip top bottom
     |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
 
+  let bezout a b =
+    let rec loop r0 s0 t0 r1 s1 t1 =
+      if r1 = zero
+      then (s0, t0, r0)
+      else (
+        let q = r0 / r1 in
+        loop r1 s1 t1 (r0 - q * r1) (s0 - q * s1) (t0 - q * t1)
+      )
+    in
+    loop a one zero b zero one
+
   let fibonacci =
     Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
 

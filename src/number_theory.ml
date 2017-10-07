@@ -1,7 +1,6 @@
 open! Core
 
-module Make (Int : Int_intf.S_unbounded)
-  : Number_theory_intf.S with type integer = Int.t = struct
+module Make (Int : Int_intf.S_unbounded) = struct
   open Int.O
 
   type integer = Int.t

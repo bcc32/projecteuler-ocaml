@@ -1,7 +1,6 @@
 open! Core
 
-module Make (Real : Numerics_intf.Real)
-  : Numerics_intf.S with type real = Real.t = struct
+module Make (Real : Numerics_intf.Real) = struct
   open Real
 
   type real = Real.t

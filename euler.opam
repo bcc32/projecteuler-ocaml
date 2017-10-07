@@ -6,4 +6,5 @@ homepage: "https://github.com/bcc32/projecteuler-ocaml"
 bug-reports: "https://github.com/bcc32/projecteuler-ocaml"
 dev-repo: "https://github.com/bcc32/projecteuler-ocaml"
 build: ["jbuilder" "build" "-p" name "-j" jobs]
+build-test: ["jbuilder" "runtest" "-p" name "-j" jobs]
 depends: ["bignum" "core" "core_bench" "re2"]

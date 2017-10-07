@@ -1,0 +1,12 @@
+(jbuild_version 1)
+
+(executables
+ ((names (test_runner))
+  (libraries (test_lib ppx_inline_test.runtime-lib ppx_inline_test.runner.lib))
+  (preprocess no_preprocessing)
+  (modules (test_runner))))
+
+(alias
+ ((name   runtest)
+  (deps   (test_runner.exe))
+  (action (run ${^} inline-test-runner test_lib))))

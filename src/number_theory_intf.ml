@@ -38,6 +38,11 @@ module type S = sig
      * b = g] *)
   val bezout : integer -> integer -> integer * integer * integer
 
+  (** [chinese_remainder_theorem [(r_1, m_1); ...]] returns [(x, m)] such that
+     [x % m_1 = r_1], and so on. All of [m_i] must be pairwise coprime. [m] is
+     the product of [m_i]. *)
+  val chinese_remainder_theorem : (integer * integer) list -> integer * integer
+
   (* miscellaneous sequences *)
   val fibonacci : integer Sequence.t
   val natural_numbers : ?init:integer -> unit -> integer Sequence.t

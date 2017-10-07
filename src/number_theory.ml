@@ -3,7 +3,7 @@ open! Core
 module Make (Int : Int_intf.S_unbounded) = struct
   open Int.O
 
-  type integer = Int.t
+  type integer = Int.t [@@deriving sexp]
 
   let one  = Int.one
   let two  = of_int_exn 2
@@ -152,6 +152,15 @@ module Make (Int : Int_intf.S_unbounded) = struct
       )
     in
     loop a one zero b zero one
+
+  let chinese_remainder_theorem residues =
+    List.reduce_balanced_exn residues ~f:(fun (r1, m1) (r2, m2) ->
+      let (s, t, g) = bezout m1 m2 in
+      if g <> one
+      then (
+        raise_s [%message "moduli not coprime" (m1 : integer) (m2 : integer)]);
+      let x = r1 * t * m2 + r2 * s * m1 in
+      (x, m1 * m2))
 
   let fibonacci =
     Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))

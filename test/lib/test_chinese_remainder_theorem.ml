@@ -23,11 +23,12 @@ let%test_unit "Chinese remainder theorem" =
     in
     List.zip_exn residues moduli
   in
+  let big = Bigint.of_int in
   Quickcheck.test gen
     (* cf https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
-    ~examples:[ [ Bigint.of_int 0, Bigint.of_int 3
-                ; Bigint.of_int 3, Bigint.of_int 4
-                ; Bigint.of_int 4, Bigint.of_int 5 ] ]
+    ~examples:[ [ big 0, big 3
+                ; big 3, big 4
+                ; big 4, big 5 ] ]
     ~sexp_of:[%sexp_of: (Bigint.t * Bigint.t) list]
     ~f:(fun residues ->
       let (x, m) = Euler.Bigint.chinese_remainder_theorem residues in

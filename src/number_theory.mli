@@ -7,3 +7,4 @@ module Int    : Number_theory_intf.S with type integer = int
 module Bigint : Number_theory_intf.S with type integer = Bignum.Std.Bigint.t
 
 val prime_sieve : int -> bool array
+val multinomial : int list -> int

@@ -13,6 +13,7 @@ module Bignum : Numerics_intf.S with type real = Bignum.t
 val is_pythagorean_triple : int -> int -> int -> bool
 
 (* Number Theory *)
+val multinomial : int list -> int
 val prime_sieve : int -> bool array
 
 (* Utility *)

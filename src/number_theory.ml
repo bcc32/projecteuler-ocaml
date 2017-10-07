@@ -211,3 +211,13 @@ let prime_sieve limit =
   primes.(1) <- false;
   sieve 2;
   primes
+
+let multinomial xs =
+  let p = ref 1 in
+  let n = ref 1 in
+  List.iter xs ~f:(fun x ->
+    for i = 1 to x do
+      p := !p * !n / i;
+      incr n;
+    done);
+  !p

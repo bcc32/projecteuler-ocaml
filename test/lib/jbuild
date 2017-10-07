@@ -3,5 +3,5 @@
 (library
  ((name test_lib)
   (library_flags (-linkall))
-  (libraries (euler ppx_inline_test.runtime-lib ppx_inline_test.runner.lib))
-  (preprocess (pps (ppx_jane)))))
+  (libraries (euler))
+  (preprocess (pps (ppx_jane ppx_driver.runner (-inline-test-lib test_lib))))))

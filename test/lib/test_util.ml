@@ -41,7 +41,7 @@ let%test_unit "run_length_encode" =
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun l ->
-      let enc = Euler.run_length_encode l in
+      let enc = Euler.run_length_encode l ~equal:Int.equal in
       (* reconstruct the list *)
       [%test_result: int list] ~expect:l
         (List.bind enc ~f:(fun (elt, n) ->

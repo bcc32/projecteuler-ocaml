@@ -1,6 +1,17 @@
 open! Core
 open Core_bench.Std
 
+let run_length_encode_group =
+  Bench.Test.create_with_initialization
+    ~name:"Euler.run_length_encode"
+    (fun `init ->
+       let list =
+         Int.gen
+         |> List.gen' ~length:(`At_least 200)
+         |> Quickcheck.random_value
+       in
+       fun () -> Euler.run_length_encode list ~equal:Int.equal)
+
 let divisors_group =
   let args = [ 17 ; 60 ; 100003 ; 120000 ; 600851475143 ] in
   Bench.Test.create_indexed
@@ -66,6 +77,7 @@ let command =
     [ "divisors", divisors_group
     ; "sqrt"    , sqrt_group
     ; "primes"  , primes_group
+    ; "rle"     , run_length_encode_group
     ]
   in
   List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))

@@ -105,7 +105,9 @@ module Make (Int : Int_intf.S_unbounded) = struct
     in
     aux two
 
-  let prime_factor n = Util.run_length_encode (factor n)
+  let prime_factor n =
+    factor n
+    |> Util.run_length_encode ~equal:Int.equal
 
   let divisors n =
     let mult_aux p a lst =

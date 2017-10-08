@@ -2,24 +2,18 @@ open! Core
 
 (* FIXME this module needs a better name *)
 
-(* FIXME don't use polymorphic compare *)
-(* run length encoding (item, count) *)
-let rec run_length_encode lst =
-  let rec count item lst foo =
+let run_length_encode lst ~equal =
+  let rec start lst ac =
     match lst with
-    | [] -> foo
-    | (hd::tl) when hd = item -> count item tl (foo + 1)
-    | _ -> foo
-  in
-  let rec drop item lst =
+    | [] -> ac
+    | hd :: tl -> count tl hd 1 ac
+  and count lst x c ac =
     match lst with
-    | [] -> []
-    | (hd::tl) when hd = item -> drop item tl
-    | _ -> lst
+    | hd :: tl when equal x hd ->
+      count tl x (c + 1) ac
+    | _ -> start lst ((x, c) :: ac)
   in
-  match lst with
-  | [] -> []
-  | (hd::_) -> (hd, count hd lst 0) :: run_length_encode (drop hd lst)
+  List.rev (start lst [])
 
 let is_palindrome l ~equal =
   List.equal ~equal l (List.rev l)

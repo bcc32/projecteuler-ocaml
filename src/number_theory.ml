@@ -143,6 +143,8 @@ module Make (Int : Int_intf.S_unbounded) = struct
     |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
 
   let powmod a b ~modulus =
+    if a < zero
+    then (raise_s [%message "powmod negative base" (a : integer)]);
     let rec loop a b ac =
       if b = zero
       then ac

@@ -13,4 +13,4 @@ let command =
     ~preserve_subcommand_order:()
 ;;
 
-let () = Command.run ~version:"0.1.0" command
+let () = Command.run ~version:"0.1.1" command

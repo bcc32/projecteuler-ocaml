@@ -10,8 +10,9 @@ module Bignum = Numerics.Bignum
 
 let is_pythagorean_triple = Geometry.is_pythagorean_triple
 
-let multinomial = Number_theory.multinomial
-let prime_sieve = Number_theory.prime_sieve
+let factorial_prime_factor = Number_theory.factorial_prime_factor
+let multinomial            = Number_theory.multinomial
+let prime_sieve            = Number_theory.prime_sieve
 
 let is_palindrome     = Util.is_palindrome
 let permutations      = Util.permutations

@@ -34,10 +34,11 @@ module type S = sig
   val totient : integer -> integer
 
   (* modular arithmetic *)
+  (** [powmod a b ~modulus] returns [a^b mod modulus], without overflowing *)
+  val powmod : integer -> integer -> modulus:integer -> integer
   (** [bezout a b] returns [(s, t, g)] such that [g = gcd(a, b)] and [s * a + t
      * b = g] *)
   val bezout : integer -> integer -> integer * integer * integer
-
   (** [chinese_remainder_theorem [(r_1, m_1); ...]] returns [(x, m)] such that
      [x % m_1 = r_1], and so on. All of [m_i] must be pairwise coprime. [m] is
      the product of [m_i]. *)

@@ -142,6 +142,16 @@ module Make (Int : Int_intf.S_unbounded) = struct
     Sequence.zip top bottom
     |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
 
+  let powmod a b ~modulus =
+    let rec loop a b ac =
+      if b = zero
+      then ac
+      else if b % two = zero
+      then (loop (a * a % modulus) (b / two) ac)
+      else (loop a (b - one) (ac * a % modulus))
+    in
+    loop a b one
+
   let bezout a b =
     let rec loop r0 s0 t0 r1 s1 t1 =
       if r1 = zero
@@ -220,6 +230,20 @@ let prime_sieve limit =
   primes.(1) <- false;
   sieve 2;
   primes
+
+let factorial_prime_factor n =
+  let primes = prime_sieve n in
+  let factors = ref [] in
+  Array.iteri primes ~f:(fun p is_prime ->
+    if is_prime
+    then (
+      let rec loop n ac =
+        if n = 0
+        then ac
+        else (loop (n / p) (n / p + ac))
+      in
+      factors := (p, loop n 0) :: !factors));
+  List.rev !factors
 
 (* TODO functorize *)
 let multinomial xs =

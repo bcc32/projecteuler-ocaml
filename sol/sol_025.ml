@@ -11,6 +11,7 @@ module M = struct
     |> Tuple2.get1
     |> succ
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

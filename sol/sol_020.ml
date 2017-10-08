@@ -9,6 +9,7 @@ module M = struct
     |> Euler.Bigint.factorial
     |> Euler.Bigint.sum_digits
     |> printf !"%{Bigint}\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

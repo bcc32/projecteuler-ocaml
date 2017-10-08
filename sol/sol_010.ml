@@ -10,6 +10,7 @@ module M = struct
       then acc + n
       else acc)
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -10,9 +10,8 @@ module M = struct
       In_channel.input_lines chan
       |> List.map ~f:(fun line ->
         String.split line ~on:' '
-        |> List.map ~f:Int.of_string
-      )
-    )
+        |> List.map ~f:Int.of_string))
+  ;;
 
   let propagate bot top =
     let rec iter bot top acc =
@@ -26,6 +25,7 @@ module M = struct
     in
     iter bot top []
     |> List.rev
+  ;;
 
   let max_sum_exn triangle =
     match List.rev triangle with
@@ -34,11 +34,13 @@ module M = struct
       List.fold tl ~init:hd ~f:propagate
       |> List.max_elt ~cmp:Int.compare
       |> Option.value_exn
+  ;;
 
   let main () =
     let triangle = read_triangle path in
     max_sum_exn triangle
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

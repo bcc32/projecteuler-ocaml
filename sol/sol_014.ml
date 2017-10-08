@@ -7,6 +7,7 @@ module M = struct
     if n mod 2 = 0
     then n / 2
     else 3 * n + 1
+  ;;
 
   let collatz_length n =
     let rec iter n acc =
@@ -15,6 +16,7 @@ module M = struct
       | n -> iter (collatz n) (acc + 1)
     in
     iter n 1
+  ;;
 
   let main () =
     let argmax = ref 0 in
@@ -24,10 +26,10 @@ module M = struct
       if len > !max
       then (
         argmax := i;
-        max    := len
-      )
+        max    := len)
     done;
     printf "%d\n" !argmax
+  ;;
 end
 
 include Euler.Solution.Make(M)

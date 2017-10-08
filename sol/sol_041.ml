@@ -16,6 +16,7 @@ module M = struct
         Option.some_if (Euler.Int.is_prime n) n))
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

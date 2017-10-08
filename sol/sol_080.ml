@@ -11,12 +11,14 @@ module M = struct
       ~f':(fun x -> of_int 2 * x)
       ~init:one
       ~epsilon:Bignum.(tenth ** 101)
+  ;;
 
   let hundred_decimal_digits n =
     let open Bignum in
     n * ten ** 101
     |> round_as_bigint
     |> Option.value_exn
+  ;;
 
   let digital_sum n =
     n
@@ -27,6 +29,7 @@ module M = struct
     |> String.subo ~len:100
     |> Euler.digits_of_string
     |> List.sum (module Int) ~f:Fn.id
+  ;;
 
   let main () =
     let range =
@@ -43,6 +46,7 @@ module M = struct
     |> Set.to_sequence
     |> Sequence.sum (module Int) ~f:digital_sum
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

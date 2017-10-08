@@ -67,5 +67,5 @@ let modules : (string, (module Euler.Solution.S)) List.Assoc.t =
   ; "429"     , (module Sol_429)
   ; "500"     , (module Sol_500)
   ; "504"     , (module Sol_504)
-  ; "549"     , (module Sol_549)
-  ]
+  ; "549"     , (module Sol_549) ]
+;;

@@ -14,6 +14,7 @@ module M = struct
     let last = Sequence.find_exn numbers ~f:(fun (_, c) -> c = 4) in
     let ans = fst last - 3 in
     printf "%d\n" ans
+  ;;
 end
 
 include Euler.Solution.Make(M)

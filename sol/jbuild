@@ -6,4 +6,5 @@
   (libraries (core
               euler
               re2))
-  (preprocess (pps (ppx_jane)))))
+  (preprocess (pps (ppx_jane)))
+  (modules (:standard \ template))))

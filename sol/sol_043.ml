@@ -17,6 +17,7 @@ module M = struct
       && is_div d7 d8 d9 13
       && is_div d8 d9 d10 17
     | _ -> invalid_arg "wrong number of digits"
+  ;;
 
   let main () =
     List.range 0 10
@@ -25,6 +26,7 @@ module M = struct
     |> Sequence.sum (module Int)
          ~f:(fun d -> Euler.Int.int_of_digits (Sequence.of_list d))
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

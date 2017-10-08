@@ -11,9 +11,7 @@ module M = struct
     lazy (
       In_channel.with_file path ~f:(fun chan ->
         In_channel.input_lines chan
-        |> List.map ~f:Bignum.of_string
-      )
-    )
+        |> List.map ~f:Bignum.of_string))
 
   let main () =
     let numbers = force numbers in
@@ -21,6 +19,7 @@ module M = struct
     |> Bignum.to_string
     |> String.subo ~len:prefix_length
     |> printf "%s\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

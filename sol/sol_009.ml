@@ -11,10 +11,10 @@ module M = struct
           if Euler.is_pythagorean_triple a b c
           then r.return (a * b * c)
         done
-      done
-    )
+      done)
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -7,6 +7,7 @@ module M = struct
     Euler.Int.natural_numbers ~init:0 ()
     |> Sequence.take_while ~f:(fun n -> Euler.Int.is_prime (n * n + a * n + b))
     |> Sequence.length
+  ;;
 
   let main () =
     let range = Sequence.range ~stop:`inclusive (-999) 999 in
@@ -16,6 +17,7 @@ module M = struct
     |> Option.value_exn
     |> Tuple2.get1
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

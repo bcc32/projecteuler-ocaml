@@ -17,8 +17,8 @@ module M = struct
           result
         | Some n -> n
       in
-      totient_chain_length
-    )
+      totient_chain_length)
+  ;;
 
   let main () =
     let totient_chain_length = force totient_chain_length in
@@ -28,6 +28,7 @@ module M = struct
       then acc + i
       else acc)
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -16,6 +16,7 @@ module M = struct
         then (return a)
       done;
       assert false)
+  ;;
 
   let main () =
     let sum = ref 0 in
@@ -23,6 +24,7 @@ module M = struct
       sum := !sum + largest_idempotent n
     done;
     printf "%d\n" !sum
+  ;;
 
   (* let max_idempotent = Array.create 0 ~len:(limit + 1)
    *

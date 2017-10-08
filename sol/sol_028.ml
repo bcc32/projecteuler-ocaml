@@ -15,6 +15,7 @@ module M = struct
       di := !di + 2;
     done;
     printf "%d\n" !sum
+  ;;
 end
 
 include Euler.Solution.Make(M)

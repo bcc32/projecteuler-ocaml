@@ -13,12 +13,14 @@ module M = struct
     |> List.map ~f:(( * ) n)
     |> List.map ~f:sort_digits
     |> List.for_all ~f:(List.equal ~equal:Int.equal n_digits)
+  ;;
 
   let main () =
     Euler.Int.natural_numbers ~init:1 ()
     |> Sequence.find ~f:same_digits
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

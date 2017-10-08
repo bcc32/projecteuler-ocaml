@@ -1,10 +1,11 @@
 open! Core
 
 module M = struct
-  let problem_number = failwith "unimplemented"
+  let problem_number = ___
 
   let main () =
-    failwith "unimplemented"
+    ___
+  ;;
 end
 
 include Euler.Solution.Make(M)

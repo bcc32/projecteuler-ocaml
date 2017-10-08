@@ -8,6 +8,7 @@ module M = struct
     let num = r |> Bignum.num_as_bigint |> Bigint.to_string |> String.length in
     let den = r |> Bignum.den_as_bigint |> Bigint.to_string |> String.length in
     num > den
+  ;;
 
   let main () =
     let expansions =
@@ -21,6 +22,7 @@ module M = struct
     |> Fn.flip Sequence.take 1000
     |> Sequence.count ~f:is_more_num_digits
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

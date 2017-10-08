@@ -20,5 +20,6 @@ module M = struct
     done;
     Debug.eprint "hi";
     printf !"%{sexp: int Int.Table.t}\n" counts
+  ;;
 end
 include Euler.Solution.Make(M)

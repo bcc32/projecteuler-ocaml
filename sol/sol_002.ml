@@ -11,14 +11,13 @@ module M = struct
     in
     iter 0 1 []
     |> List.rev
+  ;;
 
-  let ans =
+  let main () =
     fibs 4000000
     |> List.filter ~f:(fun x -> x mod 2 = 0)
     |> List.fold ~init:0 ~f:(+)
-
-  let main () =
-    printf "%d\n" ans
+    |> printf "%d\n"
 end
 
 include Euler.Solution.Make(M)

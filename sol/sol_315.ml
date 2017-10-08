@@ -15,13 +15,14 @@ module M = struct
      ; [ 0; 1; 3; 4; 5; 6 ]
      ; [ 0; 1; 2; 5 ]
      ; [ 0; 1; 2; 3; 4; 5; 6 ]
-     ; [ 0; 1; 2; 3; 5; 6 ]
-    |]
+     ; [ 0; 1; 2; 3; 5; 6 ] |]
+  ;;
 
   let digit_segments =
     Array.map digit_segments ~f:(fun segments ->
       List.fold segments ~init:0 ~f:(fun ac x ->
         ac lor (1 lsl x)))
+  ;;
 
   let distance s1 s2 = Int.popcount (s1 lxor s2)
 
@@ -37,6 +38,7 @@ module M = struct
                             digit_segments.(n2 mod 10))
     in
     loop n1 n2 0
+  ;;
 
   let digital_root n =
     let rec loop n ac =
@@ -45,6 +47,7 @@ module M = struct
       | n -> loop (n / 10) (ac + n mod 10)
     in
     loop n 0
+  ;;
 
   let digital_root_sequence n =
     Sequence.unfold ~init:(Some n) ~f:(function
@@ -54,17 +57,20 @@ module M = struct
         if d = s
         then Some (s, None)
         else Some (s, Some d))
+  ;;
 
   let sam_cost sequence =
     sequence
     |> Sequence.map ~f:(transition_cost 0)
     |> Sequence.sum (module Int) ~f:(fun x -> 2 * x)
+  ;;
 
   let max_cost sequence =
     let left  = Sequence.append (Sequence.singleton 0) sequence in
     let right = Sequence.append sequence (Sequence.singleton 0) in
     Sequence.zip left right
     |> Sequence.sum (module Int) ~f:(fun (x, y) -> transition_cost x y)
+  ;;
 
   let main () =
     let diff = ref 0 in
@@ -76,7 +82,7 @@ module M = struct
         diff := !diff + sam_cost seq - max_cost seq)
     done;
     printf "%d\n" !diff
-
+  ;;
   (* 13625242 1s *)
 end
 

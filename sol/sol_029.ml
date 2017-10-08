@@ -13,6 +13,7 @@ module M = struct
       done
     done;
     printf "%d\n" (Hash_set.length powers)
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -11,6 +11,7 @@ module M = struct
       && is_palindrome (Euler.Int.digits_of_int ~base:2 n))
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

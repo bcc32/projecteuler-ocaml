@@ -36,7 +36,7 @@ module M = struct
     Sequence.range 0 600 ~stop:`inclusive
     |> Sequence.map ~f:(fun x -> x * x * x)
     |> Sequence.to_array
-
+  ;;
 
   let find_n p =
     with_return (fun { return } ->
@@ -55,12 +55,14 @@ module M = struct
         | _ -> ()
       done;
       assert false)
+  ;;
 
   let main () =
     Euler.Int.primes
     |> Sequence.take_while ~f:(fun p -> p < 1_000_000)
     |> Sequence.count ~f:(fun p -> Option.is_some (find_n p))
     |> printf "%d\n"
+  ;;
 
   (* After reading a bit more on the ProjectEuler forum, I discovered that
      because [p] is a difference of cubes, that:
@@ -80,6 +82,7 @@ module M = struct
       then (incr count)
     done;
     printf "%d\n" !count
+  ;;
 
   (* This is about 4000x faster than the previous solution. *)
 end

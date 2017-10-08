@@ -42,9 +42,11 @@ module M = struct
       value := Bignum.(!value * ratio)
     done;
     Bignum.(of_bigint !accum / denominator)
+  ;;
 
   let main () =
     let _ = p_billionaire in
     failwith "unimplemented"
+  ;;
 end
 include Euler.Solution.Make(M)

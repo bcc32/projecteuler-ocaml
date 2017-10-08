@@ -10,6 +10,7 @@ module M = struct
   let lattice_points x y =
     let boundary_points = x + y + Euler.Int.gcd x y in
     (x * y - boundary_points) / 2 + 1
+  ;;
 
   let lattice_points =
     let cache =
@@ -18,6 +19,7 @@ module M = struct
           lattice_points x y))
     in
     fun x y -> cache.(x).(y)
+  ;;
 
   let main () =
     let count = ref 0 in
@@ -40,8 +42,8 @@ module M = struct
       done
     done;
     printf "%d\n" !count
-  (* 694687
-     15s *)
+  ;;
+  (* 694687 15s *)
 end
 
 include Euler.Solution.Make(M)

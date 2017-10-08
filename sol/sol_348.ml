@@ -23,20 +23,24 @@ module M = struct
         d @ List.tl_exn (List.rev d)
         |> Sequence.of_list
         |> Euler.Int.int_of_digits))
+  ;;
 
   let palindromes =
     Euler.Int.natural_numbers () ~init:1
     |> Sequence.bind ~f:palindromes_n_digits
+  ;;
 
   (* greater than 1 *)
   let _squares =
     Euler.Int.natural_numbers () ~init:2
     |> Sequence.map ~f:(fun x -> x * x)
+  ;;
 
   (* ditto *)
   let cubes =
     Euler.Int.natural_numbers () ~init:2
     |> Sequence.map ~f:(fun x -> x * x * x)
+  ;;
 
   let main () =
     palindromes
@@ -50,6 +54,7 @@ module M = struct
     |> Fn.flip Sequence.take 5
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

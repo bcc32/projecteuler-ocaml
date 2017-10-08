@@ -6,9 +6,11 @@ module M = struct
   let path = "data/067.txt"
 
   let main () =
-    Sol_018.read_triangle path
+    path
+    |> Sol_018.read_triangle
     |> Sol_018.max_sum_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

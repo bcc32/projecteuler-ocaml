@@ -13,6 +13,7 @@ module M = struct
       if a < b && a * a + b * b = c * c
       then Some (a, b, c)
       else None)
+  ;;
 
   let main () =
     (*
@@ -23,6 +24,7 @@ module M = struct
     *)
     pythag_triples
     |> Sequence.iter ~f:(printf !"%{sexp: int * int * int}\n%!")
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -6,10 +6,10 @@ module M = struct
 
   let rec divide_through k n =
     let open Bigint in
-    if n % k = zero then
-      divide_through k (n / k)
-    else
-      n
+    if n % k = zero
+    then (divide_through k (n / k))
+    else n
+  ;;
 
   let cycle_length n =
     let n =
@@ -26,6 +26,7 @@ module M = struct
         loop (of_int 10 * d + of_int 9) Int.(c + 1)
     in
     loop (Bigint.of_int 9) 1
+  ;;
 
   let main () =
     Sequence.range 1 1000
@@ -34,6 +35,7 @@ module M = struct
     |> uw
     |> fst
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

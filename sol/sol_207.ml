@@ -20,6 +20,7 @@ module M = struct
       12345 * perfect < part)
     |> Tuple2.get2
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

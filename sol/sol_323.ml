@@ -13,6 +13,7 @@ module M = struct
     let zero_bits = word_size - a in
     let diff = b - a in
     float (Euler.Int.binomial zero_bits diff) /. (2.0 ** float zero_bits)
+  ;;
 
   let rec expectation_to_32 =
     let cache = Int.Table.create () in
@@ -28,10 +29,10 @@ module M = struct
             e := !e +. p_transition n i *. expectation_to_32 i
           done;
           !e /. (1. -. p_transition n n)))
+  ;;
 
-  let main () =
-    printf "%.10f\n" @@ expectation_to_32 0
-    (* 6.3551758451 4.3ms *)
+  let main () = printf "%.10f\n" @@ expectation_to_32 0
+  (* 6.3551758451 4.3ms *)
 end
 
 include Euler.Solution.Make(M)

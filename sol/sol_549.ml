@@ -7,6 +7,7 @@ module M = struct
     match Sys.getenv "LIMIT" with
     | Some x -> Int.of_string x
     | None -> 100_000_000
+  ;;
 
   let divide n p =
     let rec loop n ac =
@@ -15,6 +16,7 @@ module M = struct
       else ac
     in
     loop n 0
+  ;;
 
   (* Sieve inspired by Nore's solution at https://projecteuler.net/thread=549#235492. *)
   let sieve n =
@@ -52,11 +54,13 @@ module M = struct
         loop_powers p 1 0)
     done;
     Array.sum (module Int) m ~f:Fn.id
+  ;;
 
   let main () =
     sieve limit
     |> printf "%d\n"
-    (* 476001479068717, 9.4s *)
+  ;;
+  (* 476001479068717, 9.4s *)
 end
 
 include Euler.Solution.Make(M)

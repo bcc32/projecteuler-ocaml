@@ -14,6 +14,7 @@ module M = struct
       x := Int.bit_or !x y
     done;
     !count
+  ;;
 
   let simulate bits times =
     let sample_counts = Array.create 0 ~len:40 in
@@ -22,12 +23,14 @@ module M = struct
       Array.unsafe_set sample_counts sample (Array.unsafe_get sample_counts sample + 1)
     done;
     sample_counts
+  ;;
 
   let expectation sample_counts total =
     let e = ref 0. in
     Array.iteri sample_counts ~f:(fun i x ->
       e := !e +. float i *. float x);
     !e /. float total
+  ;;
 
   let main () =
     Random.self_init ();
@@ -36,6 +39,7 @@ module M = struct
     let samples = simulate bits times in
     printf !"%{sexp: int array}\n" samples;
     printf "%.10f\n" @@ expectation samples times
+  ;;
 end
 
 include Euler.Solution.Make(M)

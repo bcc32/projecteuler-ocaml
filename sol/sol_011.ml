@@ -14,11 +14,9 @@ module M = struct
         |> List.map ~f:(fun line ->
           String.split line ~on:' '
           |> List.map ~f:Int.of_string
-          |> List.to_array
-        )
-        |> List.to_array
-      )
-    )
+          |> List.to_array)
+        |> List.to_array))
+  ;;
 
   let horizontal_products grid =
     Array.to_sequence grid
@@ -27,10 +25,9 @@ module M = struct
       |> Sequence.map ~f:(fun i ->
         Sequence.range i (i + product_size)
         |> Sequence.map ~f:(fun i -> row.(i))
-        |> Sequence.fold ~init:1 ~f:( * )
-      )
-    )
+        |> Sequence.fold ~init:1 ~f:( * )))
     |> Sequence.concat
+  ;;
 
   let vertical_products grid =
     horizontal_products (Array.transpose_exn grid)
@@ -41,8 +38,8 @@ module M = struct
     |> Sequence.map ~f:(fun (i, j) ->
       Sequence.range 0 product_size
       |> Sequence.map ~f:(fun x -> grid.(i + x).(j + x))
-      |> Sequence.fold ~init:1 ~f:( * )
-    )
+      |> Sequence.fold ~init:1 ~f:( * ))
+  ;;
 
   let rl_diagonal_products grid =
     let grid = Array.copy grid in
@@ -54,13 +51,13 @@ module M = struct
     [ horizontal_products grid
     ; vertical_products grid
     ; lr_diagonal_products grid
-    ; rl_diagonal_products grid
-    ]
+    ; rl_diagonal_products grid ]
     |> Sequence.of_list
     |> Sequence.concat
     |> Sequence.max_elt ~cmp:Int.compare
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

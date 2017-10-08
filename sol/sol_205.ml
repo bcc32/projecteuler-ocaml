@@ -12,10 +12,12 @@ module M = struct
     Map.to_alist dist
     |> List.map ~f:(Tuple2.map_fst ~f:((+) n))
     |> Map.of_alist_exn ~comparator
+  ;;
 
   let scale_div_n dist ~n : dist =
     let factor = Percent.of_mult (1.0 /. Float.of_int n) in
     Map.map dist ~f:Percent.(( * ) factor)
+  ;;
 
   let merge_dist ~key:_ data =
     let prob =
@@ -25,15 +27,18 @@ module M = struct
       | `Right p2       -> p2
     in
     Some prob
+  ;;
 
   let add_die dist die : dist =
     Sequence.range 1 die ~stop:`inclusive
     |> Sequence.map ~f:(fun n -> dist |> shift_n ~n |> scale_div_n ~n:die)
     |> Sequence.fold ~init:Int.Map.empty ~f:(Map.merge ~f:merge_dist)
+  ;;
 
   let dice_set ~faces ~len : dist =
     Sequence.range 0 len
     |> Sequence.fold ~init:empty_dist ~f:(fun dist _ -> add_die dist faces)
+  ;;
 
   let win_prob winner loser : Percent.t =
     Map.mapi winner ~f:(fun ~key:roll_w ~data:prob_w ->
@@ -45,6 +50,7 @@ module M = struct
       |> List.sum (module Percent) ~f:Fn.id)
     |> Map.data
     |> List.sum (module Percent) ~f:Fn.id
+  ;;
 
   let main () =
     let peter = dice_set ~faces:4 ~len:9 in
@@ -52,6 +58,7 @@ module M = struct
     win_prob peter colin
     |> Percent.to_mult
     |> printf "%.07f\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -12,6 +12,7 @@ module M = struct
       else iter (n / base) (n % base + acc)
     in
     iter n zero
+  ;;
 
   let main () =
     let open Bigint in
@@ -21,6 +22,7 @@ module M = struct
     sum_digits num (of_int 10)
     |> to_int_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

@@ -47,15 +47,7 @@ module M = struct
     let hundred n =
       match n / 100 with
       | 0 -> last_two_digits n
-      | 1
-      | 2
-      | 3
-      | 4
-      | 5
-      | 6
-      | 7
-      | 8
-      | 9 as h ->
+      | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 as h ->
         last_two_digits (n % 100)
         + less_than_twenty h
         + String.length "hundred"
@@ -69,10 +61,12 @@ module M = struct
          else 0)
     in
     thousand n
+  ;;
 
   let main () =
     Sequence.range 1 1000 ~stop:`inclusive
     |> Sequence.sum (module Int) ~f:how_many_letters
     |> printf "%d\n"
+  ;;
 end
 include Euler.Solution.Make(M)

@@ -18,6 +18,7 @@ module M = struct
         Euler.Bigint.binomial n r)
       |> count ~f:(Bigint.(<) limit))
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

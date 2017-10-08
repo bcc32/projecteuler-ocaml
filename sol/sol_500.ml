@@ -25,6 +25,7 @@ module M = struct
     done;
     !number
     |> printf "%d\n"
-    (* 35407281, 500ms *)
+  ;;
+  (* 35407281, 500ms *)
 end
 include Euler.Solution.Make(M)

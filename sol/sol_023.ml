@@ -11,13 +11,14 @@ module M = struct
       |> List.sum (module Int) ~f:Fn.id
     in
     divisor_sum > 2 * n
+  ;;
 
   let abundant_numbers =
     lazy (
       Sequence.range 12 limit ~stop:`inclusive
       |> Sequence.filter ~f:is_abundant
-      |> Sequence.to_list
-    )
+      |> Sequence.to_list)
+  ;;
 
   let main () =
     let can_sum = Array.create false ~len:(limit + 1) in
@@ -43,6 +44,7 @@ module M = struct
       then sum := !sum + i
     done;
     printf "%d\n" !sum
+  ;;
 end
 
 include Euler.Solution.Make(M)

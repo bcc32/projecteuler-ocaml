@@ -21,6 +21,7 @@ module M = struct
       n * n |> Int.to_string |> Re2.matches pattern_re)
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

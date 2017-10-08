@@ -13,6 +13,7 @@ module M = struct
       done
     done;
     printf "%d\n" !ans
+  ;;
 end
 
 include Euler.Solution.Make(M)

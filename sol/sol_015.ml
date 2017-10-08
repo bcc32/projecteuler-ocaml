@@ -9,6 +9,7 @@ module M = struct
     let r = Bigint.of_int 20 in
     Euler.Bigint.binomial n r
     |> printf !"%{Bigint}\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

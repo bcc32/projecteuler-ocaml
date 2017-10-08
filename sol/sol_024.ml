@@ -12,6 +12,7 @@ module M = struct
     |> List.map ~f:Int.to_string
     |> String.concat ~sep:""
     |> printf "%s\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

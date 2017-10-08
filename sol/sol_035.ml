@@ -7,6 +7,7 @@ module M = struct
     Doubly_linked.last_elt ds
     |> uw
     |> Doubly_linked.move_to_front ds
+  ;;
 
   let prime_circle n =
     let digits = Euler.Int.digits_of_int n |> Doubly_linked.of_list in
@@ -18,12 +19,11 @@ module M = struct
         if Euler.Int.is_prime n
         then (
           results.(i) <- n;
-          rotate digits
-        )
+          rotate digits)
         else return None
       done;
-      Some results
-    )
+      Some results)
+  ;;
 
   let main () =
     let circular_primes = Int.Hash_set.create () in
@@ -31,10 +31,10 @@ module M = struct
       if not (Hash_set.mem circular_primes n)
       then (
         Option.iter (prime_circle n)
-          ~f:(Array.iter ~f:(Hash_set.add circular_primes))
-      )
+          ~f:(Array.iter ~f:(Hash_set.add circular_primes)))
     done;
     printf "%d\n" (Hash_set.length circular_primes)
+  ;;
 end
 
 include Euler.Solution.Make(M)

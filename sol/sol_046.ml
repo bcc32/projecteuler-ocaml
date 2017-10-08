@@ -10,6 +10,7 @@ module M = struct
       n - 2 * s * s
       |> Euler.Int.is_prime)
     |> not
+  ;;
 
   let main () =
     Sequence.unfold ~init:3 ~f:(fun s -> Some (s, s + 2))
@@ -17,6 +18,7 @@ module M = struct
     |> Sequence.find ~f:cannot_be_written
     |> Option.value_exn
     |> printf "%d\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

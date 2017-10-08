@@ -29,9 +29,9 @@ module M = struct
     let factors = Euler.factorial_prime_factor 100_000_000 in
     let s = ref 1 in
     List.iter factors ~f:(fun (p, a) ->
-      s := !s * (1 + Euler.Int.powmod p (2 * a) ~modulus) mod modulus;
-    );
+      s := !s * (1 + Euler.Int.powmod p (2 * a) ~modulus) mod modulus);
     printf "%d\n" !s
+  ;;
   (* 98792821 9.3s *)
 end
 

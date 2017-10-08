@@ -14,6 +14,7 @@ module M = struct
     |> Sequence.max_elt ~cmp:Bigint.compare
     |> Option.value_exn
     |> printf !"%{Bigint}\n"
+  ;;
 end
 
 include Euler.Solution.Make(M)

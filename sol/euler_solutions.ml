@@ -1,7 +1,7 @@
 open! Core
 
 (* FIXME this is horrible... *)
-let modules : (module Euler.Solution.S) list =
+let modules : (module Euler.Solution_intf.S) list =
   [ (module Sol_001)
   ; (module Sol_002)
   ; (module Sol_003)
@@ -72,6 +72,6 @@ let modules : (module Euler.Solution.S) list =
 
 let modules =
   List.map modules ~f:(fun m ->
-    let module M = (val m : Euler.Solution.S) in
+    let module M = (val m : Euler.Solution_intf.S) in
     (M.command_name, m))
 ;;

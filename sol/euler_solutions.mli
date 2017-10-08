@@ -1,3 +1,3 @@
 open! Core
 
-val modules : (string, (module Euler.Solution.S)) List.Assoc.t
+val modules : (string, (module Euler.Solution_intf.S)) List.Assoc.t

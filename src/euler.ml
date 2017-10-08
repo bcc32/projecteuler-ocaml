@@ -1,6 +1,7 @@
 open! Core
 
-module Solution = Solution
+module Solution      = Solution
+module Solution_intf = Solution_intf
 
 module Int    = Number_theory.Int
 module Bigint = Number_theory.Bigint

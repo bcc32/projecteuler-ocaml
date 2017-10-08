@@ -1,19 +1,5 @@
 open! Core
 
-type solution_id =
-  [ `Number of int
-  | `Custom of int * [ `Key of string ] * [ `Description of string ] ]
-
-module type Solution = sig
-  val problem : solution_id
-  val main : unit -> unit
-end
-
-module type S = sig
-  val command : Command.t
-  val command_name : string
-end
-
 let time_unit f () =
   let start = Time.now () in
   protect ~f ~finally:(fun () ->
@@ -23,7 +9,7 @@ let time_unit f () =
     |> print_endline)
 ;;
 
-module Make (M : Solution) : S = struct
+module Make (M : Solution_intf.Arg) = struct
   let command =
     let main =
       let open Command.Let_syntax in

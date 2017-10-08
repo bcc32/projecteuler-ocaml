@@ -18,10 +18,4 @@ let prime_sieve            = Number_theory.prime_sieve
 let is_palindrome     = Util.is_palindrome
 let permutations      = Util.permutations
 let run_length_encode = Util.run_length_encode
-
-(* returns the digits of the number *)
-let digits_of_string n =
-  let zero = Char.to_int '0' in
-  String.to_list_rev n
-  |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
-;;
+let digits_of_string  = Util.digits_of_string

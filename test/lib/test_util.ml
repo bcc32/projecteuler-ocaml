@@ -1,5 +1,16 @@
 open! Core
 
+let%test_unit "digits_of_string" =
+  let gen = String.gen' Char.gen_digit ~length:(Int.gen_incl 1 12) in
+  Quickcheck.test gen ~f:(fun s ->
+    let expect = Int.of_string s in
+    [%test_result: int] ~expect (
+      s
+      |> Euler.digits_of_string
+      |> Sequence.of_list
+      |> Euler.Int.int_of_digits))
+;;
+
 let%test_unit "is_palindrome" =
   let gen = List.gen Int.gen in
   Quickcheck.test_can_generate gen ~f:(fun l -> List.rev l = l);

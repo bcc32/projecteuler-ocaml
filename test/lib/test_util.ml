@@ -8,6 +8,7 @@ let%test_unit "is_palindrome" =
     ~f:(fun l ->
       let expect = List.rev l = l in
       [%test_result: bool] (Euler.is_palindrome l ~equal:Int.equal) ~expect)
+;;
 
 let%test_unit "permutations" =
   let gen = List.gen' Int.gen ~length:(`At_most 5) in
@@ -35,6 +36,7 @@ let%test_unit "permutations" =
       (* permutations should be unique *)
       [%test_result: int list option] ~expect:None
         (List.find_a_dup perms ~compare:[%compare: int list]))
+;;
 
 let%test_unit "run_length_encode" =
   let gen = List.gen Int.gen in
@@ -51,3 +53,4 @@ let%test_unit "run_length_encode" =
       [%test_result: ((int * int) * (int * int)) option] ~expect:None
         (List.find_consecutive_duplicate enc
            ~equal:(fun (e1, _) (e2, _) -> e1 = e2)))
+;;

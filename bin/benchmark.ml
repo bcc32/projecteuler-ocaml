@@ -11,13 +11,15 @@ let run_length_encode_group =
          |> Quickcheck.random_value
        in
        fun () -> Euler.run_length_encode list ~equal:Int.equal)
+;;
 
 let divisors_group =
-  let args = [ 17 ; 60 ; 100003 ; 120000 ; 600851475143 ] in
+  let args = [ 17; 60; 100003; 120000; 600851475143 ] in
   Bench.Test.create_indexed
     ~name:"Euler.Int.divisors"
     ~args
     (fun n -> stage (fun () -> Euler.Int.divisors n))
+;;
 
 let sqrt_group =
   let sqrt_newton x =
@@ -38,16 +40,15 @@ let sqrt_group =
   let methods =
     [ sqrt_newton, "Newton's method"
     ; sqrt_bisect, "bisection"
-    ; sqrt       , "built-in [sqrt] function"
-    ]
+    ; sqrt       , "built-in [sqrt] function" ]
   in
   Bench.Test.(
     List.map methods ~f:(fun (f, name) ->
       List.map nums ~f:(fun x ->
         create ~name:(Float.to_string x) (fun () -> f x))
       |> create_group ~name)
-    |> create_group ~name:"sqrt"
-  )
+    |> create_group ~name:"sqrt")
+;;
 
 let primes_group =
   let primes_sequence limit =
@@ -61,24 +62,23 @@ let primes_group =
   let limits = [ 1000; 10_000; 100_000; 1_000_000 ] in
   let methods =
     [ primes_sequence, "Sequence.t"
-    ; primes_sieve   , "Eratosthenes' sieve"
-    ]
+    ; primes_sieve   , "Eratosthenes' sieve" ]
   in
   Bench.Test.(
     List.map methods ~f:(fun (f, name) ->
       List.map limits ~f:(fun limit ->
         create ~name:(Int.to_string limit) (fun () -> f limit))
       |> create_group ~name)
-    |> create_group ~name:"primes"
-  )
+    |> create_group ~name:"primes")
+;;
 
 let command =
   let groups =
     [ "divisors", divisors_group
     ; "sqrt"    , sqrt_group
     ; "primes"  , primes_group
-    ; "rle"     , run_length_encode_group
-    ]
+    ; "rle"     , run_length_encode_group ]
   in
   List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))
   |> Command.group ~summary:"Benchmarking Euler"
+;;

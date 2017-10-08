@@ -30,6 +30,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
       if n <= b
       then Some (n, n + stride)
       else None)
+  ;;
 
   let digits_of_int ?(base = of_int_exn 10) n =
     let rec aux n d =
@@ -38,9 +39,11 @@ module Make (Int : Int_intf.S_unbounded) = struct
       else aux (n / base) (n % base :: d)
     in
     aux n []
+  ;;
 
   let int_of_digits ?(base = of_int_exn 10) ds =
     Sequence.fold ds ~init:zero ~f:(fun acc n -> base * acc + n)
+  ;;
 
   let sum_digits ?(base = of_int_exn 10) n =
     let rec iter n acc =
@@ -49,19 +52,21 @@ module Make (Int : Int_intf.S_unbounded) = struct
       else iter (n / base) (n % base + acc)
     in
     iter n zero
+  ;;
 
   let rec gcd a b =
     if b = zero
     then a
     else gcd b (a % b)
+  ;;
 
-  let lcm a b =
-    a / (gcd a b) * b
+  let lcm a b = a / (gcd a b) * b
 
   let factorial n =
     Sequence.unfold ~init:two ~f:(fun s -> Some (s, Int.succ s))
     |> Sequence.take_while ~f:((>=) n)
     |> Sequence.fold ~init:one ~f:( * )
+  ;;
 
   let next_probable_prime n =
     match n % of_int_exn 6 |> Int.to_int_exn with
@@ -72,6 +77,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
     | 3 -> n + two
     | 4 -> Int.succ n
     | _ -> assert false
+  ;;
 
   let is_prime n =
     if n <= one
@@ -84,17 +90,20 @@ module Make (Int : Int_intf.S_unbounded) = struct
         then false
         else aux (next_probable_prime i)
       in aux (of_int_exn 2))
+  ;;
 
   let rec next_prime n =
     let next = next_probable_prime n in
     if is_prime next
     then next
-    else next_prime next
+    else (next_prime next)
+  ;;
 
   let primes =
     Sequence.unfold ~init:two ~f:(fun p ->
       let next = next_prime p in
       Some (p, next))
+  ;;
 
   let factor =
     let rec aux i n =
@@ -104,10 +113,12 @@ module Make (Int : Int_intf.S_unbounded) = struct
       | i -> aux (next_probable_prime i) n
     in
     aux two
+  ;;
 
   let prime_factor n =
     factor n
     |> Util.run_length_encode ~equal:Int.equal
+  ;;
 
   let divisors n =
     let mult_aux p a lst =
@@ -127,22 +138,26 @@ module Make (Int : Int_intf.S_unbounded) = struct
         div_aux tl (mult_aux p a lst)
     in
     div_aux (prime_factor n) [one]
+  ;;
 
   let num_divisors n =
     prime_factor n
     |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (of_int_exn a + one))
+  ;;
 
   let totient n =
     prime_factor n
     |> List.fold ~init:one ~f:(fun acc (p, a) ->
       let pam1 = Int.pow p (of_int_exn a - one) in
       acc * pam1 * (p - one))
+  ;;
 
   let binomial n r =
     let top    = range ~stop:`inclusive (r + one) n in
     let bottom = range ~stop:`inclusive one (n - r) in
     Sequence.zip top bottom
     |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
+  ;;
 
   let powmod a b ~modulus =
     if a < zero
@@ -155,6 +170,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
       else (loop a (b - one) (ac * a % modulus))
     in
     loop a b one
+  ;;
 
   let bezout a b =
     let rec loop r0 s0 t0 r1 s1 t1 =
@@ -162,10 +178,10 @@ module Make (Int : Int_intf.S_unbounded) = struct
       then (s0, t0, r0)
       else (
         let q = r0 / r1 in
-        loop r1 s1 t1 (r0 - q * r1) (s0 - q * s1) (t0 - q * t1)
-      )
+        loop r1 s1 t1 (r0 - q * r1) (s0 - q * s1) (t0 - q * t1))
     in
     loop a one zero b zero one
+  ;;
 
   let chinese_remainder_theorem residues =
     List.reduce_balanced_exn residues ~f:(fun (r1, m1) (r2, m2) ->
@@ -175,12 +191,16 @@ module Make (Int : Int_intf.S_unbounded) = struct
         raise_s [%message "moduli not coprime" (m1 : integer) (m2 : integer)]);
       let x = r1 * t * m2 + r2 * s * m1 in
       (x, m1 * m2))
+  ;;
 
   let fibonacci =
-    Sequence.unfold ~init:(one, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
+    Sequence.unfold ~init:(one, one) ~f:(fun (a, b) ->
+      Some (a, (b, a + b)))
+  ;;
 
   let natural_numbers ?(init = zero) () =
     Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
+  ;;
 
   let isqrt n =
     let rec loop n =
@@ -191,16 +211,17 @@ module Make (Int : Int_intf.S_unbounded) = struct
         let large = small + one in
         if large * large > n
         then small
-        else large
-      )
+        else large)
     in
     if n < zero
-    then (failwiths "isqrt: negative number" n [%sexp_of: Int.t])
+    then (raise_s [%message "isqrt" (n : integer)])
     else loop n
+  ;;
 
   let is_perfect_square n =
     let sqrt = isqrt n in
     sqrt * sqrt = n
+  ;;
 end
 
 module Int    = Make (Int)
@@ -234,6 +255,7 @@ let prime_sieve limit =
   primes.(1) <- false;
   sieve 2;
   primes
+;;
 
 let factorial_prime_factor n =
   let primes = prime_sieve n in
@@ -248,6 +270,7 @@ let factorial_prime_factor n =
       in
       factors := (p, loop n 0) :: !factors));
   List.rev !factors
+;;
 
 (* TODO functorize *)
 let multinomial xs =
@@ -259,3 +282,4 @@ let multinomial xs =
       incr n;
     done);
   !p
+;;

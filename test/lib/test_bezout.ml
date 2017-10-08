@@ -11,3 +11,4 @@ let%test_unit "Extended Euclidean Algorithm" =
     let (s, t, g) = Euler.Int.bezout a b in
     [%test_result: int] g ~expect:(Euler.Int.gcd a b);
     [%test_result: int] (s * a + t * b) ~expect:g)
+;;

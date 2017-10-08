@@ -15,3 +15,4 @@ let%test_unit "factorial_prime_factor" =
       in
       [%test_result: (int * int) list] ~expect
         (Euler.factorial_prime_factor n))
+;;

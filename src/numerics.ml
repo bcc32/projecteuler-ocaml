@@ -27,18 +27,19 @@ module Make (Real : Numerics_intf.Real) = struct
             | Neg -> loop x_lo x_mi y_lo y_mi
             | Pos -> loop x_mi x_hi y_mi y_hi
             | Zero -> raise (Bug "zero y-value endpoint")
-            end
-        )
+            end)
       in
       let y_lo = f x_lo in
       let y_hi = f x_hi in
       loop x_lo x_hi y_lo y_hi
+  ;;
 
   let rec newton's_method ~f ~f' ~epsilon ~init =
     let delta = f init / f' init in
     if abs delta < epsilon
     then init
     else newton's_method ~f ~f' ~epsilon ~init:(init - delta)
+  ;;
 end
 
 module Float  = Make (Float)

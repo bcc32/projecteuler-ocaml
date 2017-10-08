@@ -39,3 +39,4 @@ let%test_unit "Chinese remainder theorem" =
       [%test_result: Bigint.t] m ~expect:residue_product;
       List.iter residues ~f:(fun (r, m) ->
         [%test_result: Bigint.t] Bigint.(x % m) ~expect:r))
+;;

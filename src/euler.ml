@@ -23,3 +23,4 @@ let digits_of_string n =
   let zero = Char.to_int '0' in
   String.to_list_rev n
   |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
+;;

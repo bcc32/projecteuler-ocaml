@@ -15,6 +15,7 @@ let%test_unit "multinomial" =
       in
       [%test_result: int] ~expect
         (Euler.multinomial xs))
+;;
 
 let%test_unit "powmod" =
   let gen =
@@ -36,3 +37,4 @@ let%test_unit "powmod" =
         loop b 1
       in
       [%test_result: int] ~expect (Euler.Int.powmod a b ~modulus))
+;;

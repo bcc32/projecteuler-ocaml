@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 8
+  let problem = `Number 8
 
   let doit str =
     Sequence.range 0 (String.length str - 12)

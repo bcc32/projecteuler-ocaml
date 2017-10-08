@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 35
+  let problem = `Number 35
 
   let rotate ds =
     Doubly_linked.last_elt ds

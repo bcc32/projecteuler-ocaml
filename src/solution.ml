@@ -1,12 +1,17 @@
 open! Core
 
+type solution_id =
+  [ `Number of int
+  | `Custom of int * [ `Key of string ] * [ `Description of string ] ]
+
 module type Solution = sig
-  val problem_number : int
+  val problem : solution_id
   val main : unit -> unit
 end
 
 module type S = sig
   val command : Command.t
+  val command_name : string
 end
 
 let time_unit f () =
@@ -30,7 +35,17 @@ module Make (M : Solution) : S = struct
         then time_unit M.main ()
         else M.main ()
     in
-    let summary = sprintf "Problem %d" M.problem_number in
+    let summary =
+      match M.problem with
+      | `Number n -> sprintf "Problem %d" n
+      | `Custom (n, `Key _, `Description d) -> sprintf "Problem %d (%s)" n d
+    in
     Command.basic' main ~summary
+  ;;
+
+  let command_name =
+    match M.problem with
+    | `Number n -> Int.to_string n
+    | `Custom (n, `Key k, `Description _) -> sprintf "%d-%s" n k
   ;;
 end

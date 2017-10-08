@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 24
+  let problem = `Number 24
 
   let main () =
     let permutations =

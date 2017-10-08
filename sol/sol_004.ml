@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 4
+  let problem = `Number 4
 
   let main () =
     let ans = ref 0 in

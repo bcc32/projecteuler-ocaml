@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 323
+  let problem = `Custom (323, `Key "sim", `Description "Monte Carlo method")
 
   let simulate_one bits =
     let end_ = Int.shift_left 1 bits in

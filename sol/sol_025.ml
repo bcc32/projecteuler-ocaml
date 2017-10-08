@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 25
+  let problem = `Number 25
 
   let main () =
     Sequence.findi Euler.Bigint.fibonacci ~f:(fun _ f ->

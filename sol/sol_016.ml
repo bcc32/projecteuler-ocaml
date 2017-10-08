@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 16
+  let problem = `Number 16
 
   let sum_digits n base =
     let open Bigint in

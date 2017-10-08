@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 315
+  let problem = `Number 315
 
   let digit_segments =
     (* segments are numbered:

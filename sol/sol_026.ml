@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 026
+  let problem = `Number 026
 
   let rec divide_through k n =
     let open Bigint in

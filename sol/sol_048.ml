@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 48
+  let problem = `Number 48
 
   let ten_ten =
     let ten = Bigint.of_int 10 in

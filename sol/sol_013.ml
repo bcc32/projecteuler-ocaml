@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 13
+  let problem = `Number 13
 
   let path = "data/013.txt"
   let prefix_length = 10

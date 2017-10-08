@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 52
+  let problem = `Number 52
 
   let same_digits n =
     let sort_digits n =

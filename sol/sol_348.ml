@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 348
+  let problem = `Number 348
 
   let palindromes_n_digits n =
     if n mod 2 = 0

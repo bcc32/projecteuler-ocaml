@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 407
+  let problem = `Number 407
 
   let limit = 100_000
 

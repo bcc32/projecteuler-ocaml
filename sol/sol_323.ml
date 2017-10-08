@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 323
+  let problem = `Number 323
 
   let word_size = 32
 

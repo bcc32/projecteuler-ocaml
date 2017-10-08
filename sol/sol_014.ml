@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 14
+  let problem = `Number 14
 
   let collatz n =
     if n mod 2 = 0

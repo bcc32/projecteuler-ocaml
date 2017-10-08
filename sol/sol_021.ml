@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 21
+  let problem = `Number 21
 
   let sum_proper_divisors n =
     let sd = List.sum (module Int) (Euler.Int.divisors n) ~f:Fn.id in

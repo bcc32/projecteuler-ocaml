@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 47
+  let problem = `Number 47
 
   let main () =
     let f n = n |> Euler.Int.prime_factor |> List.length |> Int.equal 4 in

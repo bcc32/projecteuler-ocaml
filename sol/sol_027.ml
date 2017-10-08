@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 27
+  let problem = `Number 27
 
   let count_primes a b =
     Euler.Int.natural_numbers ~init:0 ()

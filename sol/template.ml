@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = ___
+  let problem = `Number ___
 
   let main () =
     ___

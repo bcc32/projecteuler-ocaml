@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 10
+  let problem = `Number 10
 
   let main () =
     Euler.prime_sieve 2_000_000

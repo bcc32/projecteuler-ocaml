@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 53
+  let problem = `Number 53
 
   let main () =
     let limit = Bigint.of_int 1_000_000 in

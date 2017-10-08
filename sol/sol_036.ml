@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 36
+  let problem = `Number 36
 
   let main () =
     Sequence.range 1 1_000_000

@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 46
+  let problem = `Number 46
 
   let cannot_be_written n =
     let upper_bound = Float.(of_int n / 2.0 |> sqrt |> to_int) in

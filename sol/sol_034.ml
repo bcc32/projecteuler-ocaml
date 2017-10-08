@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 34
+  let problem = `Number 34
 
   (* Derived by observing that 9! * n < 10^(n - 1) for all n > 7. *)
   let max_digits = 7

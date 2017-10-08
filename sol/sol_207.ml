@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 207
+  let problem = `Number 207
 
   (*
      4^t = 2^t + k

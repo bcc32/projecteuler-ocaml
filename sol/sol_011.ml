@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 11
+  let problem = `Number 11
 
   let path = "data/011.txt"
   let size = 20

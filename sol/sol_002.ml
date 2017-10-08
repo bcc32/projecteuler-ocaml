@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 2
+  let problem = `Number 2
 
   let fibs n =
     let rec iter a b acc =

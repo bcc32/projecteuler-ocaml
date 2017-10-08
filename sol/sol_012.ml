@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 12
+  let problem = `Number 12
 
   let triangle n = n * (n + 1) / 2
 

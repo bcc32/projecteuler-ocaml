@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 131
+  let problem = `Number 131
 
   (* We want to find primes [p] where there exists some positive integer, [n],
      such that [n^3 + n^2 p = m^3] for some integer [m]. The problem statement

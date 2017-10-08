@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 5
+  let problem = `Number 5
 
   let main () =
     List.fold ~init:1 ~f:Euler.Int.lcm (List.range ~stop:`inclusive 1 20)

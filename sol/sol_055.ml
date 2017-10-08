@@ -2,7 +2,7 @@ open! Core
 open Bignum.Std
 
 module M = struct
-  let problem_number = 55
+  let problem = `Number 55
 
   let is_palindrome n =
     let s = Bigint.to_string n in

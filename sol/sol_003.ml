@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 3
+  let problem = `Number 3
 
   let main () =
     Euler.Int.factor 600851475143

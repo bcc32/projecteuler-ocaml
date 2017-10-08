@@ -2,7 +2,7 @@ open! Core
 open Re2.Std
 
 module M = struct
-  let problem_number = 22
+  let problem = `Number 22
 
   let path = "data/022.txt"
 

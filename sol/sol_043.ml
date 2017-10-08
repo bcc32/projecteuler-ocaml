@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 43
+  let problem = `Number 43
 
   let check_digits d =
     let is_div d1 d2 d3 p =

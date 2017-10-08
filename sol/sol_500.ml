@@ -1,7 +1,7 @@
 open! Core
 
 module M = struct
-  let problem_number = 500
+  let problem = `Number 500
 
   let modulo = 500_500_507
 

@@ -24,6 +24,15 @@ module type S = sig
     -> low     : real
     -> high    : real
     -> real
+  (** default is `Simpson's_rule *)
+  val integrate
+    :  ?method_:[ `Midpoint | `Trapezoid | `Simpson's_rule ]
+    -> unit
+    -> f : (real -> real)
+    -> low  : real
+    -> high : real
+    -> intervals : int
+    -> real
   val newton's_method
     :  f  : (real -> real)
     -> f' : (real -> real)

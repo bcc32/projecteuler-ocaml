@@ -11,7 +11,7 @@ let quadratic_formula a b c =
     let x0 = (-b - d) / (2. * a) in
     let x1 = (-b + d) / (2. * a) in
     match Float.sign_exn a with
-     | Zero -> assert false
-     | Neg -> `Two (x1, x0)
-     | Pos -> `Two (x0, x1)
+    | Zero -> assert false
+    | Neg -> `Two (x1, x0)
+    | Pos -> `Two (x0, x1)
 ;;

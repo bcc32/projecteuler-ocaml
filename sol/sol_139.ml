@@ -18,10 +18,10 @@ module M = struct
 
   let main () =
     (*
-    pythag_triples
-    |> Sequence.take_while ~f:(fun (a, b, c) -> a + b + c < 100_000_000)
-    |> Sequence.count ~f:(fun (a, b, c) -> c % (b - a) = 0)
-    |> printf "%d\n"
+       pythag_triples
+       |> Sequence.take_while ~f:(fun (a, b, c) -> a + b + c < 100_000_000)
+       |> Sequence.count ~f:(fun (a, b, c) -> c % (b - a) = 0)
+       |> printf "%d\n"
     *)
     pythag_triples
     |> Sequence.iter ~f:(printf !"%{sexp: int * int * int}\n%!")

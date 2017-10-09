@@ -34,8 +34,8 @@ module M = struct
     let value = ref Bignum.(a**flips) in
     for i = 0 to flips do
       (* This was originally [!value >= Bignum.billion], which accidentally used
-         polymorphic comparison instead of Bignum.(>=), leading to nasty bugs.
-         *)
+         polymorphic comparison instead of Bignum.(>=), leading to nasty
+         bugs. *)
       if Bignum.(!value >= billion)
       then begin
         let coeff = Number_theory.Bigint.binomial (big flips) (big i) in

@@ -29,6 +29,7 @@ module M = struct
   ;;
 
   let main () =
+    let open Float.O in
     Euler.Int.natural_numbers () ~init:1
     |> Sequence.find_exn ~f:(fun n -> concave_triangle_area n < area_threshold)
     |> printf "%d\n"

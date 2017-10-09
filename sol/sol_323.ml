@@ -13,7 +13,7 @@ module M = struct
     assert (b <= 32);
     let zero_bits = word_size - a in
     let diff = b - a in
-    float (Number_theory.Int.binomial zero_bits diff) /. (2.0 ** float zero_bits)
+    float (Number_theory.Int.binomial zero_bits diff) /. (2. ** float zero_bits)
   ;;
 
   let rec expectation_to_32 =

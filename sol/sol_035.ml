@@ -16,7 +16,10 @@ module M = struct
     let results = Array.create n ~len in
     with_return (fun { return } ->
       for i = 0 to len - 1 do
-        let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
+        let n =
+          Doubly_linked.to_sequence digits
+          |> Number_theory.Int.int_of_digits
+        in
         if Number_theory.Int.is_prime n
         then (
           results.(i) <- n;
@@ -36,6 +39,8 @@ module M = struct
     done;
     printf "%d\n" (Hash_set.length circular_primes)
   ;;
+  (* 55
+     2.8s *)
 end
 
 include Solution.Make(M)

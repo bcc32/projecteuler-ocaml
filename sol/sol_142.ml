@@ -22,8 +22,8 @@ module M = struct
   (* let is_perfect_square = Hash_set.mem squares *)
 
   (* Surprisingly (or perhaps not!) checking for perfect squareness this way is
-     about 20x faster than using [Number_theory.Int.is_perfect_square] and about 3-4x
-     faster than keeping a hash set. *)
+     about 20x faster than using [Number_theory.Int.is_perfect_square] and about
+     3-4x faster than keeping a hash set. *)
   let is_perfect_square x =
     let y = sqrt (float x) |> Int.of_float_unchecked in
     y * y = x

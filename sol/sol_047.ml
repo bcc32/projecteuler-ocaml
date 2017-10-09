@@ -5,7 +5,7 @@ module M = struct
   let problem = `Number 47
 
   let main () =
-    let f n = n |> Number_theory.Int.prime_factor |> List.length |> Int.equal 4 in
+    let f n = List.length (Number_theory.Int.prime_factor n) = 4 in
     let numbers =
       Number_theory.Int.natural_numbers ~init:1 ()
       |> Sequence.unfold_with ~init:0 ~f:(fun s n ->
@@ -16,6 +16,8 @@ module M = struct
     let ans = fst last - 3 in
     printf "%d\n" ans
   ;;
+  (* 134043
+     261ms *)
 end
 
 include Solution.Make(M)

@@ -19,7 +19,8 @@ module M = struct
     loop n 0
   ;;
 
-  (* Sieve inspired by Nore's solution at https://projecteuler.net/thread=549#235492. *)
+  (* Sieve inspired by Nore's solution at
+     https://projecteuler.net/thread=549#235492. *)
   let sieve n =
     let m = Array.create 0 ~len:(n + 1) in
     for p = 2 to n do

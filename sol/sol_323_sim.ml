@@ -21,7 +21,7 @@ module M = struct
     let sample_counts = Array.create 0 ~len:40 in
     for _ = 1 to times do
       let sample = simulate_one bits in
-      Array.unsafe_set sample_counts sample (Array.unsafe_get sample_counts sample + 1)
+      sample_counts.(sample) <- sample_counts.(sample) + 1
     done;
     sample_counts
   ;;
@@ -41,6 +41,9 @@ module M = struct
     printf !"%{sexp: int array}\n" samples;
     printf "%.10f\n" @@ expectation samples times
   ;;
+  (* XXX doesn't quite work *)
+  (* 6.3551679500
+     39s *)
 end
 
 include Solution.Make(M)

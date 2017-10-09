@@ -49,7 +49,8 @@ module M = struct
       let count =
         cubes
         |> Sequence.take_while ~f:(fun x -> x < p)
-        |> Sequence.count ~f:(fun c -> Number_theory.Int.is_perfect_square (p - c))
+        |> Sequence.count ~f:(fun c ->
+          Number_theory.Int.is_perfect_square (p - c))
       in
       count = 4)
     |> Fn.flip Sequence.take 5

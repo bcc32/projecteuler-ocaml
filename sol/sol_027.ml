@@ -6,7 +6,8 @@ module M = struct
 
   let count_primes a b =
     Number_theory.Int.natural_numbers ~init:0 ()
-    |> Sequence.take_while ~f:(fun n -> Number_theory.Int.is_prime (n * n + a * n + b))
+    |> Sequence.take_while ~f:(fun n ->
+      Number_theory.Int.is_prime (n * n + a * n + b))
     |> Sequence.length
   ;;
 
@@ -19,6 +20,8 @@ module M = struct
     |> Tuple2.get1
     |> printf "%d\n"
   ;;
+  (* -59231
+     926ms *)
 end
 
 include Solution.Make(M)

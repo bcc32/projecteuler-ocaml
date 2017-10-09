@@ -15,14 +15,16 @@ module M = struct
       |> sqrt
       |> Float.iround_exn ~dir
     in
-    let lower_limit = sqrt_replace '0' ~dir:`Down |> Int.round_down ~to_multiple_of:10 in
-    let upper_limit = sqrt_replace '9' ~dir:`Up   |> Int.round_up   ~to_multiple_of:10 in
-    Sequence.range lower_limit upper_limit ~stop:`inclusive ~stride:10
+    let lb = sqrt_replace '0' ~dir:`Down |> Int.round_down ~to_multiple_of:10 in
+    let ub = sqrt_replace '9' ~dir:`Up   |> Int.round_up   ~to_multiple_of:10 in
+    Sequence.range lb ub ~stop:`inclusive ~stride:10
     |> Sequence.find ~f:(fun n ->
       n * n |> Int.to_string |> Re2.matches pattern_re)
     |> Option.value_exn
     |> printf "%d\n"
   ;;
+  (* 1389019170
+     16s *)
 end
 
 include Solution.Make(M)

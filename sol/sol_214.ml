@@ -13,7 +13,7 @@ module M = struct
       let rec totient_chain_length n =
         match Array.unsafe_get table n with
         | None ->
-          let result = n |> Number_theory.Int.totient |> totient_chain_length |> succ in
+          let result = totient_chain_length (Number_theory.Int.totient n) + 1 in
           Array.unsafe_set table n (Some result);
           result
         | Some n -> n

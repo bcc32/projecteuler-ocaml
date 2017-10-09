@@ -38,3 +38,4 @@ let%test_unit "quadratic_formula" =
         let y1 = Float.(a * x1 ** 2. + b * x1 + c) in
         assert (y0 < 1e-5);
         assert (y1 < 1e-5))
+;;

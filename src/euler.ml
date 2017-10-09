@@ -9,6 +9,8 @@ module Bigint = Number_theory.Bigint
 module Float  = Numerics.Float
 module Bignum = Numerics.Bignum
 
+let quadratic_formula = Algebra.quadratic_formula
+
 let is_pythagorean_triple = Geometry.is_pythagorean_triple
 
 let factorial_prime_factor = Number_theory.factorial_prime_factor

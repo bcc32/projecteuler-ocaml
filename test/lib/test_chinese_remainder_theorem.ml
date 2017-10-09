@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 let%test_unit "Chinese remainder theorem" =
   let gen =

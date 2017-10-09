@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 let%test_unit "factorial_prime_factor" =
   let gen = Quickcheck.Generator.small_positive_int in

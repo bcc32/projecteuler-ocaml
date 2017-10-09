@@ -5,8 +5,9 @@ let%test_unit "quadratic_formula" =
   let gen =
     let open Quickcheck.Generator.Let_syntax in
     let reasonable_ranges =
-      let%map magnitude = Float.gen_incl (-5.) 5. in
-      exp magnitude
+      let%map magnitude = Float.gen_incl (-5.) 5.
+      and sign = Quickcheck.Generator.of_list [ -1.; 0.; 1. ] in
+      Float.copysign (exp magnitude) sign
     in
     let%map a =
       reasonable_ranges

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 let%test_unit "factorial_prime_factor" =
@@ -9,10 +10,10 @@ let%test_unit "factorial_prime_factor" =
       let expect =
         n
         |> Bigint.of_int
-        |> Euler.Bigint.factorial
-        |> Euler.Bigint.prime_factor
+        |> Number_theory.Bigint.factorial
+        |> Number_theory.Bigint.prime_factor
         |> List.map ~f:(Tuple2.map_fst ~f:Bigint.to_int_exn)
       in
       [%test_result: (int * int) list] ~expect
-        (Euler.factorial_prime_factor n))
+        (Number_theory.factorial_prime_factor n))
 ;;

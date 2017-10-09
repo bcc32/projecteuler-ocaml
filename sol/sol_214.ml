@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 214
@@ -12,7 +13,7 @@ module M = struct
       let rec totient_chain_length n =
         match Array.unsafe_get table n with
         | None ->
-          let result = n |> Euler.Int.totient |> totient_chain_length |> succ in
+          let result = n |> Number_theory.Int.totient |> totient_chain_length |> succ in
           Array.unsafe_set table n (Some result);
           result
         | Some n -> n
@@ -22,7 +23,7 @@ module M = struct
 
   let main () =
     let totient_chain_length = force totient_chain_length in
-    Euler.prime_sieve limit
+    Number_theory.prime_sieve limit
     |> Array.foldi ~init:0 ~f:(fun i acc is_prime ->
       if is_prime && totient_chain_length i = 25
       then acc + i
@@ -31,4 +32,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

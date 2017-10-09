@@ -1,12 +1,14 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 5
 
   let main () =
-    List.fold ~init:1 ~f:Euler.Int.lcm (List.range ~stop:`inclusive 1 20)
+    List.range ~stop:`inclusive 1 20
+    |> List.fold ~init:1 ~f:Number_theory.Int.lcm
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

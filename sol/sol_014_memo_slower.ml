@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 let collatz n =
   if n mod 2 = 0

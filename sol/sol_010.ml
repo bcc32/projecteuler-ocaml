@@ -1,10 +1,11 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 10
 
   let main () =
-    Euler.prime_sieve 2_000_000
+    Number_theory.prime_sieve 2_000_000
     |> Array.foldi ~init:0 ~f:(fun n acc is_prime ->
       if is_prime
       then acc + n
@@ -13,4 +14,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,11 +1,12 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 27
 
   let count_primes a b =
-    Euler.Int.natural_numbers ~init:0 ()
-    |> Sequence.take_while ~f:(fun n -> Euler.Int.is_prime (n * n + a * n + b))
+    Number_theory.Int.natural_numbers ~init:0 ()
+    |> Sequence.take_while ~f:(fun n -> Number_theory.Int.is_prime (n * n + a * n + b))
     |> Sequence.length
   ;;
 
@@ -20,4 +21,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

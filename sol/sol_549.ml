@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 549
@@ -63,4 +64,4 @@ module M = struct
   (* 476001479068717, 9.4s *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 429
@@ -26,13 +27,13 @@ module M = struct
   let modulus = 1_000_000_009
 
   let main () =
-    let factors = Euler.factorial_prime_factor 100_000_000 in
+    let factors = Number_theory.factorial_prime_factor 100_000_000 in
     let s = ref 1 in
     List.iter factors ~f:(fun (p, a) ->
-      s := !s * (1 + Euler.Int.powmod p (2 * a) ~modulus) mod modulus);
+      s := !s * (1 + Number_theory.Int.powmod p (2 * a) ~modulus) mod modulus);
     printf "%d\n" !s
   ;;
   (* 98792821 9.3s *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

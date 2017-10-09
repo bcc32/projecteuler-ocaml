@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 (* FIXME this is horrible... *)
 let modules : (module Euler.Solution_intf.S) list =

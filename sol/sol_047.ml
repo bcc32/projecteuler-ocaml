@@ -1,12 +1,13 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 47
 
   let main () =
-    let f n = n |> Euler.Int.prime_factor |> List.length |> Int.equal 4 in
+    let f n = n |> Number_theory.Int.prime_factor |> List.length |> Int.equal 4 in
     let numbers =
-      Euler.Int.natural_numbers ~init:1 ()
+      Number_theory.Int.natural_numbers ~init:1 ()
       |> Sequence.unfold_with ~init:0 ~f:(fun s n ->
         let consec_ok = if f n then s + 1 else 0 in
         Yield ((n, consec_ok), consec_ok))
@@ -17,4 +18,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

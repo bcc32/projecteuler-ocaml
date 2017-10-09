@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 12
@@ -7,11 +8,11 @@ module M = struct
 
   let main () =
     let i = ref 1 in
-    while (Euler.Int.num_divisors (triangle !i)) <= 500 do
+    while (Number_theory.Int.num_divisors (triangle !i)) <= 500 do
       Int.incr i
     done;
     printf "%d\n" (triangle !i)
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

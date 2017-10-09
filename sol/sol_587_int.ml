@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Custom (587, `Key "int", `Description "integration")
@@ -17,7 +18,7 @@ module M = struct
   ;;
 
   let concave_triangle_area n =
-    Euler.Float.integrate ()
+    Numerics.Float.integrate ()
       ~f:(height n)
       ~low:0.
       ~high:1.
@@ -25,11 +26,11 @@ module M = struct
   ;;
 
   let main () =
-    Euler.Int.natural_numbers () ~init:1
+    Number_theory.Int.natural_numbers () ~init:1
     |> Sequence.find_exn ~f:(fun n -> concave_triangle_area n < area_threshold)
     |> printf "%d\n"
   ;;
   (* 2240 354ms *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
@@ -6,7 +7,7 @@ module M = struct
 
   let sqrt n =
     let open Bignum in
-    Euler.Bignum.newton's_method
+    Numerics.Bignum.newton's_method
       ~f:(fun x -> x * x - n)
       ~f':(fun x -> of_int 2 * x)
       ~init:one
@@ -27,7 +28,7 @@ module M = struct
     |> hundred_decimal_digits
     |> Bigint.to_string
     |> String.subo ~len:100
-    |> Euler.digits_of_string
+    |> Util.digits_of_string
     |> List.sum (module Int) ~f:Fn.id
   ;;
 
@@ -49,4 +50,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

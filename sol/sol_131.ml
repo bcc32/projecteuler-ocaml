@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 131
@@ -58,7 +59,7 @@ module M = struct
   ;;
 
   let main () =
-    Euler.Int.primes
+    Number_theory.Int.primes
     |> Sequence.take_while ~f:(fun p -> p < 1_000_000)
     |> Sequence.count ~f:(fun p -> Option.is_some (find_n p))
     |> printf "%d\n"
@@ -78,7 +79,7 @@ module M = struct
     let count = ref 0 in
     for i = 1 to 576 do
       let j = i + 1 in
-      if Euler.Int.is_prime (j * j * j - i * i * i)
+      if Number_theory.Int.is_prime (j * j * j - i * i * i)
       then (incr count)
     done;
     printf "%d\n" !count
@@ -86,4 +87,4 @@ module M = struct
 
   (* This is about 4000x faster than the previous solution. *)
 end
-include Euler.Solution.Make(M)
+include Solution.Make(M)

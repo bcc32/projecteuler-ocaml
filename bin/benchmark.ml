@@ -1,5 +1,6 @@
 open! Core
 open Core_bench.Std
+open Euler
 
 let run_length_encode_group =
   Bench.Test.create_with_initialization
@@ -10,7 +11,7 @@ let run_length_encode_group =
          |> List.gen' ~length:(`At_least 200)
          |> Quickcheck.random_value
        in
-       fun () -> Euler.run_length_encode list ~equal:Int.equal)
+       fun () -> Util.run_length_encode list ~equal:Int.equal)
 ;;
 
 let divisors_group =
@@ -18,19 +19,19 @@ let divisors_group =
   Bench.Test.create_indexed
     ~name:"Euler.Int.divisors"
     ~args
-    (fun n -> stage (fun () -> Euler.Int.divisors n))
+    (fun n -> stage (fun () -> Number_theory.Int.divisors n))
 ;;
 
 let sqrt_group =
   let sqrt_newton x =
-    Euler.Float.newton's_method
+    Numerics.Float.newton's_method
       ~f:(fun y -> Float.(y * y - x))
       ~f':(Float.( * ) 2.0)
       ~epsilon:1e-12
       ~init:1.0
   in
   let sqrt_bisect x =
-    Euler.Float.bisect
+    Numerics.Float.bisect
       ~f:(fun y -> Float.(y * y - x))
       ~epsilon:1e-12
       ~low:1.0
@@ -52,12 +53,12 @@ let sqrt_group =
 
 let primes_group =
   let primes_sequence limit =
-    Euler.Int.primes
+    Number_theory.Int.primes
     |> Sequence.take_while ~f:(fun x -> x < limit)
     |> Sequence.iter ~f:(fun x -> ignore (Sys.opaque_identity x))
   in
   let primes_sieve limit =
-    ignore (Sys.opaque_identity (Euler.prime_sieve limit))
+    ignore (Sys.opaque_identity (Number_theory.prime_sieve limit))
   in
   let limits = [ 1000; 10_000; 100_000; 1_000_000 ] in
   let methods =

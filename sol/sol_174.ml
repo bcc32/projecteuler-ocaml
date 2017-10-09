@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 174
@@ -22,4 +23,4 @@ module M = struct
     printf !"%{sexp: int Int.Table.t}\n" counts
   ;;
 end
-include Euler.Solution.Make(M)
+include Solution.Make(M)

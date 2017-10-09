@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 315
@@ -74,7 +75,7 @@ module M = struct
 
   let main () =
     let diff = ref 0 in
-    let primes = Euler.prime_sieve 20_000_000 in
+    let primes = Number_theory.prime_sieve 20_000_000 in
     for i = 10_000_000 to 20_000_000 do
       if primes.(i)
       then (
@@ -86,4 +87,4 @@ module M = struct
   (* 13625242 1s *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

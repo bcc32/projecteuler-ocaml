@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 4
@@ -7,8 +8,8 @@ module M = struct
     let ans = ref 0 in
     for i = 100 to 999 do
       for j = 100 to 999 do
-        let digits = i * j |> Euler.Int.digits_of_int in
-        if Euler.is_palindrome ~equal:Int.equal digits && i * j > !ans
+        let digits = i * j |> Number_theory.Int.digits_of_int in
+        if Util.is_palindrome ~equal:Int.equal digits && i * j > !ans
         then ans := i * j
       done
     done;
@@ -16,4 +17,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

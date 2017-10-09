@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 18
@@ -43,7 +44,7 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)
 
 let read_triangle = M.read_triangle
 let max_sum_exn   = M.max_sum_exn

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 let%test_unit "Extended Euclidean Algorithm" =
   let gen =
@@ -8,7 +9,7 @@ let%test_unit "Extended Euclidean Algorithm" =
     (a, b)
   in
   Quickcheck.iter gen ~f:(fun (a, b) ->
-    let (s, t, g) = Euler.Int.bezout a b in
-    [%test_result: int] g ~expect:(Euler.Int.gcd a b);
+    let (s, t, g) = Number_theory.Int.bezout a b in
+    [%test_result: int] g ~expect:(Number_theory.Int.gcd a b);
     [%test_result: int] (s * a + t * b) ~expect:g)
 ;;

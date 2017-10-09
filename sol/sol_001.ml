@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 1
@@ -12,4 +13,4 @@ module M = struct
   let main () = printf "%d\n" threes_and_fives
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

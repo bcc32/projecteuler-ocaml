@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 504
@@ -8,7 +9,7 @@ module M = struct
   (* https://en.wikipedia.org/wiki/Pick%27s_theorem *)
 
   let lattice_points x y =
-    let boundary_points = x + y + Euler.Int.gcd x y in
+    let boundary_points = x + y + Number_theory.Int.gcd x y in
     (x * y - boundary_points) / 2 + 1
   ;;
 
@@ -35,7 +36,7 @@ module M = struct
               lattice_points c d +
               lattice_points d a
             in
-            if Euler.Int.is_perfect_square points
+            if Number_theory.Int.is_perfect_square points
             then (incr count)
           done
         done
@@ -46,4 +47,4 @@ module M = struct
   (* 694687 15s *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

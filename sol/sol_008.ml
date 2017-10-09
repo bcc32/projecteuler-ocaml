@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 8
@@ -7,7 +8,7 @@ module M = struct
     Sequence.range 0 (String.length str - 12)
     |> Sequence.map ~f:(fun i ->
       String.sub str ~pos:i ~len:13
-      |> Euler.digits_of_string
+      |> Util.digits_of_string
       |> List.fold ~init:1 ~f:( * ))
     |> Sequence.max_elt ~cmp:Int.compare
     |> Option.value_exn
@@ -21,4 +22,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

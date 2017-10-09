@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 46
@@ -8,17 +9,17 @@ module M = struct
     Sequence.range ~stop:`inclusive 1 upper_bound
     |> Sequence.exists ~f:(fun s ->
       n - 2 * s * s
-      |> Euler.Int.is_prime)
+      |> Number_theory.Int.is_prime)
     |> not
   ;;
 
   let main () =
     Sequence.unfold ~init:3 ~f:(fun s -> Some (s, s + 2))
-    |> Sequence.filter ~f:(Fn.non Euler.Int.is_prime)
+    |> Sequence.filter ~f:(Fn.non Number_theory.Int.is_prime)
     |> Sequence.find ~f:cannot_be_written
     |> Option.value_exn
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

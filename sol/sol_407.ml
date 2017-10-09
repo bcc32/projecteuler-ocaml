@@ -1,11 +1,12 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 407
 
   let limit = 100_000
 
-  let _primes = lazy (Euler.prime_sieve limit)
+  let _primes = lazy (Number_theory.prime_sieve limit)
 
   let largest_idempotent modulo =
     with_return (fun { return } ->
@@ -43,4 +44,4 @@ module M = struct
    *   |> Array.sum (module Int) ~f:Fn.id
    *   |> printf "%d\n" *)
 end
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 500
@@ -11,7 +12,7 @@ module M = struct
 
   let main () =
     let queue =
-      Euler.prime_sieve upper_bound
+      Number_theory.prime_sieve upper_bound
       |> Array.filter_mapi ~f:(fun i p -> Option.some_if p i)
       |> Heap.of_array ~cmp:Int.compare
     in
@@ -28,4 +29,4 @@ module M = struct
   ;;
   (* 35407281, 500ms *)
 end
-include Euler.Solution.Make(M)
+include Solution.Make(M)

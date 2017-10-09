@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
@@ -7,9 +8,9 @@ module M = struct
   let main () =
     let n = Bigint.of_int 40 in
     let r = Bigint.of_int 20 in
-    Euler.Bigint.binomial n r
+    Number_theory.Bigint.binomial n r
     |> printf !"%{Bigint}\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

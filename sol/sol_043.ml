@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 43
@@ -21,12 +22,12 @@ module M = struct
 
   let main () =
     List.range 0 10
-    |> Euler.permutations ~cmp:Int.compare
+    |> Util.permutations ~cmp:Int.compare
     |> Sequence.filter ~f:check_digits
     |> Sequence.sum (module Int)
-         ~f:(fun d -> Euler.Int.int_of_digits (Sequence.of_list d))
+         ~f:(fun d -> Number_theory.Int.int_of_digits (Sequence.of_list d))
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

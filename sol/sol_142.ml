@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 142
@@ -21,7 +22,7 @@ module M = struct
   (* let is_perfect_square = Hash_set.mem squares *)
 
   (* Surprisingly (or perhaps not!) checking for perfect squareness this way is
-     about 20x faster than using [Euler.Int.is_perfect_square] and about 3-4x
+     about 20x faster than using [Number_theory.Int.is_perfect_square] and about 3-4x
      faster than keeping a hash set. *)
   let is_perfect_square x =
     let y = sqrt (float x) |> Int.of_float_unchecked in
@@ -52,4 +53,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

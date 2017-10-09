@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
@@ -15,10 +16,10 @@ module M = struct
       |> map ~f:(fun (n, r) ->
         let n = Bigint.of_int n in
         let r = Bigint.of_int r in
-        Euler.Bigint.binomial n r)
+        Number_theory.Bigint.binomial n r)
       |> count ~f:(Bigint.(<) limit))
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

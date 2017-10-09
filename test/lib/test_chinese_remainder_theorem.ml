@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 let%test_unit "Chinese remainder theorem" =
@@ -13,7 +14,7 @@ let%test_unit "Chinese remainder theorem" =
           | [] -> true
           | hd :: tl ->
             List.for_all tl ~f:(fun x ->
-              Bigint.(one = Euler.Bigint.gcd x hd))
+              Bigint.(one = Number_theory.Bigint.gcd x hd))
             && loop tl
         in loop ms)
     in
@@ -31,7 +32,7 @@ let%test_unit "Chinese remainder theorem" =
                 ; big 4, big 5 ] ]
     ~sexp_of:[%sexp_of: (Bigint.t * Bigint.t) list]
     ~f:(fun residues ->
-      let (x, m) = Euler.Bigint.chinese_remainder_theorem residues in
+      let (x, m) = Number_theory.Bigint.chinese_remainder_theorem residues in
       let residue_product =
         List.fold residues ~init:Bigint.one ~f:(fun ac (_, m) ->
           Bigint.(ac * m))

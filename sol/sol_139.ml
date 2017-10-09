@@ -1,10 +1,11 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 139
 
   let pythag_triples : (int * int * int) Sequence.t =
-    Euler.Int.natural_numbers ~init:5 ()
+    Number_theory.Int.natural_numbers ~init:5 ()
     |> Sequence.concat_map ~f:(fun c ->
       Sequence.range 4 c
       |> Sequence.map ~f:(fun b -> (b, c)))
@@ -27,4 +28,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

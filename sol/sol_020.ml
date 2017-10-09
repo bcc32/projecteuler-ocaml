@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
@@ -6,10 +7,10 @@ module M = struct
 
   let main () =
     Bigint.of_int 100
-    |> Euler.Bigint.factorial
-    |> Euler.Bigint.sum_digits
+    |> Number_theory.Bigint.factorial
+    |> Number_theory.Bigint.sum_digits
     |> printf !"%{Bigint}\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

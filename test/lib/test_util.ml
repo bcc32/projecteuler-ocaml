@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 let%test_unit "digits_of_string" =
   let gen = String.gen' Char.gen_digit ~length:(Int.gen_incl 1 12) in
@@ -6,9 +7,9 @@ let%test_unit "digits_of_string" =
     let expect = Int.of_string s in
     [%test_result: int] ~expect (
       s
-      |> Euler.digits_of_string
+      |> Util.digits_of_string
       |> Sequence.of_list
-      |> Euler.Int.int_of_digits))
+      |> Number_theory.Int.int_of_digits))
 ;;
 
 let%test_unit "is_palindrome" =
@@ -18,7 +19,7 @@ let%test_unit "is_palindrome" =
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun l ->
       let expect = List.rev l = l in
-      [%test_result: bool] (Euler.is_palindrome l ~equal:Int.equal) ~expect)
+      [%test_result: bool] (Util.is_palindrome l ~equal:Int.equal) ~expect)
 ;;
 
 let%test_unit "permutations" =
@@ -27,7 +28,7 @@ let%test_unit "permutations" =
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun l ->
       let cmp = Int.compare in
-      let seq = Euler.permutations l ~cmp in
+      let seq = Util.permutations l ~cmp in
       let perms = Sequence.to_list seq in
       let elts = List.sort l ~cmp in
       (* expected number of permutations *)
@@ -35,7 +36,7 @@ let%test_unit "permutations" =
         List.fold l ~init:Int.Map.empty ~f:(fun ac x ->
           Map.update ac x ~f:(Option.value_map ~default:1 ~f:((+) 1)))
         |> Map.data
-        |> Euler.multinomial
+        |> Number_theory.multinomial
       in
       [%test_result: int] (List.length perms) ~expect:num_permutations;
       (* permutations have the same elements as the original list *)
@@ -54,7 +55,7 @@ let%test_unit "run_length_encode" =
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun l ->
-      let enc = Euler.run_length_encode l ~equal:Int.equal in
+      let enc = Util.run_length_encode l ~equal:Int.equal in
       (* reconstruct the list *)
       [%test_result: int list] ~expect:l
         (List.bind enc ~f:(fun (elt, n) ->

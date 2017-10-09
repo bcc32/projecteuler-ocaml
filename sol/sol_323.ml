@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 323
@@ -12,7 +13,7 @@ module M = struct
     assert (b <= 32);
     let zero_bits = word_size - a in
     let diff = b - a in
-    float (Euler.Int.binomial zero_bits diff) /. (2.0 ** float zero_bits)
+    float (Number_theory.Int.binomial zero_bits diff) /. (2.0 ** float zero_bits)
   ;;
 
   let rec expectation_to_32 =
@@ -35,4 +36,4 @@ module M = struct
   (* 6.3551758451 4.3ms *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

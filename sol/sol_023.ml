@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 23
@@ -7,7 +8,7 @@ module M = struct
 
   let is_abundant n =
     let divisor_sum =
-      Euler.Int.divisors n
+      Number_theory.Int.divisors n
       |> List.sum (module Int) ~f:Fn.id
     in
     divisor_sum > 2 * n
@@ -47,4 +48,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

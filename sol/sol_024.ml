@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 24
@@ -6,7 +7,7 @@ module M = struct
   let main () =
     let permutations =
       List.range 0 10
-      |> Euler.permutations ~cmp:Int.compare
+      |> Util.permutations ~cmp:Int.compare
     in
     Sequence.nth_exn permutations 999999
     |> List.map ~f:Int.to_string
@@ -15,4 +16,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

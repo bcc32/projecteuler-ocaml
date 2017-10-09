@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 34
@@ -9,12 +10,12 @@ module M = struct
   let main () =
     Sequence.range 10 (Int.pow 10 max_digits)
     |> Sequence.filter ~f:(fun n ->
-      Euler.Int.digits_of_int n
-      |> List.sum (module Int) ~f:Euler.Int.factorial
+      Number_theory.Int.digits_of_int n
+      |> List.sum (module Int) ~f:Number_theory.Int.factorial
       |> Int.equal n)
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

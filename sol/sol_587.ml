@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 587
@@ -17,7 +18,7 @@ module M = struct
       let a = 1. + tan_theta ** 2. in
       let b = -2. * (1. + tan_theta) in
       let c = 1. in
-      match Euler.quadratic_formula a b c with
+      match Algebra.quadratic_formula a b c with
       | `None | `One _ -> assert false
       | `Two (x_d, _) -> x_d
     in
@@ -30,11 +31,11 @@ module M = struct
 
   let main () =
     let open Float.O in
-    Euler.Int.natural_numbers () ~init:1
+    Number_theory.Int.natural_numbers () ~init:1
     |> Sequence.find_exn ~f:(fun n -> concave_triangle_area n < area_threshold)
     |> printf "%d\n"
   ;;
   (* 2240 764us *)
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,11 +1,12 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
   let problem = `Number 25
 
   let main () =
-    Sequence.findi Euler.Bigint.fibonacci ~f:(fun _ f ->
+    Sequence.findi Number_theory.Bigint.fibonacci ~f:(fun _ f ->
       String.length (Bigint.to_string f) >= 1000)
     |> Option.value_exn
     |> Tuple2.get1
@@ -14,4 +15,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

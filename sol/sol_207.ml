@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 207
@@ -11,7 +12,7 @@ module M = struct
   *)
 
   let main () =
-    let ns = Euler.Int.natural_numbers ~init:2 () in
+    let ns = Number_theory.Int.natural_numbers ~init:2 () in
     Sequence.unfold_with ns ~init:(0, 0) ~f:(fun (part, perfect) n ->
       let new_state = part + 1, if Int.is_pow2 n then perfect + 1 else perfect in
       Yield ((new_state, n * n - n), new_state))
@@ -23,4 +24,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 let%test_unit "multinomial" =
   let gen =
@@ -8,13 +9,16 @@ let%test_unit "multinomial" =
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]
     ~f:(fun xs ->
-      let numerator = List.sum (module Int) xs ~f:Fn.id |> Euler.Int.factorial in
+      let numerator =
+        List.sum (module Int) xs ~f:Fn.id
+        |> Number_theory.Int.factorial
+      in
       let expect =
         List.fold xs ~init:numerator ~f:(fun ac x ->
-          ac / Euler.Int.factorial x)
+          ac / Number_theory.Int.factorial x)
       in
       [%test_result: int] ~expect
-        (Euler.multinomial xs))
+        (Number_theory.multinomial xs))
 ;;
 
 let%test_unit "powmod" =
@@ -36,5 +40,5 @@ let%test_unit "powmod" =
         in
         loop b 1
       in
-      [%test_result: int] ~expect (Euler.Int.powmod a b ~modulus))
+      [%test_result: int] ~expect (Number_theory.Int.powmod a b ~modulus))
 ;;

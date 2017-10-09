@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Bignum.Std
 
 module M = struct
@@ -25,6 +26,7 @@ module M = struct
   let denominator = Bignum.(of_int 2 ** flips)
 
   let p_billionaire f =
+    let big i = Bigint.of_int i in
     let accum = ref Bigint.zero in
     let a = Bignum.(one - f) in
     let b = Bignum.(one + f + f) in
@@ -36,7 +38,7 @@ module M = struct
          *)
       if Bignum.(!value >= billion)
       then begin
-        let coeff = Euler.Bigint.binomial (Bigint.of_int flips) (Bigint.of_int i) in
+        let coeff = Number_theory.Bigint.binomial (big flips) (big i) in
         accum := Bigint.(!accum + coeff)
       end;
       value := Bignum.(!value * ratio)
@@ -49,4 +51,4 @@ module M = struct
     failwith "unimplemented"
   ;;
 end
-include Euler.Solution.Make(M)
+include Solution.Make(M)

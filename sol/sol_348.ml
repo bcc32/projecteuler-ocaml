@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 348
@@ -10,35 +11,35 @@ module M = struct
       let ub = Int.pow 10 (n / 2) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
-        let d = Euler.Int.digits_of_int n in
+        let d = Number_theory.Int.digits_of_int n in
         d @ List.rev d
         |> Sequence.of_list
-        |> Euler.Int.int_of_digits))
+        |> Number_theory.Int.int_of_digits))
     else (
       let lb = Int.pow 10 (n / 2)     in
       let ub = Int.pow 10 (n / 2 + 1) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
-        let d = Euler.Int.digits_of_int n in
+        let d = Number_theory.Int.digits_of_int n in
         d @ List.tl_exn (List.rev d)
         |> Sequence.of_list
-        |> Euler.Int.int_of_digits))
+        |> Number_theory.Int.int_of_digits))
   ;;
 
   let palindromes =
-    Euler.Int.natural_numbers () ~init:1
+    Number_theory.Int.natural_numbers () ~init:1
     |> Sequence.bind ~f:palindromes_n_digits
   ;;
 
   (* greater than 1 *)
   let _squares =
-    Euler.Int.natural_numbers () ~init:2
+    Number_theory.Int.natural_numbers () ~init:2
     |> Sequence.map ~f:(fun x -> x * x)
   ;;
 
   (* ditto *)
   let cubes =
-    Euler.Int.natural_numbers () ~init:2
+    Number_theory.Int.natural_numbers () ~init:2
     |> Sequence.map ~f:(fun x -> x * x * x)
   ;;
 
@@ -48,7 +49,7 @@ module M = struct
       let count =
         cubes
         |> Sequence.take_while ~f:(fun x -> x < p)
-        |> Sequence.count ~f:(fun c -> Euler.Int.is_perfect_square (p - c))
+        |> Sequence.count ~f:(fun c -> Number_theory.Int.is_perfect_square (p - c))
       in
       count = 4)
     |> Fn.flip Sequence.take 5
@@ -57,4 +58,4 @@ module M = struct
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

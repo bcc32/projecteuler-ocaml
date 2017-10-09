@@ -1,11 +1,12 @@
 open! Core
+open! Import
 
 module M = struct
   let problem = `Number 52
 
   let same_digits n =
     let sort_digits n =
-      Euler.Int.digits_of_int n
+      Number_theory.Int.digits_of_int n
       |> List.sort ~cmp:Int.compare
     in
     let n_digits = sort_digits n in
@@ -16,11 +17,11 @@ module M = struct
   ;;
 
   let main () =
-    Euler.Int.natural_numbers ~init:1 ()
+    Number_theory.Int.natural_numbers ~init:1 ()
     |> Sequence.find ~f:same_digits
     |> Option.value_exn
     |> printf "%d\n"
   ;;
 end
 
-include Euler.Solution.Make(M)
+include Solution.Make(M)

@@ -2,7 +2,7 @@ open! Core
 
 module Make (Prob : Distribution_intf.Prob) = struct
   (* FIXME See if you can avoid using [Map.Poly.t]. *)
-  type 'key t = ('key, Prob.t) Map.Poly.t
+  type 'key t = ('key, Prob.t) Map.Poly.t [@@deriving compare, sexp]
 
   type prob = Prob.t
 
@@ -22,6 +22,8 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
   let find     = Map.find
   let find_exn = Map.find_exn
+
+  let to_map = Fn.id
 
   include Monad.Make(struct
       type nonrec 'a t = 'a t

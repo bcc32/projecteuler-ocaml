@@ -23,6 +23,7 @@ module Make (Prob : Distribution_intf.Prob) = struct
   let find     = Map.find
   let find_exn = Map.find_exn
 
+  let of_map = Fn.id
   let to_map = Fn.id
 
   include Monad.Make(struct

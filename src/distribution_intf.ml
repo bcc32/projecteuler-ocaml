@@ -25,5 +25,6 @@ module type S = sig
   val find     : 'k t -> 'k -> prob option
   val find_exn : 'k t -> 'k -> prob
 
+  val of_map : ('k, prob) Map.Poly.t -> 'k t
   val to_map : 'k t -> ('k, prob) Map.Poly.t
 end

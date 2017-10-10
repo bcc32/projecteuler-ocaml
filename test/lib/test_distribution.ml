@@ -36,3 +36,16 @@ let%test_unit "monad laws" =
     [%test_result: int D.t] (t >>= f >>= g)
       ~expect:(t >>= (fun x -> f x >>= g)))
 ;;
+
+let%test_unit "bind" =
+  let f x = D.combine ~p1:0.5 ~d1:(D.singleton x) ~d2:(D.singleton (x + 1)) in
+  let t = D.combine ~p1:0.2 ~d1:(D.singleton 0) ~d2:(D.singleton 1) in
+  let expect =
+    [ ( 0, 0.1 )
+    ; ( 1, 0.5 )
+    ; ( 2, 0.4 ) ]
+    |> Map.Poly.of_alist_exn
+    |> D.of_map
+  in
+  [%test_result: int D.t] (D.bind t ~f) ~expect
+;;

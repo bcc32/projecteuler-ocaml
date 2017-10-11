@@ -12,13 +12,26 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
   let scale t x = Map.map t ~f:(fun p -> Prob.(p * x))
 
-  let combine ~d1 ~d2 ~p1 =
-    let p2 = Prob.(one - p1) in
-    Map.merge (scale d1 p1) (scale d2 p2) ~f:(fun ~key:_ -> function
+  let merge t1 t2 =
+    Map.merge t1 t2 ~f:(fun ~key:_ -> function
       | `Both (p1, p2) -> Some Prob.(p1 + p2)
       | `Left p1       -> Some p1
       | `Right p2      -> Some p2)
   ;;
+
+  let combine ~d1 ~d2 ~p1 = merge (scale d1 p1) (scale d2 Prob.(one - p1))
+
+  let uniform ts =
+    match List.length ts with
+    | 0 -> invalid_arg "empty list"
+    | n ->
+      let x = Prob.(one / of_int n) in
+      ts
+      |> List.map ~f:(fun t -> scale t x)
+      |> List.reduce_exn ~f:merge
+  ;;
+
+  let uniform' ks = uniform (List.map ks ~f:singleton)
 
   let find     = Map.find
   let find_exn = Map.find_exn

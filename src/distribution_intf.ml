@@ -22,6 +22,9 @@ module type S = sig
     -> p1:prob
     -> 'k t
 
+  val uniform  : 'k t list -> 'k t
+  val uniform' : 'k   list -> 'k t
+
   val find     : 'k t -> 'k -> prob option
   val find_exn : 'k t -> 'k -> prob
 

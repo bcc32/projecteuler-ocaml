@@ -49,3 +49,16 @@ let%test_unit "bind" =
   in
   [%test_result: int D.t] (D.bind t ~f) ~expect
 ;;
+
+let%test_unit "uniform'" =
+  let t = D.uniform' [ 0; 1; 2; 3 ] in
+  let expect =
+    [ ( 0, 0.25 )
+    ; ( 1, 0.25 )
+    ; ( 2, 0.25 )
+    ; ( 3, 0.25 ) ]
+    |> Map.Poly.of_alist_exn
+    |> D.of_map
+  in
+  [%test_result: int D.t] t ~expect
+;;

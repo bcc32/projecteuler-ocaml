@@ -1,10 +1,16 @@
 open! Core
 
 module type Prob = sig
-  type t
-  include Commutative_group.S with type t := t
-  include Numerics_intf.Real  with type t := t
-  include Sexpable.S          with type t := t
+  type t [@@deriving compare, sexp]
+
+  val zero : t
+  val one  : t
+  val of_int : int -> t
+
+  val ( + ) : t -> t -> t
+  val ( - ) : t -> t -> t
+  val ( * ) : t -> t -> t
+  val ( / ) : t -> t -> t
 end
 
 module type S = sig

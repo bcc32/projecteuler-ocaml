@@ -83,16 +83,25 @@ let%test_unit "uniform" =
 ;;
 
 let%test_unit "uniform'" =
-  let t = D.uniform' [ 0; 1; 2; 3 ] in
-  let expect =
-    let fourth = Bignum.(one / of_int 4) in
-    [ ( 0, fourth )
-    ; ( 1, fourth )
-    ; ( 2, fourth )
-    ; ( 3, fourth ) ]
-    |> D.of_alist_exn
+  let gen =
+    List.gen' Int.gen ~length:(`At_least 1)
+    |> Quickcheck.Generator.filter ~f:(fun ks ->
+      List.find_a_dup ks ~compare:Int.compare
+      |> Option.is_none)
   in
-  [%test_result: int D.t] t ~expect
+  Quickcheck.test gen
+    ~sexp_of:[%sexp_of: int list]
+    ~shrinker:(List.shrinker Int.shrinker)
+    ~f:(fun ks ->
+      let t = D.uniform' ks in
+      let expect =
+        let length = List.length ks in
+        let prob = Bignum.(one / of_int length) in
+        ks
+        |> List.map ~f:(fun k -> (k, prob))
+        |> D.of_alist_exn
+      in
+      [%test_result: int D.t] t ~expect)
 ;;
 
 let%test_unit "cartesian_product" =

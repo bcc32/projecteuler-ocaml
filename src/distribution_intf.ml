@@ -39,6 +39,8 @@ module type S = sig
   val total : 'k t -> prob
 
   val find     : 'k t -> 'k -> prob option
+  (** defaults to zero *)
+  val find'    : 'k t -> 'k -> prob
   val find_exn : 'k t -> 'k -> prob
 
   val of_map : ('k, prob) Map.Poly.t -> 'k t

@@ -37,8 +37,9 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
   let uniform' ks = uniform (List.map ks ~f:singleton)
 
-  let find     = Map.find
-  let find_exn = Map.find_exn
+  let find      = Map.find
+  let find' t x = Map.find t x |> Option.value ~default:Prob.zero
+  let find_exn  = Map.find_exn
 
   let of_map = Fn.id
   let to_map = Fn.id

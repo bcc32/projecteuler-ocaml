@@ -1,9 +1,9 @@
 open! Core
 open! Import
 
-module D = Distribution.Make(Float)
+module D = Distribution.Make(Bignum)
 
-let gen_prob = Float.gen_incl 0. 1.
+let gen_prob = Bignum.(gen_incl zero one)
 
 let gen_distribution =
   let open Quickcheck.Generator.Let_syntax in
@@ -16,13 +16,13 @@ let gen_distribution =
 
 let%test_unit "singleton" =
   let d = D.singleton 0 in
-  [%test_result: float] ~expect:1. (D.find_exn d 0)
+  [%test_result: Bignum.t] ~expect:Bignum.one (D.find_exn d 0)
 ;;
 
 let%test_unit "scale" =
   Quickcheck.test gen_prob ~f:(fun p ->
     let d = D.scale (D.singleton 0) p in
-    [%test_result: float] ~expect:p (D.find_exn d 0))
+    [%test_result: Bignum.t] ~expect:p (D.find_exn d 0))
 ;;
 
 let%test_unit "combine" =
@@ -30,13 +30,16 @@ let%test_unit "combine" =
   let d2 = D.singleton 2 in
   Quickcheck.test gen_prob ~f:(fun p1 ->
     let d = D.combine ~d1 ~d2 ~p1 in
-    [%test_result: float] (D.find_exn d 1) ~expect:p1;
-    [%test_result: float] (D.find_exn d 2) ~expect:(1. -. p1))
+    [%test_result: Bignum.t] (D.find_exn d 1) ~expect:p1;
+    [%test_result: Bignum.t] (D.find_exn d 2) ~expect:Bignum.(one - p1))
 ;;
 
 let%test_unit "monad laws" =
   let f x = D.singleton (x + 1) in
-  let g x = D.combine ~p1:0.5 ~d1:(D.singleton x) ~d2:(D.singleton (-x)) in
+  let g x =
+    let p1 = Bignum.(one / of_int 2) in
+    D.combine ~p1 ~d1:(D.singleton x) ~d2:(D.singleton (-x))
+  in
   let t = D.singleton 0 in
   Quickcheck.test Int.gen ~f:(fun v ->
     let open D.Let_syntax in
@@ -47,24 +50,46 @@ let%test_unit "monad laws" =
 ;;
 
 let%test_unit "bind" =
-  let f x = D.combine ~p1:0.5 ~d1:(D.singleton x) ~d2:(D.singleton (x + 1)) in
-  let t = D.combine ~p1:0.2 ~d1:(D.singleton 0) ~d2:(D.singleton 1) in
+  let half  = Bignum.(one / of_int 2) in
+  let fifth = Bignum.(one / of_int 5) in
+  let f x = D.combine ~p1:half ~d1:(D.singleton x) ~d2:(D.singleton (x + 1)) in
+  let t = D.combine ~p1:fifth ~d1:(D.singleton 0) ~d2:(D.singleton 1) in
   let expect =
-    [ ( 0, 0.1 )
-    ; ( 1, 0.5 )
-    ; ( 2, 0.4 ) ]
+    [ ( 0, Bignum.(of_int 1 / ten) )
+    ; ( 1, Bignum.(of_int 5 / ten) )
+    ; ( 2, Bignum.(of_int 4 / ten) ) ]
     |> D.of_alist_exn
   in
   [%test_result: int D.t] (D.bind t ~f) ~expect
 ;;
 
+let%test_unit "uniform" =
+  let gen = List.gen' gen_distribution ~length:(`At_least 1) in
+  Quickcheck.test gen
+    ~sexp_of:[%sexp_of: int D.t list]
+    ~shrinker:(List.shrinker (Quickcheck.Shrinker.empty ()))
+    ~f:(fun ds ->
+      let n = List.length ds in
+      let d = D.uniform ds in
+      Map.iteri (D.to_map d) ~f:(fun ~key ~data ->
+        let expect =
+          let open Bignum.O in
+          List.sum (module Bignum) ds ~f:(fun d ->
+            D.find d key
+            |> Option.value ~default:Bignum.zero)
+          / of_int n
+        in
+        [%test_result: Bignum.t] data ~expect))
+;;
+
 let%test_unit "uniform'" =
   let t = D.uniform' [ 0; 1; 2; 3 ] in
   let expect =
-    [ ( 0, 0.25 )
-    ; ( 1, 0.25 )
-    ; ( 2, 0.25 )
-    ; ( 3, 0.25 ) ]
+    let fourth = Bignum.(one / of_int 4) in
+    [ ( 0, fourth )
+    ; ( 1, fourth )
+    ; ( 2, fourth )
+    ; ( 3, fourth ) ]
     |> D.of_alist_exn
   in
   [%test_result: int D.t] t ~expect
@@ -83,6 +108,6 @@ let%test_unit "cartesian_product" =
       let d = D.cartesian_product d1 d2 in
       Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
         Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
-          [%test_result: float] ~expect:(p1 *. p2)
+          [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2)
             (D.find_exn d (k1, k2)))))
 ;;

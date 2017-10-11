@@ -2,8 +2,9 @@ open! Core
 
 module type Prob = sig
   type t
-  include Numerics_intf.Real with type t := t
-  include Sexpable.S         with type t := t
+  include Commutative_group.S with type t := t
+  include Numerics_intf.Real  with type t := t
+  include Sexpable.S          with type t := t
 end
 
 module type S = sig
@@ -15,6 +16,7 @@ module type S = sig
   val singleton : 'k -> 'k t
 
   val scale : 'k t -> prob -> 'k t
+  val normalize : 'k t -> 'k t
 
   val combine
     :  d1:'k t
@@ -24,6 +26,11 @@ module type S = sig
 
   val uniform  : 'k t list -> 'k t
   val uniform' : 'k   list -> 'k t
+
+  val cartesian_product : 'a t -> 'b t -> ('a * 'b) t
+
+  (** usually 1 **)
+  val total : 'k t -> prob
 
   val find     : 'k t -> 'k -> prob option
   val find_exn : 'k t -> 'k -> prob

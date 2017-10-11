@@ -5,6 +5,15 @@ module D = Distribution.Make(Float)
 
 let gen_prob = Float.gen_incl 0. 1.
 
+let gen_distribution =
+  let open Quickcheck.Generator.Let_syntax in
+  let%map keys = Int.Map.gen Int.gen gen_prob in
+  keys
+  |> Map.to_alist
+  |> D.of_alist_exn
+  |> D.normalize
+;;
+
 let%test_unit "singleton" =
   let d = D.singleton 0 in
   [%test_result: float] ~expect:1. (D.find_exn d 0)
@@ -59,4 +68,21 @@ let%test_unit "uniform'" =
     |> D.of_alist_exn
   in
   [%test_result: int D.t] t ~expect
+;;
+
+let%test_unit "cartesian_product" =
+  let gen =
+    let open Quickcheck.Generator.Let_syntax in
+    let%map d1 = gen_distribution
+    and     d2 = gen_distribution in
+    (d1, d2)
+  in
+  Quickcheck.test gen
+    ~sexp_of:[%sexp_of: int D.t * int D.t]
+    ~f:(fun (d1, d2) ->
+      let d = D.cartesian_product d1 d2 in
+      Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
+        Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
+          [%test_result: float] ~expect:(p1 *. p2)
+            (D.find_exn d (k1, k2)))))
 ;;

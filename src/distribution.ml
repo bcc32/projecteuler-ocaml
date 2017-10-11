@@ -12,6 +12,10 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
   let scale t x = Map.map t ~f:(fun p -> Prob.(p * x))
 
+  let total t = Map.data t |> List.sum (module Prob) ~f:Fn.id
+
+  let normalize t = scale t Prob.(one / total t)
+
   let merge t1 t2 =
     Map.merge t1 t2 ~f:(fun ~key:_ -> function
       | `Both (p1, p2) -> Some Prob.(p1 + p2)
@@ -65,4 +69,11 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
       let map = `Custom map
     end)
+
+  let cartesian_product t1 t2 =
+    let open Let_syntax in
+    let%bind k1 = t1 in
+    let%map  k2 = t2 in
+    (k1, k2)
+  ;;
 end

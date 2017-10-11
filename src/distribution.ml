@@ -39,6 +39,9 @@ module Make (Prob : Distribution_intf.Prob) = struct
   let of_map = Fn.id
   let to_map = Fn.id
 
+  let of_alist_exn = Map.Poly.of_alist_exn
+  let to_alist t = Map.to_alist t
+
   include Monad.Make(struct
       type nonrec 'a t = 'a t
 

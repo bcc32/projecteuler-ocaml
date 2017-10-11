@@ -30,4 +30,7 @@ module type S = sig
 
   val of_map : ('k, prob) Map.Poly.t -> 'k t
   val to_map : 'k t -> ('k, prob) Map.Poly.t
+
+  val of_alist_exn : ('k, prob) List.Assoc.t -> 'k t
+  val to_alist     : 'k t -> ('k, prob) List.Assoc.t
 end

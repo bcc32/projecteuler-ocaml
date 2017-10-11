@@ -44,8 +44,7 @@ let%test_unit "bind" =
     [ ( 0, 0.1 )
     ; ( 1, 0.5 )
     ; ( 2, 0.4 ) ]
-    |> Map.Poly.of_alist_exn
-    |> D.of_map
+    |> D.of_alist_exn
   in
   [%test_result: int D.t] (D.bind t ~f) ~expect
 ;;
@@ -57,8 +56,7 @@ let%test_unit "uniform'" =
     ; ( 1, 0.25 )
     ; ( 2, 0.25 )
     ; ( 3, 0.25 ) ]
-    |> Map.Poly.of_alist_exn
-    |> D.of_map
+    |> D.of_alist_exn
   in
   [%test_result: int D.t] t ~expect
 ;;

@@ -44,9 +44,12 @@ let%test_unit "monad laws" =
   Quickcheck.test Int.gen ~f:(fun v ->
     let open D.Let_syntax in
     [%test_result: int D.t] (return v >>= f) ~expect:(f v);
+    [%test_result: int D.t] (return v >>= g) ~expect:(g v);
     [%test_result: int D.t] (t >>= return) ~expect:t;
     [%test_result: int D.t] (t >>= f >>= g)
-      ~expect:(t >>= (fun x -> f x >>= g)))
+      ~expect:(t >>= (fun x -> f x >>= g));
+    [%test_result: int D.t] (t >>= g >>= f)
+      ~expect:(t >>= (fun x -> g x >>= f)))
 ;;
 
 let%test_unit "bind" =

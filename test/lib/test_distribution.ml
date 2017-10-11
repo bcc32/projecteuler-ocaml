@@ -84,10 +84,9 @@ let%test_unit "uniform" =
 
 let%test_unit "uniform'" =
   let gen =
-    List.gen' Int.gen ~length:(`At_least 1)
-    |> Quickcheck.Generator.filter ~f:(fun ks ->
-      List.find_a_dup ks ~compare:Int.compare
-      |> Option.is_none)
+    let open Quickcheck.Generator.Let_syntax in
+    let%map xs = List.gen' Int.gen ~length:(`At_least 1) in
+    List.dedup xs
   in
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]

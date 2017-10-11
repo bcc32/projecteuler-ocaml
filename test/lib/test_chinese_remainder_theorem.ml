@@ -1,21 +1,24 @@
 open! Core
 open! Import
 
+let are_pairwise_coprime xs =
+  let rec loop xs =
+    match xs with
+    | [] -> true
+    | hd :: tl ->
+      List.for_all tl ~f:(fun x ->
+        Bigint.(one = Number_theory.Bigint.gcd x hd))
+      && loop tl
+  in loop xs
+;;
+
 let%test_unit "Chinese remainder theorem" =
   let gen =
     let open Quickcheck.Generator.Let_syntax in
     let%bind moduli =
       Bigint.gen_positive
       |> List.gen' ~length:(`At_least 1)
-      |> Quickcheck.Generator.filter ~f:(fun ms ->
-        let rec loop ls =
-          match ls with
-          | [] -> true
-          | hd :: tl ->
-            List.for_all tl ~f:(fun x ->
-              Bigint.(one = Number_theory.Bigint.gcd x hd))
-            && loop tl
-        in loop ms)
+      |> Quickcheck.Generator.filter ~f:are_pairwise_coprime
     in
     let%map residues =
       List.map moduli ~f:(fun m -> Bigint.gen_incl Bigint.zero (Bigint.pred m))

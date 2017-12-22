@@ -55,6 +55,7 @@ let modules : (module Euler.Solution_intf.S) list =
   ; (module Sol_131)
   ; (module Sol_139)
   ; (module Sol_142)
+  ; (module Sol_166)
   ; (module Sol_174)
   ; (module Sol_205)
   ; (module Sol_206)

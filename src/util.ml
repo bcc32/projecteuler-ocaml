@@ -23,30 +23,38 @@ let run_length_encode lst ~equal =
 
 let is_palindrome l ~equal = List.equal ~equal l (List.rev l)
 
-let next_permutation ~cmp a =
-  let a = Array.copy a in
-  with_return_option (fun { return } ->
+let next_permutation_inplace ~cmp a =
+  let (<<<) i j = cmp a.(i) a.(j) < 0 in
+  with_return (fun { return } ->
     for i = Array.length a - 2 downto 0 do
-      if cmp a.(i) a.(i + 1) < 0
+      if i <<< i + 1
       then (
         let min_index = ref (i + 1) in
         for j = i + 2 to Array.length a - 1 do
-          if cmp a.(i) a.(j) < 0 && cmp a.(j) a.(!min_index) < 0
+          if i <<< j && j <<< !min_index
           then min_index := j
         done;
         Array.swap a i !min_index;
         Array.sort ~pos:(i + 1) ~cmp a;
-        return a)
-    done)
+        return true)
+    done;
+    false)
+;;
+
+let prev_permutation_inplace ~cmp a =
+  next_permutation_inplace a ~cmp:(Fn.flip cmp)
 ;;
 
 let permutations ~cmp l =
-  let a = Array.sorted_copy ~cmp (List.to_array l) in
+  let init = List.sort l ~cmp in
   let next_permutations =
-    Sequence.unfold ~init:a ~f:(fun a ->
-      let open Option.Let_syntax in
-      let%map next = next_permutation ~cmp a in
-      (Array.to_list next, next))
+    Sequence.unfold ~init ~f:(fun list ->
+      let a = Array.of_list list in
+      if next_permutation_inplace a ~cmp
+      then (
+        let next = Array.to_list a in
+        Some (next, next))
+      else None)
   in
-  Sequence.shift_right next_permutations (Array.to_list a)
+  Sequence.shift_right next_permutations init
 ;;

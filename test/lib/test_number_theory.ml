@@ -3,8 +3,10 @@ open! Import
 
 let%test_unit "multinomial" =
   let gen =
+    let open Quickcheck.Generator.Let_syntax in
+    let%bind length = Int.gen_incl 0 4 in
     let small_number = Int.gen_incl 0 4 in
-    List.gen' small_number ~length:(`At_most 4)
+    List.gen_with_length length small_number
   in
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]

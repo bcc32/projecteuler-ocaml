@@ -27,7 +27,7 @@ module Make (Prob : Distribution_intf.Prob) = struct
 
   let uniform ts =
     match List.length ts with
-    | 0 -> invalid_arg "empty list"
+    | 0 -> invalid_arg "uniform"
     | n ->
       let x = Prob.(one / of_int n) in
       ts

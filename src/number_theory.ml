@@ -6,8 +6,8 @@ module Make (Int : Int_intf.S_unbounded) = struct
   type integer = Int.t [@@deriving sexp]
 
   let one  = Int.one
-  let two  = of_int_exn 2
-  let four = of_int_exn 4
+  let two  = Int.of_int_exn 2
+  let four = Int.of_int_exn 4
 
   let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
     let init =
@@ -32,7 +32,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
       else None)
   ;;
 
-  let digits_of_int ?(base = of_int_exn 10) n =
+  let digits_of_int ?(base = Int.of_int_exn 10) n =
     let rec aux n d =
       if n = zero
       then d
@@ -41,11 +41,11 @@ module Make (Int : Int_intf.S_unbounded) = struct
     aux n []
   ;;
 
-  let int_of_digits ?(base = of_int_exn 10) ds =
+  let int_of_digits ?(base = Int.of_int_exn 10) ds =
     Sequence.fold ds ~init:zero ~f:(fun acc n -> base * acc + n)
   ;;
 
-  let sum_digits ?(base = of_int_exn 10) n =
+  let sum_digits ?(base = Int.of_int_exn 10) n =
     let rec iter n acc =
       if n = zero
       then acc
@@ -69,7 +69,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
   ;;
 
   let next_probable_prime n =
-    match n % of_int_exn 6 |> Int.to_int_exn with
+    match n % Int.of_int_exn 6 |> Int.to_int_exn with
     | 1 -> n + four
     | 5 -> n + two
     | 0 -> Int.succ n
@@ -89,7 +89,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
         else if n % i = zero
         then false
         else aux (next_probable_prime i)
-      in aux (of_int_exn 2))
+      in aux (Int.of_int_exn 2))
   ;;
 
   let rec next_prime n =
@@ -124,7 +124,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
     let mult_aux p a lst =
       let powers =
         Sequence.range ~stop:`inclusive 0 a
-        |> Sequence.map ~f:of_int_exn
+        |> Sequence.map ~f:Int.of_int_exn
         |> Sequence.map ~f:(Int.pow p)
         |> Sequence.to_list
       in
@@ -142,13 +142,13 @@ module Make (Int : Int_intf.S_unbounded) = struct
 
   let num_divisors n =
     prime_factor n
-    |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (of_int_exn a + one))
+    |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (Int.of_int_exn a + one))
   ;;
 
   let totient n =
     prime_factor n
     |> List.fold ~init:one ~f:(fun acc (p, a) ->
-      let pam1 = Int.pow p (of_int_exn a - one) in
+      let pam1 = Int.pow p (Int.of_int_exn a - one) in
       acc * pam1 * (p - one))
   ;;
 

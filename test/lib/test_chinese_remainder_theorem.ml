@@ -17,7 +17,7 @@ let%test_unit "Chinese remainder theorem" =
     let open Quickcheck.Generator.Let_syntax in
     let%bind moduli =
       Bigint.gen_positive
-      |> List.gen' ~length:(`At_least 1)
+      |> List.gen_non_empty
       |> Quickcheck.Generator.filter ~f:are_pairwise_coprime
     in
     let%map residues =

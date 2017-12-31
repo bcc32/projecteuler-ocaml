@@ -12,7 +12,7 @@ module M = struct
     let comparator = Map.comparator dist in
     Map.to_alist dist
     |> List.map ~f:(Tuple2.map_fst ~f:((+) n))
-    |> Map.of_alist_exn ~comparator
+    |> Map.Using_comparator.of_alist_exn ~comparator
   ;;
 
   let scale_div_n dist ~n : dist =

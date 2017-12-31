@@ -26,7 +26,7 @@ module Make (M : Solution_intf.Arg) = struct
       | `Number n -> sprintf "Problem %d" n
       | `Custom (n, `Key _, `Description d) -> sprintf "Problem %d (%s)" n d
     in
-    Command.basic' main ~summary
+    Command.basic main ~summary
   ;;
 
   let command_name =

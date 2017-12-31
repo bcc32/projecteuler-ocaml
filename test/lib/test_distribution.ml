@@ -67,8 +67,8 @@ let%test_unit "bind" =
 ;;
 
 let%test_unit "uniform" =
-  let gen = List.gen' gen_distribution ~length:(`At_least 1) in
-  Quickcheck.test gen
+  List.gen_non_empty gen_distribution
+  |> Quickcheck.test
     ~sexp_of:[%sexp_of: int D.t list]
     ~shrinker:(List.shrinker (Quickcheck.Shrinker.empty ()))
     ~f:(fun ds ->
@@ -88,8 +88,8 @@ let%test_unit "uniform" =
 let%test_unit "uniform'" =
   let gen =
     let open Quickcheck.Generator.Let_syntax in
-    let%map xs = List.gen' Int.gen ~length:(`At_least 1) in
-    List.dedup xs
+    let%map xs = List.gen_non_empty Int.gen in
+    List.dedup_and_sort xs
   in
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]

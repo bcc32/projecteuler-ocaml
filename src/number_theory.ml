@@ -20,16 +20,16 @@ module Make (Int : Int_intf.S_unbounded) = struct
       | `inclusive -> (<=)
       | `exclusive -> (<)
     in
-    let (<=) left right =
+    let (<=) =
       match Int.sign stride with
-      | Neg -> right <= left
-      | Pos -> left  <= right
+      | Neg -> fun left right -> right <= left
+      | Pos -> fun left right -> left  <= right
       | Zero -> invalid_arg "stride is zero"
     in
-    Sequence.unfold ~init ~f:(fun n ->
+    Sequence.unfold_step ~init ~f:(fun n ->
       if n <= b
-      then Some (n, n + stride)
-      else None)
+      then Yield (n, n + stride)
+      else Done)
   ;;
 
   let digits_of_int ?(base = Int.of_int_exn 10) n =

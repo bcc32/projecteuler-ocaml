@@ -1,7 +1,0 @@
-(jbuild_version 1)
-
-(library
- ((name test_lib)
-  (library_flags (-linkall))
-  (libraries (euler))
-  (preprocess (pps (ppx_jane ppx_driver.runner (-inline-test-lib test_lib))))))

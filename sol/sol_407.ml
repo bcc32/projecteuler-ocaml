@@ -4,11 +4,12 @@ open! Import
 module M = struct
   let problem = `Number 407
 
-  let limit = 100_000
+  let limit = 10_000_000
 
   let _primes = lazy (Number_theory.prime_sieve limit)
 
   let largest_idempotent modulo =
+    Debug.eprintf "%d" modulo;
     with_return (fun { return } ->
       (* if (force primes).(modulo)
        * then (return 1); *)
@@ -20,11 +21,9 @@ module M = struct
   ;;
 
   let main () =
-    let sum = ref 0 in
-    for n = 1 to limit do
-      sum := !sum + largest_idempotent n
-    done;
-    printf "%d\n" !sum
+    Sequence.range 1 limit ~stop:`inclusive
+    |> Sequence.sum (module Int) ~f:largest_idempotent
+    |> printf "%d\n"
   ;;
 
   (* let max_idempotent = Array.create 0 ~len:(limit + 1)

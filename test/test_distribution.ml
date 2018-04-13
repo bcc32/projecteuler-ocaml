@@ -1,7 +1,7 @@
 open! Core
 open! Import
 
-module D = Distribution.Make(Bignum)
+module D = Distribution.Bignum
 
 let gen_prob = Bignum.(gen_incl zero one)
 

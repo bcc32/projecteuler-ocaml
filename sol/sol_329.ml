@@ -4,7 +4,7 @@ open! Import
 module M = struct
   let problem = `Number 329
 
-  module Dist = Distribution.Make(Bignum)
+  module Dist = Distribution.Bignum
 
   let is_prime = lazy (Number_theory.prime_sieve 500)
 

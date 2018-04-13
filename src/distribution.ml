@@ -78,3 +78,6 @@ module Make (Prob : Distribution_intf.Prob) = struct
     (k1, k2)
   ;;
 end
+
+module Float  = Make(Float)
+module Bignum = Make(Bignum)

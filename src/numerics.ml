@@ -17,16 +17,16 @@ module Make (Real : Numerics_intf.Real) = struct
       then x_mi
       else (
         let y_mi = f x_mi in
-        match sign y_mi with
+        match sign_exn y_mi with
         | Zero -> x_mi
         | Neg ->
-          begin match sign y_lo with
+          begin match sign_exn y_lo with
           | Neg -> loop x_mi x_hi y_mi y_hi
           | Pos -> loop x_lo x_mi y_lo y_mi
           | Zero -> raise (Bug "zero y-value endpoint")
           end
         | Pos ->
-          begin match sign y_lo with
+          begin match sign_exn y_lo with
           | Neg -> loop x_lo x_mi y_lo y_mi
           | Pos -> loop x_mi x_hi y_mi y_hi
           | Zero -> raise (Bug "zero y-value endpoint")
@@ -70,7 +70,6 @@ end
 
 module Float  = Make (Float)
 module Bignum = Make (struct
-    open Bignum.Std
     include Bignum
-    let sign t = Sign.of_int (sign t)
+    let sign_exn t = Sign.of_int (sign t)
   end)

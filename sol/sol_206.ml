@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Re2.Std
 
 module M = struct
   let problem = `Number 206

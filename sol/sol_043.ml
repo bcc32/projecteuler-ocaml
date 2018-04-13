@@ -22,7 +22,7 @@ module M = struct
 
   let main () =
     List.range 0 10
-    |> Util.permutations ~cmp:Int.compare
+    |> Util.permutations ~compare:Int.compare
     |> Sequence.filter ~f:check_digits
     |> Sequence.sum (module Int)
          ~f:(fun d -> Number_theory.Int.int_of_digits (Sequence.of_list d))

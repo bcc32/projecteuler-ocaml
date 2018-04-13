@@ -10,7 +10,7 @@ module M = struct
       String.sub str ~pos:i ~len:13
       |> Util.digits_of_string
       |> List.fold ~init:1 ~f:( * ))
-    |> Sequence.max_elt ~cmp:Int.compare
+    |> Sequence.max_elt ~compare:Int.compare
     |> Option.value_exn
   ;;
 

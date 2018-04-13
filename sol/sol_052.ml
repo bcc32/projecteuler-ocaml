@@ -7,7 +7,7 @@ module M = struct
   let same_digits n =
     let sort_digits n =
       Number_theory.Int.digits_of_int n
-      |> List.sort ~cmp:Int.compare
+      |> List.sort ~compare:Int.compare
     in
     let n_digits = sort_digits n in
     List.range 2 6 ~stop:`inclusive

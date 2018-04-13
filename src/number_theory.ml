@@ -226,7 +226,6 @@ end
 
 module Int    = Make (Int)
 module Bigint = Make (struct
-    open Bignum.Std
     include Bigint
     (* different signature in Int_intf.S_unbounded *)
     let to_int64 _t =

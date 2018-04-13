@@ -23,8 +23,8 @@ let run_length_encode lst ~equal =
 
 let is_palindrome l ~equal = List.equal ~equal l (List.rev l)
 
-let next_permutation_inplace ~cmp a =
-  let (<<<) i j = cmp a.(i) a.(j) < 0 in
+let next_permutation_inplace a ~compare =
+  let (<<<) i j = compare a.(i) a.(j) < 0 in
   with_return (fun { return } ->
     for i = Array.length a - 2 downto 0 do
       if i <<< i + 1
@@ -35,22 +35,24 @@ let next_permutation_inplace ~cmp a =
           then min_index := j
         done;
         Array.swap a i !min_index;
-        Array.sort ~pos:(i + 1) ~cmp a;
+        Array.sort ~pos:(i + 1) ~compare a;
         return true)
     done;
     false)
 ;;
 
-let prev_permutation_inplace ~cmp a =
-  next_permutation_inplace a ~cmp:(Fn.flip cmp)
+let reverse compare a b = compare b a
+
+let prev_permutation_inplace a ~compare =
+  next_permutation_inplace a ~compare:(reverse compare)
 ;;
 
-let permutations ~cmp l =
-  let init = List.sort l ~cmp in
+let permutations list ~compare =
+  let init = List.sort list ~compare in
   let next_permutations =
     Sequence.unfold ~init ~f:(fun list ->
       let a = Array.of_list list in
-      if next_permutation_inplace a ~cmp
+      if next_permutation_inplace a ~compare
       then (
         let next = Array.to_list a in
         Some (next, next))

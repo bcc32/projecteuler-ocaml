@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Re2.Std
 
 module M = struct
   let problem = `Number 22
@@ -13,7 +12,7 @@ module M = struct
       In_channel.with_file path ~f:(fun chan ->
         In_channel.input_all chan
         |> Re2.find_all_exn name_regexp ~sub:(`Index 1)
-        |> List.sort ~cmp:String.compare))
+        |> List.sort ~compare:String.compare))
   ;;
 
   let letter_score ch = Char.to_int ch - Char.to_int 'A' + 1

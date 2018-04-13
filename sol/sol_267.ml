@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 module M = struct
   let problem = `Number 267

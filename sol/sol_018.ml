@@ -33,7 +33,7 @@ module M = struct
     | [] -> invalid_arg "empty triangle"
     | hd :: tl ->
       List.fold tl ~init:hd ~f:propagate
-      |> List.max_elt ~cmp:Int.compare
+      |> List.max_elt ~compare:Int.compare
       |> Option.value_exn
   ;;
 

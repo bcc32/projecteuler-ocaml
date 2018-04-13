@@ -55,7 +55,7 @@ module M = struct
     ; rl_diagonal_products grid ]
     |> Sequence.of_list
     |> Sequence.concat
-    |> Sequence.max_elt ~cmp:Int.compare
+    |> Sequence.max_elt ~compare:Int.compare
     |> Option.value_exn
     |> printf "%d\n"
   ;;

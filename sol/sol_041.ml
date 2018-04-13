@@ -8,7 +8,7 @@ module M = struct
     Sequence.range ~stride:(-1) 9 0
     |> Sequence.find_map ~f:(fun n ->
       List.range 1 n ~stop:`inclusive
-      |> Util.permutations ~cmp:Int.descending
+      |> Util.permutations ~compare:Int.descending
       |> Sequence.find_map ~f:(fun p ->
         let n =
           Sequence.of_list p

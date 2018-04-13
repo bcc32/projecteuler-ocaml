@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 module M = struct
   let problem = `Number 56
@@ -12,7 +11,7 @@ module M = struct
     |> Sequence.map ~f:(fun (a, b) ->
       Bigint.pow a b
       |> Number_theory.Bigint.sum_digits)
-    |> Sequence.max_elt ~cmp:Bigint.compare
+    |> Sequence.max_elt ~compare:Bigint.compare
     |> Option.value_exn
     |> printf !"%{Bigint}\n"
   ;;

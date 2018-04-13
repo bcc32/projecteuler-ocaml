@@ -19,7 +19,7 @@ let rec collatz_length =
 
 let () =
   Sequence.range ~stop:`inclusive 1 1000000
-  |> Sequence.max_elt ~cmp:(fun a b ->
+  |> Sequence.max_elt ~compare:(fun a b ->
     Int.compare
       (collatz_length a)
       (collatz_length b))

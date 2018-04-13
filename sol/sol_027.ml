@@ -14,8 +14,8 @@ module M = struct
   let main () =
     let range = Sequence.range ~stop:`inclusive (-999) 999 in
     Sequence.cartesian_product range range
-    |> Sequence.map ~f:(fun (a, b) -> a * b, count_primes a b)
-    |> Sequence.max_elt ~cmp:(fun (_, a) (_, b) -> Int.compare a b)
+    |> Sequence.map ~f:(fun (a, b) -> (a * b, count_primes a b))
+    |> Sequence.max_elt ~compare:(fun (_, a) (_, b) -> Int.compare a b)
     |> Option.value_exn
     |> Tuple2.get1
     |> printf "%d\n"

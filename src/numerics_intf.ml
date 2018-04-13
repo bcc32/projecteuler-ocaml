@@ -10,8 +10,8 @@ module type Real = sig
 
   val of_int : int -> t
 
-  val sign : t -> Sign.t
-  val abs  : t -> t
+  val abs      : t -> t
+  val sign_exn : t -> Sign.t
 
   include Comparable.S with type t := t
 end

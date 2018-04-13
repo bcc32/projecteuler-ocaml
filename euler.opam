@@ -1,15 +1,19 @@
-opam-version: "1.2"
-version: "0.2.1"
+opam-version: "2.0"
+version: "0.3.0"
 maintainer: "Aaron L. Zeng <me@bcc32.com>"
 authors: "Aaron L. Zeng <me@bcc32.com>"
 homepage: "https://github.com/bcc32/projecteuler-ocaml"
-bug-reports: "https://github.com/bcc32/projecteuler-ocaml"
-dev-repo: "https://github.com/bcc32/projecteuler-ocaml"
-build: ["jbuilder" "build" "-p" name "-j" jobs]
-build-test: ["jbuilder" "runtest" "-p" name "-j" jobs]
+bug-reports: "https://github.com/bcc32/projecteuler-ocaml/issues"
+dev-repo: "git://github.com/bcc32/projecteuler-ocaml.git"
+build: [
+  ["jbuilder" "build" "-p" name "-j" jobs]
+  ["jbuilder" "runtest" "-p" name "-j" jobs] {with-test}
+]
 depends: [
-  "bignum"
-  "core" {>= "v0.10.0"}
-  "core_bench"
-  "re2"
+  "jbuilder" {build}
+
+  "bignum"     {>= "v0.11.0" & < "v0.12.0"}
+  "core"       {>= "v0.11.0" & < "v0.12.0"}
+  "core_bench" {>= "v0.11.0" & < "v0.12.0"}
+  "re2"        {>= "v0.11.0" & < "v0.12.0"}
 ]

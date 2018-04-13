@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 module M = struct
   let problem = `Number 13
@@ -12,12 +11,12 @@ module M = struct
     lazy (
       In_channel.with_file path ~f:(fun chan ->
         In_channel.input_lines chan
-        |> List.map ~f:Bignum.of_string))
+        |> List.map ~f:Bigint.of_string))
 
   let main () =
-    let numbers = force numbers in
-    List.fold numbers ~init:Bignum.zero ~f:Bignum.(+)
-    |> Bignum.to_string
+    force numbers
+    |> List.sum (module Bigint) ~f:Fn.id
+    |> Bigint.to_string
     |> String.subo ~len:prefix_length
     |> printf "%s\n"
   ;;

@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 module M = struct
   let problem = `Number 329
@@ -52,9 +51,9 @@ module M = struct
       product := Bignum.(!product * total);
       let next = Dist.normalize next in
       init := next);
-    printf !"%{Bignum}/%{Bignum}\n"
-      (Bignum.num !product)
-      (Bignum.den !product)
+    printf !"%{Bigint}/%{Bigint}\n"
+      (Bignum.num_as_bigint !product)
+      (Bignum.den_as_bigint !product)
   ;;
   (* 199740353/29386561536000
      80ms *)

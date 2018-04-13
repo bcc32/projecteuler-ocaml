@@ -7,7 +7,7 @@ module M = struct
   let main () =
     let permutations =
       List.range 0 10
-      |> Util.permutations ~cmp:Int.compare
+      |> Util.permutations ~compare:Int.compare
     in
     Sequence.nth_exn permutations 999999
     |> List.map ~f:Int.to_string

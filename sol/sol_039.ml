@@ -16,7 +16,7 @@ module M = struct
             Geometry.is_pythagorean_triple a b c))
       in
       p, solutions)
-    |> Sequence.max_elt ~cmp:(fun (_, a) (_, b) -> Int.compare a b)
+    |> Sequence.max_elt ~compare:(fun (_, a) (_, b) -> Int.compare a b)
     |> uw
     |> fst
     |> printf "%d\n"

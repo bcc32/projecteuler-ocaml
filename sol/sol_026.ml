@@ -1,6 +1,5 @@
 open! Core
 open! Import
-open Bignum.Std
 
 module M = struct
   let problem = `Number 026
@@ -32,7 +31,7 @@ module M = struct
   let main () =
     Sequence.range 1 1000
     |> Sequence.map ~f:(fun n -> n, cycle_length n)
-    |> Sequence.max_elt ~cmp:(Comparable.lift Int.compare ~f:snd)
+    |> Sequence.max_elt ~compare:(Comparable.lift Int.compare ~f:snd)
     |> uw
     |> fst
     |> printf "%d\n"

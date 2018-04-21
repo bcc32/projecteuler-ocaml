@@ -45,7 +45,10 @@ module type S = sig
   val chinese_remainder_theorem : (integer * integer) list -> integer * integer
 
   (* miscellaneous sequences *)
+  (** 1, 1, 2, 3, 5, ... *)
   val fibonacci : integer Sequence.t
+
+  (** [?init] defaults to 0 *)
   val natural_numbers : ?init:integer -> unit -> integer Sequence.t
 
   (* square roots *)

@@ -7,4 +7,5 @@
               euler
               re2))
   (preprocess (pps (ppx_jane)))
+  (inline_tests)
   (modules (:standard \ template))))

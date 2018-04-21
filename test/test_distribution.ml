@@ -89,7 +89,7 @@ let%test_unit "uniform'" =
   let gen =
     let open Quickcheck.Generator.Let_syntax in
     let%map xs = List.gen_non_empty Int.gen in
-    List.dedup_and_sort xs
+    List.dedup_and_sort xs ~compare:Int.compare
   in
   Quickcheck.test gen
     ~sexp_of:[%sexp_of: int list]

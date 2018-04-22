@@ -2,8 +2,9 @@ open! Core
 
 let solution_commands =
   Euler_solutions.modules
-  |> List.map ~f:(Tuple2.map_snd ~f:(fun m ->
-    let module M = (val m : Euler.Solution_intf.S) in M.command))
+  |> List.map ~f:(fun m ->
+    let module M = (val m : Euler.Solution_intf.S) in
+    (M.command_name, M.command))
 ;;
 
 let command =

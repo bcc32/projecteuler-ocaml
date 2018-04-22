@@ -81,9 +81,3 @@ let modules : (module Euler.Solution_intf.S) list =
   ; (module Sol_587_int)
   ; (module Sol_611) ]
 ;;
-
-let modules =
-  List.map modules ~f:(fun m ->
-    let module M = (val m : Euler.Solution_intf.S) in
-    (M.command_name, m))
-;;

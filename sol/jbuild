@@ -9,3 +9,9 @@
   (preprocess (pps (ppx_jane)))
   (inline_tests)
   (modules (:standard \ template))))
+
+(rule
+ ((targets (euler_solutions.ml))
+  (deps    (euler_solutions.cppo.ml))
+  (action  (run ${bin:cppo} ${<} -o ${@}
+             -x "module_list:perl ${path:module-list.pl}"))))

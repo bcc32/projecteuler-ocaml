@@ -8,6 +8,8 @@ module Make (Int : Int_intf.S_unbounded) = struct
   let one  = Int.one
   let two  = Int.of_int_exn 2
   let four = Int.of_int_exn 4
+  let six  = Int.of_int_exn 6
+  let ten  = Int.of_int_exn 10
 
   let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
     let init =
@@ -32,7 +34,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
       else Done)
   ;;
 
-  let digits_of_int ?(base = Int.of_int_exn 10) n =
+  let digits_of_int ?(base = ten) n =
     let rec aux n d =
       if n = zero
       then d
@@ -41,11 +43,11 @@ module Make (Int : Int_intf.S_unbounded) = struct
     aux n []
   ;;
 
-  let int_of_digits ?(base = Int.of_int_exn 10) ds =
+  let int_of_digits ?(base = ten) ds =
     Sequence.fold ds ~init:zero ~f:(fun acc n -> base * acc + n)
   ;;
 
-  let sum_digits ?(base = Int.of_int_exn 10) n =
+  let sum_digits ?(base = ten) n =
     let rec iter n acc =
       if n = zero
       then acc
@@ -69,7 +71,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
   ;;
 
   let next_probable_prime n =
-    match n % Int.of_int_exn 6 |> Int.to_int_exn with
+    match n % six |> Int.to_int_exn with
     | 1 -> n + four
     | 5 -> n + two
     | 0 -> Int.succ n
@@ -89,7 +91,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
         else if n % i = zero
         then false
         else aux (next_probable_prime i)
-      in aux (Int.of_int_exn 2))
+      in aux two)
   ;;
 
   let rec next_prime n =

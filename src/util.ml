@@ -21,6 +21,16 @@ let run_length_encode lst ~equal =
   List.rev (start lst [])
 ;;
 
+let run_length_decode =
+  List.concat_map ~f:(fun (x, n) -> List.init n ~f:(fun _ -> x))
+;;
+
+let%expect_test _ =
+  let aabbbbc = run_length_decode [("a", 2); ("b", 4); ("c", 1)] in
+  print_s [%sexp (aabbbbc : string list)];
+  [%expect {| (a a b b b b c) |}]
+;;
+
 let is_palindrome l ~equal = List.equal ~equal l (List.rev l)
 
 let next_permutation_inplace a ~compare =

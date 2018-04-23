@@ -3,6 +3,7 @@ open! Core
 val digits_of_string : string -> int list
 
 val run_length_encode : 'a list -> equal:'a Equal.t -> ('a * int) list
+val run_length_decode : ('a * int) list -> 'a list
 
 val is_palindrome : 'a list -> equal:'a Equal.t -> bool
 

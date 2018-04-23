@@ -1,15 +1,71 @@
 open! Core
 
-module Make (Int : Int_intf.S_unbounded) = struct
-  open Int.O
+module Make (Integer : Int_intf.S_unbounded) = struct
+  open Integer.O
 
-  type integer = Int.t [@@deriving sexp]
+  type integer = Integer.t [@@deriving sexp]
 
-  let one  = Int.one
-  let two  = Int.of_int_exn 2
-  let four = Int.of_int_exn 4
-  let six  = Int.of_int_exn 6
-  let ten  = Int.of_int_exn 10
+  let one  = Integer.one
+  let two  = Integer.of_int_exn 2
+  let four = Integer.of_int_exn 4
+  let six  = Integer.of_int_exn 6
+  let ten  = Integer.of_int_exn 10
+
+  let prime_cache =
+    [ 2;   3;  5;  7; 11; 13; 17; 19; 23; 29
+    ; 31; 37; 41; 43; 47; 53; 59; 61; 67; 71
+    ; 73; 79; 83; 89; 97 ]
+    |> List.map ~f:Integer.of_int_exn
+    |> Queue.of_list
+  ;;
+
+  let next_probable_prime n =
+    match n % six |> Integer.to_int_exn with
+    | 1 -> n + four
+    | 5 -> n + two
+    | 0 -> Integer.succ n
+    | 2 -> Integer.succ n
+    | 3 -> n + two
+    | 4 -> Integer.succ n
+    | _ -> assert false
+  ;;
+
+  let rec is_prime n =
+    if n <= one
+    then false
+    else (
+      let ubound = one + Integer.of_float (sqrt (Integer.to_float n)) in
+      prepare_prime_cache ~upto:ubound;
+      with_return (fun { return } ->
+        Queue.iter prime_cache ~f:(fun d ->
+          if d * d > n
+          then (return true);
+          if n % d = zero
+          then (return false));
+        true))
+  and prepare_prime_cache ~upto =
+    let rec loop candidate =
+      if candidate < upto
+      then (
+        if is_prime candidate
+        then (Queue.enqueue prime_cache candidate);
+        loop (next_probable_prime candidate))
+    in
+    loop (Queue.last_exn prime_cache)
+  ;;
+
+  let rec next_prime n =
+    let next = next_probable_prime n in
+    if is_prime next
+    then next
+    else (next_prime next)
+  ;;
+
+  let primes =
+    Sequence.unfold ~init:two ~f:(fun p ->
+      let next = next_prime p in
+      Some (p, next))
+  ;;
 
   let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
     let init =
@@ -23,7 +79,7 @@ module Make (Int : Int_intf.S_unbounded) = struct
       | `exclusive -> (<)
     in
     let (<=) =
-      match Int.sign stride with
+      match Integer.sign stride with
       | Neg -> fun left right -> right <= left
       | Pos -> fun left right -> left  <= right
       | Zero -> invalid_arg "stride is zero"
@@ -65,69 +121,40 @@ module Make (Int : Int_intf.S_unbounded) = struct
   let lcm a b = a / (gcd a b) * b
 
   let factorial n =
-    Sequence.unfold ~init:two ~f:(fun s -> Some (s, Int.succ s))
-    |> Sequence.take_while ~f:((>=) n)
+    range two n ~stop:`inclusive
     |> Sequence.fold ~init:one ~f:( * )
   ;;
 
-  let next_probable_prime n =
-    match n % six |> Int.to_int_exn with
-    | 1 -> n + four
-    | 5 -> n + two
-    | 0 -> Int.succ n
-    | 2 -> Int.succ n
-    | 3 -> n + two
-    | 4 -> Int.succ n
-    | _ -> assert false
-  ;;
-
-  let is_prime n =
-    if n <= one
-    then false
-    else (
-      let rec aux i =
-        if i * i > n
-        then true
-        else if n % i = zero
-        then false
-        else aux (next_probable_prime i)
-      in aux two)
-  ;;
-
-  let rec next_prime n =
-    let next = next_probable_prime n in
-    if is_prime next
-    then next
-    else (next_prime next)
-  ;;
-
-  let primes =
-    Sequence.unfold ~init:two ~f:(fun p ->
-      let next = next_prime p in
-      Some (p, next))
-  ;;
-
-  let factor =
-    let rec aux i n =
-      match i with
-      | _ when i * i > n -> if n > one then [n] else []
-      | _ when n % i = zero -> i :: aux i (n / i)
-      | i -> aux (next_probable_prime i) n
-    in
-    aux two
-  ;;
-
   let prime_factor n =
-    factor n
-    |> Util.run_length_encode ~equal:Int.equal
+    let rec loop_over_primes n i ac =
+      let prime = Queue.get prime_cache i in
+      if prime * prime > n
+      then (
+        if n > one
+        then ((n, 1) :: ac)
+        else ac)
+      else (
+        let rec loop_over_powers n prime count ac =
+          if n % prime = zero
+          then (loop_over_powers (n / prime) prime (succ count) ac )
+          else (
+            let ac = if Int.(count > 0) then (prime, count) :: ac else ac in
+            loop_over_primes n (succ i) ac)
+        in
+        loop_over_powers n prime 0 ac)
+    in
+    loop_over_primes n 0 []
+    |> List.rev
   ;;
+
+  let factor n = prime_factor n |> Util.run_length_decode
 
   let divisors n =
     let mult_aux p a lst =
       let powers =
         Sequence.range ~stop:`inclusive 0 a
-        |> Sequence.map ~f:Int.of_int_exn
-        |> Sequence.map ~f:(Int.pow p)
+        |> Sequence.map ~f:Integer.of_int_exn
+        |> Sequence.map ~f:(Integer.pow p)
         |> Sequence.to_list
       in
       List.map ~f:(fun pp -> List.map ~f:(fun x -> pp * x) lst) powers
@@ -144,13 +171,13 @@ module Make (Int : Int_intf.S_unbounded) = struct
 
   let num_divisors n =
     prime_factor n
-    |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (Int.of_int_exn a + one))
+    |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (Integer.of_int_exn a + one))
   ;;
 
   let totient n =
     prime_factor n
     |> List.fold ~init:one ~f:(fun acc (p, a) ->
-      let pam1 = Int.pow p (Int.of_int_exn a - one) in
+      let pam1 = Integer.pow p (Integer.of_int_exn a - one) in
       acc * pam1 * (p - one))
   ;;
 
@@ -258,16 +285,14 @@ let prime_sieve limit =
     if n < len
     then (
       primes.(n) <- false;
-      mark p (n + p)
-    )
+      mark p (n + p))
   in
   let rec sieve p =
     if p * p < len
     then (
       if primes.(p)
       then mark p (p * p);
-      sieve (Int.next_probable_prime p)
-    )
+      sieve (Int.next_probable_prime p))
   in
   primes.(0) <- false;
   primes.(1) <- false;

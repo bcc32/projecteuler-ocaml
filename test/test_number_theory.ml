@@ -53,3 +53,17 @@ let%test_unit "fast_fibonacci" =
       let expect = Sequence.nth_exn Number_theory.Int.fibonacci n in
       [%test_result: int] ~expect (Number_theory.Int.fast_fibonacci n))
 ;;
+
+let%expect_test "prime_factor" =
+  [ 10; 17; 109; 256; 480; 9001 ]
+  |> List.iter ~f:(fun x ->
+    print_s [%sexp ((x, Number_theory.Int.prime_factor x) : int * (int * int) list)]);
+  [%expect {|
+    (10 ((2 1) (5 1)))
+    (17 ((17 1)))
+    (109 ((109 1)))
+    (256 ((2 8)))
+    (480 ((2 5) (3 1) (5 1)))
+    (9001 ((9001 1)))
+  |}]
+;;

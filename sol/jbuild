@@ -11,7 +11,10 @@
   (modules (:standard \ template))))
 
 (rule
- ((targets (euler_solutions.ml))
-  (deps    (euler_solutions.cppo.ml (glob_files sol*.ml)))
-  (action (run ${bin:cppo} ${<} -o ${@}
-            -x "module_list:perl ${path:module-list.pl}"))))
+ ((targets (euler_solutions.ml-gen))
+  (deps (module-list.pl))
+  (action (with-stdout-to ${@} (run perl ${<})))))
+
+(alias
+ ((name runtest)
+  (action (diff euler_solutions.ml euler_solutions.ml-gen))))

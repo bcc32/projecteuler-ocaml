@@ -10,4 +10,16 @@ while (readdir($dh)) {
   }
 }
 
+print <<HEADER;
+open! Core
+open! Import
+
+let modules : (module Euler.Solution_intf.S) list = [
+HEADER
+
 say "  (module $_);" for sort @modules;
+
+print <<FOOTER;
+]
+;;
+FOOTER

@@ -7,11 +7,12 @@ module M = struct
   let main () =
     Sequence.findi Number_theory.Bigint.fibonacci ~f:(fun _ f ->
       String.length (Bigint.to_string f) >= 1000)
-    |> Option.value_exn
-    |> Tuple2.get1
-    |> succ
+    |> uw
+    |> fst
     |> printf "%d\n"
   ;;
+  (* 4782
+     37ms *)
 end
 
 include Solution.Make(M)

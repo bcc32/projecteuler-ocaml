@@ -44,3 +44,12 @@ let%test_unit "powmod" =
       in
       [%test_result: int] ~expect (Number_theory.Int.powmod a b ~modulus))
 ;;
+
+let%test_unit "fast_fibonacci" =
+  let gen = Int.gen_incl 0 200 in
+  Quickcheck.test gen
+    ~sexp_of:[%sexp_of: int]
+    ~f:(fun n ->
+      let expect = Sequence.nth_exn Number_theory.Int.fibonacci n in
+      [%test_result: int] ~expect (Number_theory.Int.fast_fibonacci n))
+;;

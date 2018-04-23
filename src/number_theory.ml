@@ -194,8 +194,25 @@ module Make (Int : Int_intf.S_unbounded) = struct
   ;;
 
   let fibonacci =
-    Sequence.unfold ~init:(one, one) ~f:(fun (a, b) ->
+    Sequence.unfold ~init:(zero, one) ~f:(fun (a, b) ->
       Some (a, (b, a + b)))
+  ;;
+
+  (* https://www.nayuki.io/page/fast-fibonacci-algorithms *)
+  let fast_fibonacci n =
+    (* fib_n_n' n = (F(n), F(n + 1)) *)
+    let rec fib_n_n' n =
+      if n = zero
+      then (zero, one)
+      else (
+        let (a, b) = fib_n_n' (n / two) in
+        let c = a * (b * two - a) in
+        let d = a * a + b * b in
+        if n % two = zero
+        then (c, d)
+        else (d, c + d))
+    in
+    fst (fib_n_n' n)
   ;;
 
   let natural_numbers ?(init = zero) () =

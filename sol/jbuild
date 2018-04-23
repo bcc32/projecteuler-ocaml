@@ -1,7 +1,7 @@
 (jbuild_version 1)
 
 (library
- ((name        euler_solutions)
+ ((name euler_solutions)
   (synopsis "A collection of OCaml solutions to ProjectEuler problems")
   (libraries (core
               euler
@@ -12,6 +12,6 @@
 
 (rule
  ((targets (euler_solutions.ml))
-  (deps    (euler_solutions.cppo.ml))
-  (action  (run ${bin:cppo} ${<} -o ${@}
-             -x "module_list:perl ${path:module-list.pl}"))))
+  (deps    (euler_solutions.cppo.ml (glob_files sol*.ml)))
+  (action (run ${bin:cppo} ${<} -o ${@}
+            -x "module_list:perl ${path:module-list.pl}"))))

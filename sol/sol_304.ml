@@ -2,11 +2,13 @@ open! Core
 open! Import
 
 let a =
-  let a1 = Number_theory.Int.next_prime 100_000_000_000_000 in
-  Sequence.unfold ~init:a1 ~f:(fun a ->
-    Debug.eprintf "%d" a;
-    let a' = Number_theory.Int.next_prime a in
-    Some (a', a'))
+  lazy (
+    let a1 = Number_theory.Int.next_prime 100_000_000_000_000 in
+    Sequence.unfold ~init:a1 ~f:(fun a ->
+      Debug.eprintf "%d" a;
+      let a' = Number_theory.Int.next_prime a in
+      Some (a', a')))
+  |> Sequence.of_lazy
 ;;
 
 let b = Sequence.map a ~f:Number_theory.Int.fast_fibonacci

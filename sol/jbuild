@@ -12,7 +12,7 @@
 
 (rule
  ((targets (euler_solutions.ml-gen))
-  (deps (module-list.pl))
+  (deps (module-list.pl (glob_files sol*.ml)))
   (action (with-stdout-to ${@} (run perl ${<})))))
 
 (alias

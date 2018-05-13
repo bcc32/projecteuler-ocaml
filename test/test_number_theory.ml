@@ -1,6 +1,19 @@
 open! Core
 open! Import
 
+let%expect_test "is_prime" =
+  let show a b =
+    Number_theory.Int.range a b
+    |> Sequence.filter ~f:Number_theory.Int.is_prime
+    |> [%sexp_of: int Sequence.t]
+    |> print_s
+  in
+  show 1 10;
+  [%expect {| (2 3 5 7) |}];
+  show 150 160;
+  [%expect {| (151 157) |}];
+;;
+
 let%test_unit "multinomial" =
   let gen =
     let open Quickcheck.Generator.Let_syntax in

@@ -30,12 +30,32 @@ module Make (Integer : Int_intf.S_unbounded) = struct
     | _ -> assert false
   ;;
 
+  let isqrt n =
+    let rec loop n =
+      if n < two
+      then n
+      else (
+        let small = loop (n asr 2) lsl 1 in
+        let large = small + one in
+        if large * large > n
+        then small
+        else large)
+    in
+    if n < zero
+    then (raise_s [%message "isqrt" (n : integer)])
+    else loop n
+  ;;
+
+  let is_perfect_square n =
+    let sqrt = isqrt n in
+    sqrt * sqrt = n
+  ;;
+
   let rec is_prime n =
     if n <= one
     then false
     else (
-      let ubound = one + Integer.of_float (sqrt (Integer.to_float n)) in
-      prepare_prime_cache ~upto:ubound;
+      prepare_prime_cache ~upto:(one + isqrt n);
       with_return (fun { return } ->
         Queue.iter prime_cache ~f:(fun d ->
           if d * d > n
@@ -43,15 +63,25 @@ module Make (Integer : Int_intf.S_unbounded) = struct
           if n % d = zero
           then (return false));
         true))
-  and prepare_prime_cache ~upto =
+  and extend_prime_cache () =
     let rec loop candidate =
-      if candidate < upto
-      then (
-        if is_prime candidate
-        then (Queue.enqueue prime_cache candidate);
-        loop (next_probable_prime candidate))
+      if is_prime candidate
+      then (Queue.enqueue prime_cache candidate)
+      else (loop (next_probable_prime candidate))
     in
-    loop (Queue.last_exn prime_cache)
+    loop (next_probable_prime (Queue.last_exn prime_cache))
+  and prepare_prime_cache ~upto =
+    while Queue.last_exn prime_cache < upto do
+      extend_prime_cache ()
+    done
+  ;;
+
+  let nth_prime i =
+    let open Int.O in
+    while i >= Queue.length prime_cache do
+      extend_prime_cache ()
+    done;
+    Queue.get prime_cache i
   ;;
 
   let rec next_prime n =
@@ -127,7 +157,7 @@ module Make (Integer : Int_intf.S_unbounded) = struct
 
   let prime_factor n =
     let rec loop_over_primes n i ac =
-      let prime = Queue.get prime_cache i in
+      let prime = nth_prime i in
       if prime * prime > n
       then (
         if n > one
@@ -136,7 +166,7 @@ module Make (Integer : Int_intf.S_unbounded) = struct
       else (
         let rec loop_over_powers n prime count ac =
           if n % prime = zero
-          then (loop_over_powers (n / prime) prime (succ count) ac )
+          then (loop_over_powers (n / prime) prime (succ count) ac)
           else (
             let ac = if Int.(count > 0) then (prime, count) :: ac else ac in
             loop_over_primes n (succ i) ac)
@@ -246,27 +276,6 @@ module Make (Integer : Int_intf.S_unbounded) = struct
 
   let natural_numbers ?(init = zero) () =
     Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
-  ;;
-
-  let isqrt n =
-    let rec loop n =
-      if n < two
-      then n
-      else (
-        let small = loop (n asr 2) lsl 1 in
-        let large = small + one in
-        if large * large > n
-        then small
-        else large)
-    in
-    if n < zero
-    then (raise_s [%message "isqrt" (n : integer)])
-    else loop n
-  ;;
-
-  let is_perfect_square n =
-    let sqrt = isqrt n in
-    sqrt * sqrt = n
   ;;
 end
 

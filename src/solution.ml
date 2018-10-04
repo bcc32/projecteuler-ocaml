@@ -17,7 +17,7 @@ module Make (M : Solution_intf.Arg) = struct
     let summary =
       match M.problem with
       | `Number n -> sprintf "Problem %d" n
-      | `Custom (n, `Key _, `Description d) -> sprintf "Problem %d (%s)" n d
+      | `Custom (n, `Tag _, `Description d) -> sprintf "Problem %d (%s)" n d
     in
     Command.basic main ~summary
   ;;
@@ -25,6 +25,6 @@ module Make (M : Solution_intf.Arg) = struct
   let command_name =
     match M.problem with
     | `Number n -> Int.to_string n
-    | `Custom (n, `Key k, `Description _) -> sprintf "%d-%s" n k
+    | `Custom (n, `Tag k, `Description _) -> sprintf "%d-%s" n k
   ;;
 end

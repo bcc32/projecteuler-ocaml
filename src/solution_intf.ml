@@ -3,7 +3,7 @@ open! Core
 module Solution_id = struct
   type t =
     [ `Number of int
-    | `Custom of int * [`Key of string] * [`Description of string] ]
+    | `Custom of int * [`Tag of string] * [`Description of string] ]
 end
 
 module type Arg = sig

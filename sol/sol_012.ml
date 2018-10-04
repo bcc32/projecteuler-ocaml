@@ -12,6 +12,11 @@ module M = struct
     done;
     printf "%d\n" (triangle !i)
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 76576500 |}]
+  ;;
 end
 
 include Solution.Make (M)

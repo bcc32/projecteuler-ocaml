@@ -30,6 +30,12 @@ module M = struct
     done;
     printf "%d\n" !sum
   ;;
+
+  (* 34.65ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 443839 |}]
+  ;;
 end
 
 include Solution.Make (M)

@@ -25,6 +25,12 @@ module M = struct
     |> Option.value_exn
     |> printf "%d\n"
   ;;
+
+  (* 94ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 837799 |}]
+  ;;
 end
 
 include Solution.Make (M)

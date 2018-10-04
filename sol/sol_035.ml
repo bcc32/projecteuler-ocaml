@@ -41,9 +41,11 @@ module M = struct
     printf "%d\n" (Hash_set.length circular_primes)
   ;;
 
-  (* TODO update timing *)
-  (* 55
-     835.332ms *)
+  (* 59.769ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 55 |}]
+  ;;
 end
 
 include Solution.Make (M)

@@ -30,8 +30,11 @@ module M = struct
     max_sum_exn triangle |> printf "%d\n"
   ;;
 
-  (* 1074
-     0.061ms *)
+  (* 0.061ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 1074 |}]
+  ;;
 end
 
 include Solution.Make (M)

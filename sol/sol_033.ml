@@ -33,8 +33,11 @@ module M = struct
     |> printf !"%{Bigint}\n"
   ;;
 
-  (* 100
-     0.926ms *)
+  (* 0.926ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 100 |}]
+  ;;
 end
 
 include Solution.Make (M)

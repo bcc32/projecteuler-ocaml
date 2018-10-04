@@ -16,8 +16,11 @@ module M = struct
 
   let main () = doit Problem_008.data |> printf "%d\n"
 
-  (* 23514624000
-     3.3ms *)
+  (* 3.3ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 23514624000 |}]
+  ;;
 end
 
 include Solution.Make (M)

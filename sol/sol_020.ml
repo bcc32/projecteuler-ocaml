@@ -10,6 +10,11 @@ module M = struct
     |> Number_theory.Bigint.sum_digits
     |> printf !"%{Bigint}\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 648 |}]
+  ;;
 end
 
 include Solution.Make (M)

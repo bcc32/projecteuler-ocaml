@@ -22,6 +22,12 @@ module M = struct
     |> String.concat
     |> printf "%s\n"
   ;;
+
+  (* 135ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 2783915460 |}]
+  ;;
 end
 
 include Solution.Make (M)

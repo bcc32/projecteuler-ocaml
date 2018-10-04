@@ -17,6 +17,11 @@ module M = struct
     let num = pow base expt in
     sum_digits num (of_int 10) |> to_int_exn |> printf "%d\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 1366 |}]
+  ;;
 end
 
 include Solution.Make (M)

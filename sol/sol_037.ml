@@ -43,8 +43,11 @@ module M = struct
     |> printf "%d\n"
   ;;
 
-  (* 748317
-     9.74066ms *)
+  (* 9.74066ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 748317 |}]
+  ;;
 end
 
 include Solution.Make (M)

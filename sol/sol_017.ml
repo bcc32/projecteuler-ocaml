@@ -65,6 +65,11 @@ module M = struct
     |> Sequence.sum (module Int) ~f:how_many_letters
     |> printf "%d\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 21124 |}]
+  ;;
 end
 
 include Solution.Make (M)

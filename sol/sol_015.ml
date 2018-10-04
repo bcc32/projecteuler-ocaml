@@ -9,6 +9,11 @@ module M = struct
     let r = Bigint.of_int 20 in
     Number_theory.Bigint.binomial n r |> printf !"%{Bigint}\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 137846528820 |}]
+  ;;
 end
 
 include Solution.Make (M)

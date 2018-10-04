@@ -47,8 +47,11 @@ module M = struct
     | Exit -> ()
   ;;
 
-  (* 296962999629
-     1.749ms *)
+  (* 1.749ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 296962999629 |}]
+  ;;
 end
 
 include Solution.Make (M)

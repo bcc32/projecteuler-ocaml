@@ -11,6 +11,11 @@ module M = struct
   ;;
 
   let main () = printf "%d\n" threes_and_fives
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 233168 |}]
+  ;;
 end
 
 include Solution.Make (M)

@@ -26,6 +26,12 @@ module M = struct
     in
     sum |> printf !"%{Bigint}\n"
   ;;
+
+  (* 4.026ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 9110846700 |}]
+  ;;
 end
 
 include Solution.Make (M)

@@ -15,6 +15,11 @@ module M = struct
     |> List.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 4613732 |}]
+  ;;
 end
 
 include Solution.Make (M)

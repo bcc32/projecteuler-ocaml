@@ -17,6 +17,12 @@ module M = struct
     done;
     printf "%d\n" !sum
   ;;
+
+  (* 8.126us *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 669171001 |}]
+  ;;
 end
 
 include Solution.Make (M)

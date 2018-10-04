@@ -40,8 +40,11 @@ module M = struct
   let problem = Number 38
   let main () = pandigital_multiples () |> printf "%d\n"
 
-  (* 932718654
-     1.815ms *)
+  (* 1.815ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 932718654 |}]
+  ;;
 end
 
 include Solution.Make (M)

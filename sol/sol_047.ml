@@ -40,8 +40,11 @@ module M = struct
     loop each_consecutive_4 |> printf "%d\n"
   ;;
 
-  (* 134043
-     98.823ms *)
+  (* 98.823ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 134043 |}]
+  ;;
 end
 
 include Solution.Make (M)

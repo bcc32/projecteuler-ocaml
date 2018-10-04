@@ -13,6 +13,11 @@ module M = struct
       [%compare.equal: Day_of_week.t] Sun (Date.day_of_week d))
     |> printf "%d\n"
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 171 |}]
+  ;;
 end
 
 include Solution.Make (M)

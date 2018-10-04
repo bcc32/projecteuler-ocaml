@@ -7,6 +7,11 @@ module M = struct
   let sum = List.sum (module Int) ~f:Fn.id
   let sqr x = x * x
   let main () = sqr (sum hund) - sum (List.map ~f:sqr hund) |> printf "%d\n"
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 25164150 |}]
+  ;;
 end
 
 include Solution.Make (M)

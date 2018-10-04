@@ -15,6 +15,11 @@ module M = struct
     done;
     printf "%d\n" !ans
   ;;
+
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 906609 |}]
+  ;;
 end
 
 include Solution.Make (M)

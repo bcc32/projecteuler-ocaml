@@ -13,6 +13,12 @@ let rec make_change total coins =
 module M = struct
   let problem = Number 31
   let main () = make_change 200 [ 1; 2; 5; 10; 20; 50; 100; 200 ] |> printf "%d\n"
+
+  (* 97.216ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 73682 |}]
+  ;;
 end
 
 include Solution.Make (M)

@@ -20,8 +20,11 @@ module M = struct
     |> printf "%d\n"
   ;;
 
-  (* 210
-     112.283ms *)
+  (* 97.183ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 210 |}]
+  ;;
 end
 
 include Solution.Make (M)

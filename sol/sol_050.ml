@@ -31,8 +31,11 @@ module M = struct
     printf "%d\n" !arg_max
   ;;
 
-  (* 997651
-     79.818ms *)
+  (* 56.427ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 997651 |}]
+  ;;
 end
 
 include Solution.Make (M)

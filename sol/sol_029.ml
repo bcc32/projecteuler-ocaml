@@ -14,6 +14,12 @@ module M = struct
     done;
     printf "%d\n" (Hash_set.length powers)
   ;;
+
+  (* 5.239ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 9183 |}]
+  ;;
 end
 
 include Solution.Make (M)

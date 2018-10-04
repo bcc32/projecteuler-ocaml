@@ -1,11 +1,13 @@
 open! Core
 
-type solution_id =
-  [ `Number of int
-  | `Custom of int * [`Key of string] * [`Description of string] ]
+module Solution_id = struct
+  type t =
+    [ `Number of int
+    | `Custom of int * [`Key of string] * [`Description of string] ]
+end
 
 module type Arg = sig
-  val problem : solution_id
+  val problem : Solution_id.t
   val main : unit -> unit
 end
 

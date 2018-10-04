@@ -1,7 +1,8 @@
 (library
  ((name euler_solutions)
   (synopsis "A collection of OCaml solutions to ProjectEuler problems")
-  (libraries (core
+  (libraries (bignum
+              core
               euler
               re))
   (preprocess (pps (ppx_jane)))

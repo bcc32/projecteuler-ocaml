@@ -1,5 +1,7 @@
 (library
  ((name tests)
-  (libraries (core bignum euler))
+  (libraries (bignum
+              core
+              euler))
   (preprocess (pps (ppx_jane)))
   (inline_tests)))

@@ -4,7 +4,7 @@ open! Import
 module M = struct
   let problem = `Number 48
 
-  let ten_ten =
+  let modulus =
     let ten = Bigint.of_int 10 in
     Bigint.pow ten ten
   ;;
@@ -18,7 +18,7 @@ module M = struct
              let n = Bigint.of_int n in
              Bigint.pow n n)
     in
-    Bigint.(sum % ten_ten) |> Bigint.to_int_exn |> printf "%d\n"
+    Bigint.(sum % modulus) |> printf !"%{Bigint}\n"
   ;;
 end
 

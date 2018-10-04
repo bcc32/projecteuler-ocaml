@@ -18,18 +18,18 @@ let%test_unit "digits_of_string" =
 ;;
 
 let%test_unit "is_palindrome" =
-  let gen = List.gen Int.gen in
+  let gen = List.quickcheck_generator Int.quickcheck_generator in
   Quickcheck.test_can_generate gen ~f:(fun l -> [%compare.equal: int list] l (List.rev l));
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
     let expect = [%compare.equal: int list] l (List.rev l) in
-    [%test_result: bool] (Sequences.is_palindrome l ~equal:Int.equal) ~expect)
+    [%test_result: bool] (Sequences.is_palindrome Int.equal l) ~expect)
 ;;
 
 let%test_unit "permutations" =
   let gen =
     let open Gen.Let_syntax in
     let%bind length = Int.gen_incl 0 5 in
-    List.gen_with_length length Int.gen
+    List.gen_with_length length Int.quickcheck_generator
   in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
     let compare = Int.compare in
@@ -58,9 +58,9 @@ let%test_unit "permutations" =
 ;;
 
 let%test_unit "run_length_encode" =
-  let gen = List.gen Int.gen in
+  let gen = List.quickcheck_generator Int.quickcheck_generator in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
-    let enc = Sequences.run_length_encode l ~equal:Int.equal in
+    let enc = Sequences.run_length_encode Int.equal l in
     (* reconstruct the list *)
     [%test_result: int list]
       ~expect:l

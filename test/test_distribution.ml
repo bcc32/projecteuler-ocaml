@@ -6,7 +6,7 @@ let gen_prob = Bignum.(gen_incl zero one)
 
 let gen_distribution =
   let open Gen.Let_syntax in
-  let%map keys = Int.Map.gen Int.gen gen_prob in
+  let%map keys = Int.Map.quickcheck_generator Int.quickcheck_generator gen_prob in
   keys |> Map.to_alist |> D.of_alist_exn |> D.normalize
 ;;
 
@@ -37,7 +37,7 @@ let%test_unit "monad laws" =
     D.combine ~p1 ~d1:(D.singleton x) ~d2:(D.singleton (-x))
   in
   let t = D.singleton 0 in
-  Quickcheck.test Int.gen ~f:(fun v ->
+  Quickcheck.test Int.quickcheck_generator ~f:(fun v ->
     let open D.Let_syntax in
     [%test_result: int D.t] (return v >>= f) ~expect:(f v);
     [%test_result: int D.t] (return v >>= g) ~expect:(g v);
@@ -65,7 +65,7 @@ let%test_unit "uniform" =
   List.gen_non_empty gen_distribution
   |> Quickcheck.test
        ~sexp_of:[%sexp_of: int D.t list]
-       ~shrinker:(List.shrinker (Quickcheck.Shrinker.empty ()))
+       ~shrinker:(List.quickcheck_shrinker (Quickcheck.Shrinker.empty ()))
        ~f:(fun ds ->
          let n = List.length ds in
          let d = D.uniform ds in
@@ -84,13 +84,13 @@ let%test_unit "uniform" =
 let%test_unit "uniform'" =
   let gen =
     let open Gen.Let_syntax in
-    let%map xs = List.gen_non_empty Int.gen in
+    let%map xs = List.gen_non_empty Int.quickcheck_generator in
     List.dedup_and_sort xs ~compare:Int.compare
   in
   Quickcheck.test
     gen
     ~sexp_of:[%sexp_of: int list]
-    ~shrinker:(List.shrinker Int.shrinker)
+    ~shrinker:(List.quickcheck_shrinker Int.quickcheck_shrinker)
     ~f:(fun ks ->
       let t = D.uniform' ks in
       let expect =

@@ -2,9 +2,9 @@ open! Core
 open! Import
 
 val digits_of_string : string -> int list
-val run_length_encode : 'a list -> equal:'a Equal.t -> ('a * int) list
+val run_length_encode : 'a Equal.t -> 'a list -> ('a * int) list
 val run_length_decode : ('a * int) list -> 'a list
-val is_palindrome : 'a list -> equal:'a Equal.t -> bool
+val is_palindrome : 'a Equal.t -> 'a list -> bool
 
 (** [next_permutation_inplace a] attempts to permute array [a] to the next
     permutation according to the total ordering defined by [compare]. It returns

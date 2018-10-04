@@ -12,7 +12,7 @@ module M = struct
     List.range 2 6 ~stop:`inclusive
     |> List.map ~f:(( * ) n)
     |> List.map ~f:sort_digits
-    |> List.for_all ~f:(List.equal ~equal:Int.equal n_digits)
+    |> List.for_all ~f:(List.equal Int.equal n_digits)
   ;;
 
   let main () =

@@ -48,7 +48,7 @@ module M = struct
     for digits = 1 to 6 do
       iter_base10_palindromes digits ~f:(fun n ->
         if Sequences.is_palindrome
-             ~equal:Int.equal
+             Int.equal
              (Number_theory.Int.digits_of_int ~base:2 n)
         then sum := !sum + n)
     done;

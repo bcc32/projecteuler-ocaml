@@ -19,7 +19,6 @@ module Int_modulo = struct
   let modulus = 1234567891011
   let zero = 0
   let ( + ) a b = (a + b) % modulus
-  let ( - ) a b = (a - b) % modulus
 end
 
 module M = struct

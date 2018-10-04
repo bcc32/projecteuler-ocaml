@@ -8,7 +8,7 @@ let digits_of_string n =
   String.to_list_rev n |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
 ;;
 
-let run_length_encode lst ~equal =
+let run_length_encode equal lst =
   let rec start lst ac =
     match lst with
     | [] -> ac
@@ -30,7 +30,7 @@ let%expect_test _ =
   [%expect {| (a a b b b b c) |}]
 ;;
 
-let is_palindrome l ~equal = List.equal ~equal l (List.rev l)
+let is_palindrome equal l = List.equal equal l (List.rev l)
 
 let next_permutation_inplace a ~compare =
   let ( <<< ) i j = compare a.(i) a.(j) < 0 in

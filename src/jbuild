@@ -2,3 +2,5 @@
  ((name euler)
   (libraries (bignum
               core))))
+
+(enforce_style ((ocamlformat ())))

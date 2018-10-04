@@ -15,3 +15,6 @@
  ((targets (euler_solutions.ml))
   (deps (module-list.pl (glob_files sol*.ml)))
   (action "perl %{first_dep} > %{targets}")))
+
+(enforce_style ((ocamlformat ())
+                (exceptions (euler_solutions.ml))))

@@ -4,3 +4,5 @@
               core
               euler
               expect_test_helpers_kernel))))
+
+(enforce_style ((ocamlformat ())))

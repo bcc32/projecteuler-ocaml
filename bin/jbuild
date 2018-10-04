@@ -4,3 +4,5 @@
               core_bench
               euler
               euler_solutions))))
+
+(enforce_style ((ocamlformat ())))

@@ -9,7 +9,11 @@ module M = struct
     sd - n
   ;;
 
-  (* TODO don't duplicate work *)
+  let sum_proper_divisors =
+    let cache = Int.Table.create () in
+    fun n -> Hashtbl.find_or_add cache n ~default:(fun () -> sum_proper_divisors n)
+  ;;
+
   let amicable n =
     let sd = sum_proper_divisors n in
     sd <> n && sum_proper_divisors sd = n

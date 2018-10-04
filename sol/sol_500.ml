@@ -3,7 +3,6 @@ open! Import
 
 module M = struct
   let problem = `Number 500
-
   let modulo = 500_500_507
 
   (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first
@@ -21,12 +20,12 @@ module M = struct
       let factor = Heap.pop_exn queue in
       number := !number * factor mod modulo;
       let factor = factor * factor in
-      if factor < upper_bound
-      then (Heap.add queue factor)
+      if factor < upper_bound then Heap.add queue factor
     done;
-    !number
-    |> printf "%d\n"
+    !number |> printf "%d\n"
   ;;
+
   (* 35407281, 500ms *)
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

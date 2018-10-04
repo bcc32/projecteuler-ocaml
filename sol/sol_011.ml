@@ -3,20 +3,17 @@ open! Import
 
 module M = struct
   let problem = `Number 11
-
   let path = "data/011.txt"
   let size = 20
   let product_size = 4
 
   let grid =
-    lazy (
-      In_channel.with_file path ~f:(fun chan ->
-        In_channel.input_lines chan
-        |> List.map ~f:(fun line ->
-          String.split line ~on:' '
-          |> List.map ~f:Int.of_string
-          |> List.to_array)
-        |> List.to_array))
+    lazy
+      (In_channel.with_file path ~f:(fun chan ->
+         In_channel.input_lines chan
+         |> List.map ~f:(fun line ->
+           String.split line ~on:' ' |> List.map ~f:Int.of_string |> List.to_array)
+         |> List.to_array))
   ;;
 
   let horizontal_products grid =
@@ -30,8 +27,7 @@ module M = struct
     |> Sequence.concat
   ;;
 
-  let vertical_products grid =
-    horizontal_products (Array.transpose_exn grid)
+  let vertical_products grid = horizontal_products (Array.transpose_exn grid)
 
   let lr_diagonal_products grid =
     let indices = Sequence.range ~stop:`inclusive 0 (size - product_size) in
@@ -46,13 +42,15 @@ module M = struct
     let grid = Array.copy grid in
     Array.rev_inplace grid;
     lr_diagonal_products grid
+  ;;
 
   let main () =
     let grid = force grid in
     [ horizontal_products grid
     ; vertical_products grid
     ; lr_diagonal_products grid
-    ; rl_diagonal_products grid ]
+    ; rl_diagonal_products grid
+    ]
     |> Sequence.of_list
     |> Sequence.concat
     |> Sequence.max_elt ~compare:Int.compare
@@ -61,4 +59,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

@@ -5,20 +5,19 @@ module M = struct
   let problem = `Number 17
 
   let how_many_letters n =
-    if n > 1000 then (ksprintf invalid_arg "n is too big: %d"   n);
-    if n < 1    then (ksprintf invalid_arg "n is too small: %d" n);
-    let less_than_twenty =
-      function
-      | 0  -> 0
-      | 1  -> String.length "one"
-      | 2  -> String.length "two"
-      | 3  -> String.length "three"
-      | 4  -> String.length "four"
-      | 5  -> String.length "five"
-      | 6  -> String.length "six"
-      | 7  -> String.length "seven"
-      | 8  -> String.length "eight"
-      | 9  -> String.length "nine"
+    if n > 1000 then ksprintf invalid_arg "n is too big: %d" n;
+    if n < 1 then ksprintf invalid_arg "n is too small: %d" n;
+    let less_than_twenty = function
+      | 0 -> 0
+      | 1 -> String.length "one"
+      | 2 -> String.length "two"
+      | 3 -> String.length "three"
+      | 4 -> String.length "four"
+      | 5 -> String.length "five"
+      | 6 -> String.length "six"
+      | 7 -> String.length "seven"
+      | 8 -> String.length "eight"
+      | 9 -> String.length "nine"
       | 10 -> String.length "ten"
       | 11 -> String.length "eleven"
       | 12 -> String.length "twelve"
@@ -29,12 +28,11 @@ module M = struct
       | 17 -> String.length "seventeen"
       | 18 -> String.length "eighteen"
       | 19 -> String.length "nineteen"
-      | _  -> assert false
+      | _ -> assert false
     in
     let last_two_digits n =
       match n / 10 with
-      | 0
-      | 1 -> less_than_twenty n
+      | 0 | 1 -> less_than_twenty n
       | 2 -> less_than_twenty (n % 10) + String.length "twenty"
       | 3 -> less_than_twenty (n % 10) + String.length "thirty"
       | 4 -> less_than_twenty (n % 10) + String.length "forty"
@@ -48,7 +46,7 @@ module M = struct
     let hundred n =
       match n / 100 with
       | 0 -> last_two_digits n
-      | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 as h ->
+      | (1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9) as h ->
         last_two_digits (n % 100)
         + less_than_twenty h
         + String.length "hundred"
@@ -57,9 +55,7 @@ module M = struct
     in
     let thousand n =
       hundred (n % 1000)
-      + (if n = 1000
-         then String.length "one" + String.length "thousand"
-         else 0)
+      + if n = 1000 then String.length "one" + String.length "thousand" else 0
     in
     thousand n
   ;;
@@ -70,4 +66,5 @@ module M = struct
     |> printf "%d\n"
   ;;
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

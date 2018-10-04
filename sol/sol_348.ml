@@ -7,17 +7,15 @@ module M = struct
   let palindromes_n_digits n =
     if n mod 2 = 0
     then (
-      let lb = Int.pow 10 (n / 2  -  1) in
+      let lb = Int.pow 10 ((n / 2) - 1) in
       let ub = Int.pow 10 (n / 2) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
         let d = Number_theory.Int.digits_of_int n in
-        d @ List.rev d
-        |> Sequence.of_list
-        |> Number_theory.Int.int_of_digits))
+        d @ List.rev d |> Sequence.of_list |> Number_theory.Int.int_of_digits))
     else (
-      let lb = Int.pow 10 (n / 2)     in
-      let ub = Int.pow 10 (n / 2 + 1) in
+      let lb = Int.pow 10 (n / 2) in
+      let ub = Int.pow 10 ((n / 2) + 1) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
         let d = Number_theory.Int.digits_of_int n in
@@ -27,20 +25,17 @@ module M = struct
   ;;
 
   let palindromes =
-    Number_theory.Int.natural_numbers () ~init:1
-    |> Sequence.bind ~f:palindromes_n_digits
+    Number_theory.Int.natural_numbers () ~init:1 |> Sequence.bind ~f:palindromes_n_digits
   ;;
 
   (* greater than 1 *)
   let _squares =
-    Number_theory.Int.natural_numbers () ~init:2
-    |> Sequence.map ~f:(fun x -> x * x)
+    Number_theory.Int.natural_numbers () ~init:2 |> Sequence.map ~f:(fun x -> x * x)
   ;;
 
   (* ditto *)
   let cubes =
-    Number_theory.Int.natural_numbers () ~init:2
-    |> Sequence.map ~f:(fun x -> x * x * x)
+    Number_theory.Int.natural_numbers () ~init:2 |> Sequence.map ~f:(fun x -> x * x * x)
   ;;
 
   let main () =
@@ -49,8 +44,7 @@ module M = struct
       let count =
         cubes
         |> Sequence.take_while ~f:(fun x -> x < p)
-        |> Sequence.count ~f:(fun c ->
-          Number_theory.Int.is_perfect_square (p - c))
+        |> Sequence.count ~f:(fun c -> Number_theory.Int.is_perfect_square (p - c))
       in
       count = 4)
     |> Fn.flip Sequence.take 5
@@ -59,4 +53,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

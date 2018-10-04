@@ -16,13 +16,13 @@ module M = struct
      ; [ 0; 1; 3; 4; 5; 6 ]
      ; [ 0; 1; 2; 5 ]
      ; [ 0; 1; 2; 3; 4; 5; 6 ]
-     ; [ 0; 1; 2; 3; 5; 6 ] |]
+     ; [ 0; 1; 2; 3; 5; 6 ]
+    |]
   ;;
 
   let digit_segments =
     Array.map digit_segments ~f:(fun segments ->
-      List.fold segments ~init:0 ~f:(fun ac x ->
-        ac lor (1 lsl x)))
+      List.fold segments ~init:0 ~f:(fun ac x -> ac lor (1 lsl x)))
   ;;
 
   let distance s1 s2 = Int.popcount (s1 lxor s2)
@@ -33,10 +33,11 @@ module M = struct
       | 0, 0 -> ac
       | n, 0 -> loop (n1 / 10) n2 (ac + distance 0 digit_segments.(n mod 10))
       | 0, n -> loop n1 (n2 / 10) (ac + distance 0 digit_segments.(n mod 10))
-      | n1, n2 -> loop (n1 / 10) (n2 / 10)
-                    (ac + distance
-                            digit_segments.(n1 mod 10)
-                            digit_segments.(n2 mod 10))
+      | n1, n2 ->
+        loop
+          (n1 / 10)
+          (n2 / 10)
+          (ac + distance digit_segments.(n1 mod 10) digit_segments.(n2 mod 10))
     in
     loop n1 n2 0
   ;;
@@ -45,7 +46,7 @@ module M = struct
     let rec loop n ac =
       match n with
       | 0 -> ac
-      | n -> loop (n / 10) (ac + n mod 10)
+      | n -> loop (n / 10) (ac + (n mod 10))
     in
     loop n 0
   ;;
@@ -55,9 +56,7 @@ module M = struct
       | None -> None
       | Some s ->
         let d = digital_root s in
-        if d = s
-        then Some (s, None)
-        else Some (s, Some d))
+        if d = s then Some (s, None) else Some (s, Some d))
   ;;
 
   let sam_cost sequence =
@@ -67,7 +66,7 @@ module M = struct
   ;;
 
   let max_cost sequence =
-    let left  = Sequence.append (Sequence.singleton 0) sequence in
+    let left = Sequence.append (Sequence.singleton 0) sequence in
     let right = Sequence.append sequence (Sequence.singleton 0) in
     Sequence.zip left right
     |> Sequence.sum (module Int) ~f:(fun (x, y) -> transition_cost x y)
@@ -84,7 +83,8 @@ module M = struct
     done;
     printf "%d\n" !diff
   ;;
+
   (* 13625242 1s *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

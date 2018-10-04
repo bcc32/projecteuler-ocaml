@@ -4,12 +4,13 @@ let solution_commands =
   Euler_solutions.modules
   |> List.map ~f:(fun m ->
     let module M = (val m : Euler.Solution_intf.S) in
-    (M.command_name, M.command))
+    M.command_name, M.command)
 ;;
 
 let command =
-  let commands = solution_commands @ ["bench", Benchmark.command] in
-  Command.group commands
+  let commands = solution_commands @ [ "bench", Benchmark.command ] in
+  Command.group
+    commands
     ~summary:"Run ProjectEuler solutions"
     ~preserve_subcommand_order:()
 ;;

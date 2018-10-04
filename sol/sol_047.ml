@@ -16,8 +16,9 @@ module M = struct
     let ans = fst last - 3 in
     printf "%d\n" ans
   ;;
+
   (* 134043
      261ms *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

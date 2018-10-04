@@ -9,8 +9,7 @@ module M = struct
       for c = 5 to 500 do
         for b = 4 to c - 1 do
           let a = 1000 - b - c in
-          if Geometry.is_pythagorean_triple a b c
-          then r.return (a * b * c)
+          if Geometry.is_pythagorean_triple a b c then r.return (a * b * c)
         done
       done)
     |> Option.value_exn
@@ -18,4 +17,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

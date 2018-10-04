@@ -12,7 +12,7 @@ module M = struct
   (* TODO don't duplicate work *)
   let amicable n =
     let sd = sum_proper_divisors n in
-    sd <> n && (sum_proper_divisors sd) = n
+    sd <> n && sum_proper_divisors sd = n
   ;;
 
   let main () =
@@ -23,4 +23,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

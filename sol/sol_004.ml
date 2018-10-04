@@ -9,12 +9,11 @@ module M = struct
     for i = 100 to 999 do
       for j = 100 to 999 do
         let digits = i * j |> Number_theory.Int.digits_of_int in
-        if Util.is_palindrome ~equal:Int.equal digits && i * j > !ans
-        then ans := i * j
+        if Util.is_palindrome ~equal:Int.equal digits && i * j > !ans then ans := i * j
       done
     done;
     printf "%d\n" !ans
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

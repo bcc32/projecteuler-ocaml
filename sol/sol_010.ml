@@ -6,12 +6,9 @@ module M = struct
 
   let main () =
     Number_theory.prime_sieve 2_000_000
-    |> Array.foldi ~init:0 ~f:(fun n acc is_prime ->
-      if is_prime
-      then acc + n
-      else acc)
+    |> Array.foldi ~init:0 ~f:(fun n acc is_prime -> if is_prime then acc + n else acc)
     |> printf "%d\n"
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

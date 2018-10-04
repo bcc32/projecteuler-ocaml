@@ -21,7 +21,6 @@ module M = struct
      of [f] rather straightforwardly. *)
 
   let flips = 1000
-
   let denominator = Bignum.(of_int 2 ** flips)
 
   let p_billionaire f =
@@ -30,16 +29,15 @@ module M = struct
     let a = Bignum.(one - f) in
     let b = Bignum.(one + f + f) in
     let ratio = Bignum.(b / a) in
-    let value = ref Bignum.(a**flips) in
+    let value = ref Bignum.(a ** flips) in
     for i = 0 to flips do
       (* This was originally [!value >= Bignum.billion], which accidentally used
          polymorphic comparison instead of Bignum.(>=), leading to nasty
          bugs. *)
       if Bignum.(!value >= billion)
-      then begin
+      then (
         let coeff = Number_theory.Bigint.binomial (big flips) (big i) in
-        accum := Bigint.(!accum + coeff)
-      end;
+        accum := Bigint.(!accum + coeff));
       value := Bignum.(!value * ratio)
     done;
     Bignum.(of_bigint !accum / denominator)
@@ -50,4 +48,5 @@ module M = struct
     failwith "unimplemented"
   ;;
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

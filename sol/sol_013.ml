@@ -3,15 +3,14 @@ open! Import
 
 module M = struct
   let problem = `Number 13
-
   let path = "data/013.txt"
   let prefix_length = 10
 
   let numbers =
-    lazy (
-      In_channel.with_file path ~f:(fun chan ->
-        In_channel.input_lines chan
-        |> List.map ~f:Bigint.of_string))
+    lazy
+      (In_channel.with_file path ~f:(fun chan ->
+         In_channel.input_lines chan |> List.map ~f:Bigint.of_string))
+  ;;
 
   let main () =
     force numbers
@@ -22,4 +21,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

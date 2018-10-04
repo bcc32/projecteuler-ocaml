@@ -1,7 +1,6 @@
 open! Core
 open! Import
-
-module NT = Number_theory.Make(Int64)
+module NT = Number_theory.Make (Int64)
 
 let lcm_all n =
   Sequence.range 2 n ~stop:`inclusive
@@ -23,8 +22,8 @@ let p (s : int) (n : int64) =
 ;;
 
 let%test_unit "P(s, N)" =
-  [%test_result: int64] ~expect:1L     (p 3 14L);
-  [%test_result: int64] ~expect:14286L (p 6 1_000_000L);
+  [%test_result: int64] ~expect:1L (p 3 14L);
+  [%test_result: int64] ~expect:14286L (p 6 1_000_000L)
 ;;
 
 module M = struct
@@ -33,10 +32,10 @@ module M = struct
   let main () =
     let sum = ref 0L in
     for i = 1 to 31 do
-      sum := Int64.(+) !sum (p i (Int64.(lsl) 1L (2 * i)))
+      sum := Int64.( + ) !sum (p i (Int64.( lsl ) 1L (2 * i)))
     done;
     printf "%Ld\n" !sum
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

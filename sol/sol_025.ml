@@ -11,8 +11,9 @@ module M = struct
     |> fst
     |> printf "%d\n"
   ;;
+
   (* 4782
      37ms *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

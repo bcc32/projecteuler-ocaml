@@ -8,19 +8,19 @@ module M = struct
 
   let is_prime = lazy (Number_theory.prime_sieve 500)
 
-  let step (pos : int Dist.t) : (int * [ `Prime | `Not_prime ]) Dist.t =
+  let step (pos : int Dist.t) : (int * [`Prime | `Not_prime]) Dist.t =
     let open Dist.Let_syntax in
     let%bind x = pos in
     let sound =
       if (force is_prime).(x)
-      then (Dist.uniform' [ `Prime; `Prime; `Not_prime ])
-      else (Dist.uniform' [ `Prime; `Not_prime; `Not_prime ])
+      then Dist.uniform' [ `Prime; `Prime; `Not_prime ]
+      else Dist.uniform' [ `Prime; `Not_prime; `Not_prime ]
     in
     let pos =
       match x with
-      | 1   -> return 2
+      | 1 -> return 2
       | 500 -> return 499
-      | x   -> Dist.uniform' [ (x - 1); (x + 1) ]
+      | x -> Dist.uniform' [ x - 1; x + 1 ]
     in
     Dist.cartesian_product pos sound
   ;;
@@ -42,21 +42,21 @@ module M = struct
         step !init
         |> Dist.to_alist
         |> List.filter_map ~f:(fun ((pos, is_prime), p) ->
-          if is_prime = expected
-          then Some (pos, p)
-          else None)
+          if is_prime = expected then Some (pos, p) else None)
         |> Dist.of_alist_exn
       in
       let total = Dist.total next in
-      product := Bignum.(!product * total);
+      (product := Bignum.(!product * total));
       let next = Dist.normalize next in
       init := next);
-    printf !"%{Bigint}/%{Bigint}\n"
+    printf
+      !"%{Bigint}/%{Bigint}\n"
       (Bignum.num_as_bigint !product)
       (Bignum.den_as_bigint !product)
   ;;
+
   (* 199740353/29386561536000
      80ms *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

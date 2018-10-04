@@ -3,9 +3,7 @@ open! Import
 
 module M = struct
   let problem = `Number 407
-
   let limit = 10_000_000
-
   let _primes = lazy (Number_theory.prime_sieve limit)
 
   let largest_idempotent modulo =
@@ -14,8 +12,7 @@ module M = struct
       (* if (force primes).(modulo)
        * then (return 1); *)
       for a = modulo - 1 downto 0 do
-        if a * a mod modulo = a
-        then (return a)
+        if a * a mod modulo = a then return a
       done;
       assert false)
   ;;
@@ -43,4 +40,5 @@ module M = struct
    *   |> Array.sum (module Int) ~f:Fn.id
    *   |> printf "%d\n" *)
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

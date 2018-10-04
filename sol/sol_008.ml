@@ -15,19 +15,11 @@ module M = struct
   ;;
 
   let path = "data/008.txt"
+  let number = lazy (In_channel.with_file path ~f:In_channel.input_all |> String.strip)
+  let main () = doit (force number) |> printf "%d\n"
 
-  let number =
-    lazy (
-      In_channel.with_file path ~f:In_channel.input_all
-      |> String.strip)
-  ;;
-
-  let main () =
-    doit (force number)
-    |> printf "%d\n"
-  ;;
   (* 23514624000
      3.3ms *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

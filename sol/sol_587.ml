@@ -5,8 +5,7 @@ module M = struct
   let problem = `Number 587
 
   (* fix the circle radius to be 1 *)
-  let l_section_area = Float.(1. - pi / 4.)
-
+  let l_section_area = Float.(1. - (pi / 4.))
   let area_threshold = Percent.apply (Percent.of_bp_int 10) l_section_area
 
   (* see diagram for notation *)
@@ -15,7 +14,7 @@ module M = struct
     let theta = Float.atan2 1. (float n) in
     let tan_theta = 1. / float n in
     let x_d =
-      let a = 1. + tan_theta ** 2. in
+      let a = 1. + (tan_theta ** 2.) in
       let b = -2. * (1. + tan_theta) in
       let c = 1. in
       match Algebra.quadratic_formula a b c with
@@ -35,7 +34,8 @@ module M = struct
     |> Sequence.find_exn ~f:(fun n -> concave_triangle_area n < area_threshold)
     |> printf "%d\n"
   ;;
+
   (* 2240 764us *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

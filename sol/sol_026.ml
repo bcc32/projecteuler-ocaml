@@ -5,10 +5,7 @@ module M = struct
   let problem = `Number 026
 
   let rec divide_through k n =
-    let open Bigint in
-    if n % k = zero
-    then (divide_through k (n / k))
-    else n
+    Bigint.(if n % k = zero then divide_through k (n / k) else n)
   ;;
 
   let cycle_length n =
@@ -19,11 +16,7 @@ module M = struct
       |> divide_through (Bigint.of_int 5)
     in
     let rec loop d c =
-      let open Bigint in
-      if d % n = zero then
-        c
-      else
-        loop (of_int 10 * d + of_int 9) Int.(c + 1)
+      Bigint.(if d % n = zero then c else loop ((of_int 10 * d) + of_int 9) Int.(c + 1))
     in
     loop (Bigint.of_int 9) 1
   ;;
@@ -38,4 +31,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

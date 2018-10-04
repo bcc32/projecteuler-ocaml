@@ -31,4 +31,4 @@ module M = struct
   let main () = printf "%d\n" @@ f 1_000_000_000_000
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

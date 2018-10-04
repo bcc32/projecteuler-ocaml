@@ -7,13 +7,10 @@ module M = struct
   let pythag_triples : (int * int * int) Sequence.t =
     Number_theory.Int.natural_numbers ~init:5 ()
     |> Sequence.concat_map ~f:(fun c ->
-      Sequence.range 4 c
-      |> Sequence.map ~f:(fun b -> (b, c)))
+      Sequence.range 4 c |> Sequence.map ~f:(fun b -> b, c))
     |> Sequence.filter_map ~f:(fun (b, c) ->
-      let a = c * c - b * b |> float |> sqrt |> Float.iround_nearest_exn in
-      if a < b && a * a + b * b = c * c
-      then Some (a, b, c)
-      else None)
+      let a = (c * c) - (b * b) |> float |> sqrt |> Float.iround_nearest_exn in
+      if a < b && (a * a) + (b * b) = c * c then Some (a, b, c) else None)
   ;;
 
   let main () =
@@ -23,9 +20,8 @@ module M = struct
        |> Sequence.count ~f:(fun (a, b, c) -> c % (b - a) = 0)
        |> printf "%d\n"
     *)
-    pythag_triples
-    |> Sequence.iter ~f:(printf !"%{sexp: int * int * int}\n%!")
+    pythag_triples |> Sequence.iter ~f:(printf !"%{sexp: int * int * int}\n%!")
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

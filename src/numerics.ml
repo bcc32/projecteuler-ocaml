@@ -6,9 +6,9 @@ module Make (Real : Numerics_intf.Real) = struct
   type real = Real.t
 
   let zero = of_int 0
-  let two  = of_int 2
+  let two = of_int 2
   let four = of_int 4
-  let six  = of_int 6
+  let six = of_int 6
 
   let bisect ~f ~epsilon ~low:x_lo ~high:x_hi =
     let rec loop x_lo x_hi y_lo y_hi =
@@ -20,17 +20,15 @@ module Make (Real : Numerics_intf.Real) = struct
         match sign_exn y_mi with
         | Zero -> x_mi
         | Neg ->
-          begin match sign_exn y_lo with
-          | Neg -> loop x_mi x_hi y_mi y_hi
-          | Pos -> loop x_lo x_mi y_lo y_mi
-          | Zero -> raise (Bug "zero y-value endpoint")
-          end
+          (match sign_exn y_lo with
+           | Neg -> loop x_mi x_hi y_mi y_hi
+           | Pos -> loop x_lo x_mi y_lo y_mi
+           | Zero -> raise (Bug "zero y-value endpoint"))
         | Pos ->
-          begin match sign_exn y_lo with
-          | Neg -> loop x_lo x_mi y_lo y_mi
-          | Pos -> loop x_mi x_hi y_mi y_hi
-          | Zero -> raise (Bug "zero y-value endpoint")
-          end)
+          (match sign_exn y_lo with
+           | Neg -> loop x_lo x_mi y_lo y_mi
+           | Pos -> loop x_mi x_hi y_mi y_hi
+           | Zero -> raise (Bug "zero y-value endpoint")))
     in
     let y_lo = f x_lo in
     let y_hi = f x_hi in
@@ -40,13 +38,10 @@ module Make (Real : Numerics_intf.Real) = struct
   let integrate ?(method_ = `Simpson's_rule) () ~f ~low ~high ~intervals =
     let rule =
       match method_ with
-      | `Midpoint ->
-        fun x_lo _ x_hi _ -> f ((x_lo + x_hi) / two)
-      | `Trapezoid ->
-        fun _ y_lo _ y_hi -> (y_lo + y_hi) / two
+      | `Midpoint -> fun x_lo _ x_hi _ -> f ((x_lo + x_hi) / two)
+      | `Trapezoid -> fun _ y_lo _ y_hi -> (y_lo + y_hi) / two
       | `Simpson's_rule ->
-        fun x_lo y_lo x_hi y_hi ->
-          (four * f ((x_lo + x_hi) / two) + y_lo + y_hi) / six
+        fun x_lo y_lo x_hi y_hi -> ((four * f ((x_lo + x_hi) / two)) + y_lo + y_hi) / six
     in
     let dx = (high - low) / of_int intervals in
     let rec loop x_lo y_lo i ac =
@@ -55,7 +50,7 @@ module Make (Real : Numerics_intf.Real) = struct
       else (
         let x_hi = x_lo + dx in
         let y_hi = f x_hi in
-        loop x_hi y_hi Int.(i + 1) (ac + dx * rule x_lo y_lo x_hi y_hi))
+        loop x_hi y_hi Int.(i + 1) (ac + (dx * rule x_lo y_lo x_hi y_hi)))
     in
     loop low (f low) 0 zero
   ;;
@@ -68,8 +63,10 @@ module Make (Real : Numerics_intf.Real) = struct
   ;;
 end
 
-module Float  = Make (Float)
+module Float = Make (Float)
+
 module Bignum = Make (struct
     include Bignum
+
     let sign_exn t = Sign.of_int (sign t)
   end)

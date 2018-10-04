@@ -6,10 +6,10 @@ let are_pairwise_coprime xs =
     match xs with
     | [] -> true
     | hd :: tl ->
-      List.for_all tl ~f:(fun x ->
-        Bigint.(one = Number_theory.Bigint.gcd x hd))
+      List.for_all tl ~f:(fun x -> Bigint.(one = Number_theory.Bigint.gcd x hd))
       && loop tl
-  in loop xs
+  in
+  loop xs
 ;;
 
 let%test_unit "Chinese remainder theorem" =
@@ -27,17 +27,14 @@ let%test_unit "Chinese remainder theorem" =
     List.zip_exn residues moduli
   in
   let big = Bigint.of_int in
-  Quickcheck.test gen
-    (* cf https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
-    ~examples:[ [ big 0, big 3
-                ; big 3, big 4
-                ; big 4, big 5 ] ]
+  Quickcheck.test
+    gen (* cf https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
+    ~examples:[ [ big 0, big 3; big 3, big 4; big 4, big 5 ] ]
     ~sexp_of:[%sexp_of: (Bigint.t * Bigint.t) list]
     ~f:(fun residues ->
-      let (x, m) = Number_theory.Bigint.chinese_remainder_theorem residues in
+      let x, m = Number_theory.Bigint.chinese_remainder_theorem residues in
       let residue_product =
-        List.fold residues ~init:Bigint.one ~f:(fun ac (_, m) ->
-          Bigint.(ac * m))
+        List.fold residues ~init:Bigint.one ~f:(fun ac (_, m) -> Bigint.(ac * m))
       in
       [%test_result: Bigint.t] m ~expect:residue_product;
       List.iter residues ~f:(fun (r, m) ->

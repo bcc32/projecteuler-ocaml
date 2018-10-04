@@ -7,7 +7,7 @@ module M = struct
   let simulate_one bits =
     let end_ = Int.shift_left 1 bits in
     let mask = end_ - 1 in
-    let x     = ref 0 in
+    let x = ref 0 in
     let count = ref 0 in
     while !x <> mask do
       incr count;
@@ -28,8 +28,7 @@ module M = struct
 
   let expectation sample_counts total =
     let e = ref 0. in
-    Array.iteri sample_counts ~f:(fun i x ->
-      e := !e +. float i *. float x);
+    Array.iteri sample_counts ~f:(fun i x -> e := !e +. (float i *. float x));
     !e /. float total
   ;;
 
@@ -41,9 +40,10 @@ module M = struct
     printf !"%{sexp: int array}\n" samples;
     printf "%.10f\n" @@ expectation samples times
   ;;
+
   (* XXX doesn't quite work *)
   (* 6.3551679500
      39s *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

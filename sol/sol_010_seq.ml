@@ -6,10 +6,10 @@ module M = struct
 
   let main () =
     Number_theory.Int.primes
-    |> Sequence.take_while ~f:((>) 2_000_000)
+    |> Sequence.take_while ~f:(( > ) 2_000_000)
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

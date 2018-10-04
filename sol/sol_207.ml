@@ -14,11 +14,8 @@ module M = struct
   let main () =
     let ns = Number_theory.Int.natural_numbers ~init:2 () in
     Sequence.unfold_with ns ~init:(0, 0) ~f:(fun (part, perfect) n ->
-      let new_state =
-        ( part + 1
-        , if Int.is_pow2 n then perfect + 1 else perfect )
-      in
-      Yield ((new_state, n * n - n), new_state))
+      let new_state = part + 1, if Int.is_pow2 n then perfect + 1 else perfect in
+      Yield ((new_state, (n * n) - n), new_state))
     |> Sequence.find_exn ~f:(fun ((part, perfect), _m) ->
       (* perfect / part < 1 / 12345 *)
       12345 * perfect < part)
@@ -27,4 +24,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

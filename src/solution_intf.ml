@@ -2,7 +2,7 @@ open! Core
 
 type solution_id =
   [ `Number of int
-  | `Custom of int * [ `Key of string ] * [ `Description of string ] ]
+  | `Custom of int * [`Key of string] * [`Description of string] ]
 
 module type Arg = sig
   val problem : solution_id

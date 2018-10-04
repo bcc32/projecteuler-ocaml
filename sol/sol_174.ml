@@ -12,10 +12,10 @@ module M = struct
       let rec loop j =
         if j < 1
         then ()
-        else
-          let tiles = i * i - j * j in
+        else (
+          let tiles = (i * i) - (j * j) in
           Hashtbl.incr counts tiles;
-          loop (j - 2)
+          loop (j - 2))
       in
       loop (i - 2)
     done;
@@ -23,4 +23,5 @@ module M = struct
     printf !"%{sexp: int Int.Table.t}\n" counts
   ;;
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

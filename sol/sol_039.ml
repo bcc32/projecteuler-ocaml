@@ -9,11 +9,13 @@ module M = struct
     |> Sequence.map ~f:(fun p ->
       let solutions =
         Sequence.range 5 (p / 2)
-        |> Sequence.sum (module Int) ~f:(fun c ->
-          Sequence.range ((p - c) / 2) c
-          |> Sequence.count ~f:(fun b ->
-            let a = p - c - b in
-            Geometry.is_pythagorean_triple a b c))
+        |> Sequence.sum
+             (module Int)
+             ~f:(fun c ->
+               Sequence.range ((p - c) / 2) c
+               |> Sequence.count ~f:(fun b ->
+                 let a = p - c - b in
+                 Geometry.is_pythagorean_triple a b c))
       in
       p, solutions)
     |> Sequence.max_elt ~compare:(fun (_, a) (_, b) -> Int.compare a b)
@@ -23,4 +25,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

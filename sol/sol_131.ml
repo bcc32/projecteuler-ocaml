@@ -28,8 +28,6 @@ module M = struct
      [n]. Otherwise, continue until [n + p] is less than the next cube after
      [n]; since the gaps between cubes increases monotonically, the values of
      [n] we need to check are bounded quite reasonably. *)
-
-
   (* The maximum value of [p] we need to check is less than [1_000_000], so we
      only need to continue until the gaps between cubes becomes as large, i.e.,
      when the cube root is [600] or so. *)
@@ -43,7 +41,8 @@ module M = struct
     with_return (fun { return } ->
       for x = 0 to Array.length cubes - 1 do
         let i =
-          Array.binary_search cubes
+          Array.binary_search
+            cubes
             ~pos:(x + 1)
             ~len:(Array.length cubes - (x + 1))
             ~compare:Int.compare
@@ -52,7 +51,8 @@ module M = struct
         in
         match i with
         | None -> return None
-        | Some i when cubes.(i) = cubes.(x) + p -> return (Some cubes.(i))
+        | Some i
+          when cubes.(i) = cubes.(x) + p -> return (Some cubes.(i))
         | _ -> ()
       done;
       assert false)
@@ -79,12 +79,12 @@ module M = struct
     let count = ref 0 in
     for i = 1 to 576 do
       let j = i + 1 in
-      if Number_theory.Int.is_prime (j * j * j - i * i * i)
-      then (incr count)
+      if Number_theory.Int.is_prime ((j * j * j) - (i * i * i)) then incr count
     done;
     printf "%d\n" !count
   ;;
 
   (* This is about 4000x faster than the previous solution. *)
 end
-include Solution.Make(M)
+
+include Solution.Make (M)

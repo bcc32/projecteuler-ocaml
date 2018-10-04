@@ -16,7 +16,7 @@ module M = struct
 
      {[
        S_{k + 1}(n) = (p_1^a_1 * ... * p_k^a_k)^2 + ...
-                    = S_k(n) + S_k(n) * (p_{k+1}^{a_{k+1}})^2
+                                                  = S_k(n) + S_k(n) * (p_{k+1}^{a_{k+1}})^2
      ]}
 
      For each term above, a new copy has p_{k+1}^{a_{k+1}} since we can factor
@@ -34,7 +34,8 @@ module M = struct
       s := !s * (1 + Number_theory.Int.powmod p (2 * a) ~modulus) mod modulus);
     printf "%d\n" !s
   ;;
+
   (* 98792821 9.3s *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

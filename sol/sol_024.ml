@@ -5,10 +5,7 @@ module M = struct
   let problem = `Number 24
 
   let main () =
-    let permutations =
-      List.range 0 10
-      |> Util.permutations ~compare:Int.compare
-    in
+    let permutations = List.range 0 10 |> Util.permutations ~compare:Int.compare in
     Sequence.nth_exn permutations 999999
     |> List.map ~f:Int.to_string
     |> String.concat ~sep:""
@@ -16,4 +13,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

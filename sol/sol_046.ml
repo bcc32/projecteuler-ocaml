@@ -7,9 +7,7 @@ module M = struct
   let cannot_be_written n =
     let upper_bound = Float.(of_int n / 2.0 |> sqrt |> to_int) in
     Sequence.range ~stop:`inclusive 1 upper_bound
-    |> Sequence.exists ~f:(fun s ->
-      n - 2 * s * s
-      |> Number_theory.Int.is_prime)
+    |> Sequence.exists ~f:(fun s -> n - (2 * s * s) |> Number_theory.Int.is_prime)
     |> not
   ;;
 
@@ -22,4 +20,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

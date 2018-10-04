@@ -7,17 +7,14 @@ module M = struct
   let sqrt n =
     let open Bignum in
     Numerics.Bignum.newton's_method
-      ~f:(fun x -> x * x - n)
+      ~f:(fun x -> (x * x) - n)
       ~f':(fun x -> of_int 2 * x)
       ~init:one
       ~epsilon:Bignum.(tenth ** 101)
   ;;
 
   let hundred_decimal_digits n =
-    let open Bignum in
-    n * ten ** 101
-    |> round_as_bigint
-    |> Option.value_exn
+    Bignum.(n * (ten ** 101) |> round_as_bigint |> Option.value_exn)
   ;;
 
   let digital_sum n =
@@ -32,10 +29,7 @@ module M = struct
   ;;
 
   let main () =
-    let range =
-      List.range 1 100 ~stop:`inclusive
-      |> Int.Set.of_list
-    in
+    let range = List.range 1 100 ~stop:`inclusive |> Int.Set.of_list in
     let squares =
       List.range 1 10 ~stop:`inclusive
       |> List.map ~f:(Fn.flip Int.pow 2)
@@ -49,4 +43,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

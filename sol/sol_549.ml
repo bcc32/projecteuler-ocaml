@@ -11,11 +11,7 @@ module M = struct
   ;;
 
   let divide n p =
-    let rec loop n ac =
-      if n mod p = 0
-      then (loop (n / p) (ac + 1))
-      else ac
-    in
+    let rec loop n ac = if n mod p = 0 then loop (n / p) (ac + 1) else ac in
     loop n 0
   ;;
 
@@ -24,7 +20,7 @@ module M = struct
   let sieve n =
     let m = Array.create 0 ~len:(n + 1) in
     for p = 2 to n do
-      if m.(p) = 0              (* prime *)
+      if m.(p) = 0 (* prime *)
       then (
         (* loop invariant: [smallest] is the smallest multiple of [p] such that
            [power | smallest!]. [k] is incremented each loop and serves to
@@ -33,10 +29,10 @@ module M = struct
           if power <= n
           then (
             (* Debug.eprintf "power %d" power; *)
-            let (k, smallest) =
+            let k, smallest =
               let rec ensure_enough_p k smallest =
                 if k <= 0
-                then (k, smallest)
+                then k, smallest
                 else (
                   let smallest = smallest + p in
                   ensure_enough_p (k - divide smallest p) smallest)
@@ -46,8 +42,7 @@ module M = struct
             let rec loop j =
               if j <= n
               then (
-                if smallest > m.(j)
-                then (m.(j) <- smallest);
+                if smallest > m.(j) then m.(j) <- smallest;
                 loop (j + power))
             in
             loop power;
@@ -58,11 +53,9 @@ module M = struct
     Array.sum (module Int) m ~f:Fn.id
   ;;
 
-  let main () =
-    sieve limit
-    |> printf "%d\n"
-  ;;
+  let main () = sieve limit |> printf "%d\n"
+
   (* 476001479068717, 9.4s *)
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

@@ -13,9 +13,9 @@ module M = struct
   let main () =
     let expansions =
       let open Bignum.O in
-      let init = of_int 1 + of_int 1 / of_int 2 in
+      let init = of_int 1 + (of_int 1 / of_int 2) in
       Sequence.unfold ~init ~f:(fun s ->
-        let next = of_int 1 + of_int 1 / (of_int 1 + s) in
+        let next = of_int 1 + (of_int 1 / (of_int 1 + s)) in
         Some (s, next))
     in
     expansions
@@ -25,4 +25,4 @@ module M = struct
   ;;
 end
 
-include Solution.Make(M)
+include Solution.Make (M)

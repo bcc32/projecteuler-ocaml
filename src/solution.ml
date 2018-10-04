@@ -1,10 +1,10 @@
 open! Core
 
 let time_unit f () =
-  let start = Time.now () in
+  let start = Time_ns.now () in
   protect ~f ~finally:(fun () ->
-    let finish = Time.now () in
-    Time.diff finish start |> Time.Span.to_short_string |> print_endline)
+    let finish = Time_ns.now () in
+    Time_ns.diff finish start |> Time_ns.Span.to_short_string |> print_endline)
 ;;
 
 module Make (M : Solution_intf.Arg) = struct

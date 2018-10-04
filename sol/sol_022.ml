@@ -7,10 +7,14 @@ module M = struct
 
   let names =
     lazy
-      (let name_regexp = Re2.create_exn {|"([[:upper:]]+?)"|} in
+      (let name_regexp =
+         let open Re in
+         compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ])
+       in
        In_channel.with_file path ~f:(fun chan ->
          In_channel.input_all chan
-         |> Re2.find_all_exn name_regexp ~sub:(`Index 1)
+         |> Re.all name_regexp
+         |> List.map ~f:(fun groups -> Re.get groups 1)
          |> List.sort ~compare:String.compare))
   ;;
 

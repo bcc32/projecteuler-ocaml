@@ -7,9 +7,14 @@ module M = struct
 
   let words =
     lazy
-      (let word_regexp = Re2.create_exn {|"([[:upper:]]+?)"|} in
+      (let word_regexp =
+         let open Re in
+         compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ])
+       in
        In_channel.with_file path ~f:(fun chan ->
-         In_channel.input_all chan |> Re2.find_all_exn word_regexp ~sub:(`Index 1)))
+         In_channel.input_all chan
+         |> Re.all word_regexp
+         |> List.map ~f:(fun groups -> Re.get groups 1)))
   ;;
 
   let word_value word =
@@ -31,8 +36,9 @@ module M = struct
     |> List.count ~f:is_triangle_number
     |> printf "%d\n"
   ;;
+
   (* 162
-     2.5ms *)
+     1.6ms *)
 end
 
 include Solution.Make (M)

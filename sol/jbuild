@@ -1,5 +1,3 @@
-(jbuild_version 1)
-
 (library
  ((name euler_solutions)
   (synopsis "A collection of OCaml solutions to ProjectEuler problems")

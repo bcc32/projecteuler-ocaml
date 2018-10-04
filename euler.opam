@@ -6,11 +6,11 @@ homepage: "https://github.com/bcc32/projecteuler-ocaml"
 bug-reports: "https://github.com/bcc32/projecteuler-ocaml/issues"
 dev-repo: "git://github.com/bcc32/projecteuler-ocaml.git"
 build: [
-  ["jbuilder" "build" "-p" name "-j" jobs]
-  ["jbuilder" "runtest" "-p" name "-j" jobs] {with-test}
+  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 depends: [
-  "jbuilder" {build}
+  "dune" {build}
 
   "bignum"     {>= "v0.11.0" & < "v0.12.0"}
   "core"       {>= "v0.11.0" & < "v0.12.0"}

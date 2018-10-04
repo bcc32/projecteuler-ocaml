@@ -1,0 +1,6 @@
+(library
+ ((name euler_test)
+  (libraries (bignum
+              core
+              euler
+              expect_test_helpers_kernel))))

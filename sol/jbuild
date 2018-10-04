@@ -1,0 +1,17 @@
+(library
+ ((name euler_solutions)
+  (libraries (bignum
+              core
+              euler
+              euler_data
+              re))
+  (modules (:standard \ template))))
+
+(alias
+ ((name DEFAULT)
+  (deps (euler_solutions.ml))))
+
+(rule
+ ((targets (euler_solutions.ml))
+  (deps (module-list.pl (glob_files sol*.ml)))
+  (action "perl %{first_dep} > %{targets}")))

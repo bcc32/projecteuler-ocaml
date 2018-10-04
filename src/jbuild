@@ -1,0 +1,4 @@
+(library
+ ((name euler)
+  (libraries (bignum
+              core))))

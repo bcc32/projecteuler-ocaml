@@ -4,12 +4,16 @@ _build
 .merlin
 
 # Jenga
+*.a
+*.build_info.sexp
 *.cmi
 *.cmt
 *.cmti
 *.cmx
+*.cmxa
 *.d
 *.deps
+*.exe
 .files-to-style
 *.hg_version.c
 *.hg_version.o

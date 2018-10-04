@@ -4,7 +4,7 @@ let time_unit f () =
   let start = Time_ns.now () in
   protect ~f ~finally:(fun () ->
     let finish = Time_ns.now () in
-    Time_ns.diff finish start |> Time_ns.Span.to_short_string |> print_endline)
+    print_s [%sexp (Time_ns.diff finish start : Time_ns.Span.t)])
 ;;
 
 module Make (M : Solution_intf.Arg) = struct

@@ -31,6 +31,8 @@ module M = struct
     |> List.count ~f:is_triangle_number
     |> printf "%d\n"
   ;;
+  (* 162
+     2.5ms *)
 end
 
 include Solution.Make (M)

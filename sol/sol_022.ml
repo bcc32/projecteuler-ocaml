@@ -23,6 +23,9 @@ module M = struct
     |> List.fold ~init:0 ~f:( + )
     |> printf "%d\n"
   ;;
+
+  (* 871198282
+     5.4ms*)
 end
 
 include Solution.Make (M)

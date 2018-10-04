@@ -14,10 +14,10 @@ module M = struct
 
      For [k + 1], we have:
 
-     {[
+     {v
        S_{k + 1}(n) = (p_1^a_1 * ... * p_k^a_k)^2 + ...
-                                                  = S_k(n) + S_k(n) * (p_{k+1}^{a_{k+1}})^2
-     ]}
+                    = S_k(n) + S_k(n) * (p_{k+1}^{a_{k+1}})^2
+     v}
 
      For each term above, a new copy has p_{k+1}^{a_{k+1}} since we can factor
      out the common new prime.

@@ -2,3 +2,24 @@
 _build
 *.install
 .merlin
+
+# Jenga
+*.cmi
+*.cmt
+*.cmti
+*.cmx
+*.d
+*.deps
+.files-to-style
+*.hg_version.c
+*.hg_version.o
+inline_tests_runner
+*.libdeps
+*.ml-gen
+*.moduledeps
+*.modules
+*.o
+*.objdeps
+*.out
+*.pack-order
+*.stub.names

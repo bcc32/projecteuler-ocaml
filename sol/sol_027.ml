@@ -5,19 +5,27 @@ module M = struct
   let problem = `Number 27
 
   let count_primes a b =
-    Number_theory.Int.natural_numbers ~init:0 ()
-    |> Sequence.take_while ~f:(fun n -> Number_theory.Int.is_prime ((n * n) + (a * n) + b))
-    |> Sequence.length
+    let rec loop n count =
+      if Number_theory.Int.is_prime ((n * n) + (a * n) + b)
+      then loop (n + 1) (count + 1)
+      else count
+    in
+    loop 0 0
   ;;
 
   let main () =
-    let range = Sequence.range ~stop:`inclusive (-999) 999 in
-    Sequence.cartesian_product range range
-    |> Sequence.map ~f:(fun (a, b) -> a * b, count_primes a b)
-    |> Sequence.max_elt ~compare:(fun (_, a) (_, b) -> Int.compare a b)
-    |> Option.value_exn
-    |> Tuple2.get1
-    |> printf "%d\n"
+    let max = ref None in
+    for a = -999 to 999 do
+      for b = -999 to 999 do
+        match !max with
+        | None -> max := Some (a, b, count_primes a b)
+        | Some (_, _, primes') ->
+          let primes = count_primes a b in
+          if primes > primes' then max := Some (a, b, primes)
+      done
+    done;
+    let a, b, _ = uw !max in
+    printf "%d\n" (a * b)
   ;;
 
   (* -59231

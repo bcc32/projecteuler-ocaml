@@ -8,7 +8,7 @@ module M = struct
     Sequence.range 0 (String.length str - 12)
     |> Sequence.map ~f:(fun i ->
       String.sub str ~pos:i ~len:13
-      |> Util.digits_of_string
+      |> Sequences.digits_of_string
       |> List.fold ~init:1 ~f:( * ))
     |> Sequence.max_elt ~compare:Int.compare
     |> Option.value_exn

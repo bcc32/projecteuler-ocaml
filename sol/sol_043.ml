@@ -20,7 +20,7 @@ module M = struct
 
   let main () =
     List.range 0 10
-    |> Util.permutations ~compare:Int.compare
+    |> Sequences.permutations ~compare:Int.compare
     |> Sequence.filter ~f:check_digits
     |> Sequence.sum
          (module Int)

@@ -7,4 +7,4 @@ module Distribution = Distribution
 module Geometry = Geometry
 module Numerics = Numerics
 module Number_theory = Number_theory
-module Util = Util
+module Sequences = Sequences

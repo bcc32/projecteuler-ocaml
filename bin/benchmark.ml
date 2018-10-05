@@ -7,7 +7,7 @@ let run_length_encode_group =
   Bench.Test.create_with_initialization ~name:"Euler.run_length_encode" (fun `init ->
     let length = 200 in
     let list = List.gen_with_length length Int.gen |> Quickcheck.random_value in
-    fun () -> Util.run_length_encode list ~equal:Int.equal)
+    fun () -> Sequences.run_length_encode list ~equal:Int.equal)
 ;;
 
 let divisors_group =

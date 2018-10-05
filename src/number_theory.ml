@@ -172,7 +172,7 @@ module Make (Integer : Int_intf.S_unbounded) = struct
     loop_over_primes n 0 [] |> List.rev
   ;;
 
-  let factor n = prime_factor n |> Util.run_length_decode
+  let factor n = prime_factor n |> Sequences.run_length_decode
 
   let divisors n =
     let mult_aux p a lst =

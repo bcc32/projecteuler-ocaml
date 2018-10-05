@@ -12,7 +12,7 @@ let%test_unit "digits_of_string" =
     [%test_result: int]
       ~expect
       (s
-       |> Util.digits_of_string
+       |> Sequences.digits_of_string
        |> Sequence.of_list
        |> Number_theory.Int.int_of_digits))
 ;;
@@ -22,7 +22,7 @@ let%test_unit "is_palindrome" =
   Quickcheck.test_can_generate gen ~f:(fun l -> [%compare.equal: int list] l (List.rev l));
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
     let expect = [%compare.equal: int list] l (List.rev l) in
-    [%test_result: bool] (Util.is_palindrome l ~equal:Int.equal) ~expect)
+    [%test_result: bool] (Sequences.is_palindrome l ~equal:Int.equal) ~expect)
 ;;
 
 let%test_unit "permutations" =
@@ -33,7 +33,7 @@ let%test_unit "permutations" =
   in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
     let compare = Int.compare in
-    let seq = Util.permutations l ~compare in
+    let seq = Sequences.permutations l ~compare in
     let perms = Sequence.to_list seq in
     let elts = List.sort l ~compare in
     (* expected number of permutations *)
@@ -60,7 +60,7 @@ let%test_unit "permutations" =
 let%test_unit "run_length_encode" =
   let gen = List.gen Int.gen in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
-    let enc = Util.run_length_encode l ~equal:Int.equal in
+    let enc = Sequences.run_length_encode l ~equal:Int.equal in
     (* reconstruct the list *)
     [%test_result: int list]
       ~expect:l

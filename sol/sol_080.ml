@@ -24,7 +24,7 @@ module M = struct
     |> hundred_decimal_digits
     |> Bigint.to_string
     |> String.subo ~len:100
-    |> Util.digits_of_string
+    |> Sequences.digits_of_string
     |> List.sum (module Int) ~f:Fn.id
   ;;
 

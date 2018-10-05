@@ -36,7 +36,7 @@ let%test_unit "quadratic_formula" =
       test_root x
     | `Two (x0, x1) ->
       [%test_result: int] 2 ~expect;
-      assert (Float.(x0 < x1));
+      [%test_pred: float * float] (fun (x, y) -> Float.(x < y)) (x0, x1);
       test_root x0;
       test_root x1)
 ;;

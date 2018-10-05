@@ -3,9 +3,10 @@ open! Import
 
 let%test_unit "Extended Euclidean Algorithm" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
-    let%map a = Quickcheck.Generator.small_non_negative_int
-    and b = Quickcheck.Generator.small_non_negative_int in
+    let open Gen.Let_syntax in
+    let%map () = return ()
+    and a = Gen.small_non_negative_int
+    and b = Gen.small_non_negative_int in
     a, b
   in
   Quickcheck.iter gen ~f:(fun (a, b) ->

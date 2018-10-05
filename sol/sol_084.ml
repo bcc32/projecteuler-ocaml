@@ -302,7 +302,8 @@ module M = struct
     let die =
       let one_die = D.uniform' [ 1; 2; 3; 4 ] in
       let open D.Let_syntax in
-      let%map a = one_die
+      let%map () = return ()
+      and a = one_die
       and b = one_die in
       a + b
     in

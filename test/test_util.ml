@@ -3,7 +3,7 @@ open! Import
 
 let%test_unit "digits_of_string" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Gen.Let_syntax in
     let%bind length = Int.gen_incl 1 12 in
     String.gen_with_length length Char.gen_digit
   in
@@ -27,7 +27,7 @@ let%test_unit "is_palindrome" =
 
 let%test_unit "permutations" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Gen.Let_syntax in
     let%bind length = Int.gen_incl 0 5 in
     List.gen_with_length length Int.gen
   in

@@ -5,7 +5,7 @@ module D = Distribution.Bignum
 let gen_prob = Bignum.(gen_incl zero one)
 
 let gen_distribution =
-  let open Quickcheck.Generator.Let_syntax in
+  let open Gen.Let_syntax in
   let%map keys = Int.Map.gen Int.gen gen_prob in
   keys |> Map.to_alist |> D.of_alist_exn |> D.normalize
 ;;
@@ -83,7 +83,7 @@ let%test_unit "uniform" =
 
 let%test_unit "uniform'" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Gen.Let_syntax in
     let%map xs = List.gen_non_empty Int.gen in
     List.dedup_and_sort xs ~compare:Int.compare
   in
@@ -103,8 +103,9 @@ let%test_unit "uniform'" =
 
 let%test_unit "cartesian_product" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
-    let%map d1 = gen_distribution
+    let open Gen.Let_syntax in
+    let%map () = return ()
+    and d1 = gen_distribution
     and d2 = gen_distribution in
     d1, d2
   in

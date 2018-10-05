@@ -26,9 +26,11 @@ let%test_unit _ =
   let max_result = limit * limit in
   let gen =
     let open Quickcheck.Generator.Let_syntax in
-    let%bind n = Int.gen_incl 1 limit
+    let%bind () = return ()
+    and n = Int.gen_incl 1 limit
     and m = Int.gen_incl 1 limit in
-    let%map a = Int.gen_incl 0 (n - 1)
+    let%map () = return ()
+    and a = Int.gen_incl 0 (n - 1)
     and b = Int.gen_incl 0 (m - 1) in
     a, n, b, m
   in

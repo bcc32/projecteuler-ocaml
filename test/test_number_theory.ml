@@ -16,7 +16,7 @@ let%expect_test "is_prime" =
 
 let%test_unit "multinomial" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Gen.Let_syntax in
     let%bind length = Int.gen_incl 0 4 in
     let small_number = Int.gen_incl 0 4 in
     List.gen_with_length length small_number
@@ -31,10 +31,11 @@ let%test_unit "multinomial" =
 
 let%test_unit "powmod" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
-    let%map a = Quickcheck.Generator.small_non_negative_int
-    and b = Quickcheck.Generator.small_non_negative_int
-    and m = Quickcheck.Generator.small_positive_int in
+    let open Gen.Let_syntax in
+    let%map () = return ()
+    and a = Gen.small_non_negative_int
+    and b = Gen.small_non_negative_int
+    and m = Gen.small_positive_int in
     a, b, m
   in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int * int * int] ~f:(fun (a, b, modulus) ->

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 (* FIXME this module needs a better name *)
 

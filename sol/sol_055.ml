@@ -6,7 +6,7 @@ module M = struct
 
   let is_palindrome n =
     let s = Bigint.to_string n in
-    s = String.rev s
+    String.equal s (String.rev s)
   ;;
 
   let is_lychrel n =

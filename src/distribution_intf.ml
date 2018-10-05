@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module type Prob = sig
   type t [@@deriving compare, sexp]

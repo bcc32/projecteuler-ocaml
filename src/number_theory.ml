@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module Make (Integer : Int_intf.S_unbounded) = struct
   open Integer.O

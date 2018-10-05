@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module type Real = sig
   type t

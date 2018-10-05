@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module Solution_id = struct
   type t =

@@ -22,7 +22,7 @@ module M = struct
 
   let main () =
     Number_theory.Int.natural_numbers () ~init:1
-    |> Sequence.find_exn ~f:(fun n -> concave_triangle_area n < area_threshold)
+    |> Sequence.find_exn ~f:(fun n -> Float.(concave_triangle_area n < area_threshold))
     |> printf "%d\n"
   ;;
 

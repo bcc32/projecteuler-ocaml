@@ -1,4 +1,5 @@
 open! Core
+open! Import
 open Core_bench.Std
 open Euler
 

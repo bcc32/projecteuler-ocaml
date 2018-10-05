@@ -142,6 +142,7 @@ end = struct
   end
 
   include T
+  include Comparable.Make (T)
 
   let all_array = Array.of_list all
 

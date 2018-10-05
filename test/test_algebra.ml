@@ -22,17 +22,18 @@ let%test_unit "quadratic_formula" =
       | Zero -> 1
       | Pos -> 2
     in
+    let test_near_zero = [%test_pred: float] (fun x -> Float.(x < 1e-5)) in
     match Algebra.quadratic_formula a b c with
     | `None -> [%test_result: int] 0 ~expect
     | `One x ->
       [%test_result: int] 1 ~expect;
       let y = Float.((a * (x ** 2.)) + (b * x) + c) in
-      assert (y < 1e-8)
+      test_near_zero y
     | `Two (x0, x1) ->
       [%test_result: int] 2 ~expect;
-      assert (x0 < x1);
+      assert (Float.(x0 < x1));
       let y0 = Float.((a * (x0 ** 2.)) + (b * x0) + c) in
       let y1 = Float.((a * (x1 ** 2.)) + (b * x1) + c) in
-      assert (y0 < 1e-5);
-      assert (y1 < 1e-5))
+      test_near_zero y0;
+      test_near_zero y1)
 ;;

@@ -1,4 +1,5 @@
 open! Core
+open! Import
 module Solution = Solution
 module Solution_intf = Solution_intf
 module Algebra = Algebra

@@ -19,9 +19,9 @@ let%test_unit "digits_of_string" =
 
 let%test_unit "is_palindrome" =
   let gen = List.gen Int.gen in
-  Quickcheck.test_can_generate gen ~f:(fun l -> List.rev l = l);
+  Quickcheck.test_can_generate gen ~f:(fun l -> [%compare.equal: int list] l (List.rev l));
   Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
-    let expect = List.rev l = l in
+    let expect = [%compare.equal: int list] l (List.rev l) in
     [%test_result: bool] (Util.is_palindrome l ~equal:Int.equal) ~expect)
 ;;
 

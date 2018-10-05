@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module Make (Real : Numerics_intf.Real) = struct
   open Real

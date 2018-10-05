@@ -1,6 +1,24 @@
 open! Core
 open! Import
 
+module Is_prime = struct
+  module T = struct
+    type t =
+      [ `Prime
+      | `Not_prime ]
+    [@@deriving compare, sexp]
+  end
+
+  include T
+  include Comparable.Make (T)
+
+  let of_char_exn = function
+    | 'P' -> `Prime
+    | 'N' -> `Not_prime
+    | c -> invalid_argf "Is_prime.of_char_exn: '%c'" c ()
+  ;;
+end
+
 module M = struct
   let problem = `Number 329
 
@@ -29,12 +47,7 @@ module M = struct
     let init = ref (Dist.uniform' (List.range 1 500 ~stop:`inclusive)) in
     let product = ref Bignum.one in
     let expected =
-      "PPPPNNPPPNPPNPN"
-      |> String.to_list
-      |> List.map ~f:(function
-        | 'P' -> `Prime
-        | 'N' -> `Not_prime
-        | _ -> assert false)
+      "PPPPNNPPPNPPNPN" |> String.to_list |> List.map ~f:Is_prime.of_char_exn
     in
     List.iter expected ~f:(fun expected ->
       assert (Map.length (Dist.to_map !init) = 500);
@@ -42,7 +55,7 @@ module M = struct
         step !init
         |> Dist.to_alist
         |> List.filter_map ~f:(fun ((pos, is_prime), p) ->
-          if is_prime = expected then Some (pos, p) else None)
+          if Is_prime.equal is_prime expected then Some (pos, p) else None)
         |> Dist.of_alist_exn
       in
       let total = Dist.total next in

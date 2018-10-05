@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 let solution_commands =
   Euler_solutions.modules

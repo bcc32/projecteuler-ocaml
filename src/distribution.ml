@@ -1,4 +1,5 @@
 open! Core
+open! Import
 
 module Make (Prob : Distribution_intf.Prob) = struct
   (* FIXME See if you can avoid using [Map.Poly.t]. *)

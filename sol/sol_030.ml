@@ -6,15 +6,29 @@ module M = struct
 
   (* Derived by observing that 9^5 * n < 10^(n - 1) for all n > 6. *)
   let max_digits = 6
+  let limit = Int.pow 10 max_digits
+
+  (* optimized for constant exponent
+
+     See https://en.wikipedia.org/wiki/Addition-chain_exponentiation *)
+  let[@inline always] fifth_power n =
+    let nn = n * n in
+    nn * nn * n
+  ;;
+
+  let sum_fifth_of_digits n =
+    let rec loop n ac =
+      if n = 0 then ac else loop (n / 10) (ac + fifth_power (n mod 10))
+    in
+    loop n 0
+  ;;
 
   let main () =
-    Sequence.range 2 (Int.pow 10 max_digits)
-    |> Sequence.filter ~f:(fun n ->
-      Number_theory.Int.digits_of_int n
-      |> List.sum (module Int) ~f:(Fn.flip Int.pow 5)
-      |> Int.equal n)
-    |> Sequence.sum (module Int) ~f:Fn.id
-    |> printf "%d\n"
+    let sum = ref 0 in
+    for n = 2 to limit - 1 do
+      if n = sum_fifth_of_digits n then sum := !sum + n
+    done;
+    printf "%d\n" !sum
   ;;
 end
 

@@ -17,8 +17,8 @@ let modules : (module Euler.Solution_intf.S) list = [
   (module Sol_012);
   (module Sol_013);
   (module Sol_014);
-  (module Sol_014_memo_opt);
   (module Sol_014_memo_slower);
+  (module Sol_014_naive);
   (module Sol_015);
   (module Sol_016);
   (module Sol_017);

@@ -1,8 +1,0 @@
-(library
- ((name        euler)
-  (public_name euler)
-  (synopsis "a collection of utilities for solving ProjectEuler math problems")
-  (libraries (bignum
-              core))
-  (inline_tests)
-  (preprocess (pps (ppx_jane)))))

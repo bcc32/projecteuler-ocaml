@@ -82,6 +82,7 @@ let modules : (module Euler.Solution_intf.S) list = [
   (module Sol_587_int);
   (module Sol_601);
   (module Sol_611);
+  (module Sol_613);
   (module Sol_625);
 ]
 ;;

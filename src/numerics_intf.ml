@@ -21,8 +21,8 @@ module type S = sig
   val bisect : f:(real -> real) -> epsilon:real -> low:real -> high:real -> real
 
   (** default is `Simpson's_rule *)
-  val integrate
-    :  ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
+  val integrate :
+    ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
     -> unit
     -> f:(real -> real)
     -> low:real
@@ -30,8 +30,8 @@ module type S = sig
     -> intervals:int
     -> real
 
-  val newton's_method
-    :  f:(real -> real)
+  val newton's_method :
+    f:(real -> real)
     -> f':(real -> real)
     -> epsilon:real
     -> init:real

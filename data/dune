@@ -1,4 +1,7 @@
 ;; generate dune rules
+;;
+;; see https://jbuilder.readthedocs.io/en/latest/dune-files.html#include for
+;; example
 (include dune.inc)
 
 (rule

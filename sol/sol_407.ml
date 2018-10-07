@@ -4,41 +4,40 @@ open! Import
 module M = struct
   let problem = Number 407
   let limit = 10_000_000
-  let _primes = lazy (Number_theory.prime_sieve limit)
-
-  let largest_idempotent modulo =
-    Debug.eprintf "%d" modulo;
-    with_return (fun { return } ->
-      (* if (force primes).(modulo)
-       * then (return 1); *)
-      for a = modulo - 1 downto 0 do
-        if a * a mod modulo = a then return a
-      done;
-      assert false)
-  ;;
+  let debug = false
 
   let main () =
-    Sequence.range 1 limit ~stop:`inclusive
-    |> Sequence.sum (module Int) ~f:largest_idempotent
-    |> printf "%d\n"
+    let ms = Option_array.create ~len:(limit + 1) in
+    let somes = ref 0 in
+    let all = ref 0 in
+    for m = limit downto 2 do
+      if debug && m mod 1000 = 0
+      then
+        Debug.eprintf !"%d %{Percent}" m (Percent.of_mult (float !somes /. float !all));
+      Number_theory.Int.divisors ((m * m) - m)
+      |> List.iter ~f:(fun n ->
+        if m < n && n <= limit && not (Option_array.unsafe_is_some ms n)
+        then (
+          Option_array.unsafe_set_some ms n m;
+          incr somes));
+      incr all
+    done;
+    (* trivial case, 1^2 = 1 (mod n) *)
+    for i = 2 to limit do
+      if not (Option_array.unsafe_is_some ms i) then Option_array.unsafe_set_some ms i 1
+    done;
+    Option_array.unsafe_set_some ms 1 0;
+    (* just in case *)
+    if debug then Sexp.save "407.sexp" [%sexp (ms : int Option_array.t)];
+    let sum = ref 0 in
+    for i = 1 to limit do
+      sum := !sum + Option_array.unsafe_get_some_exn ms i
+    done;
+    printf "%d\n" !sum
   ;;
 
-  (* let max_idempotent = Array.create 0 ~len:(limit + 1)
-   *
-   * let compute () =
-   *   for a = limit - 1 downto 1 do
-   *     let x = a * a - a in
-   *     for j = a + 1 to min x limit do
-   *       if max_idempotent.(j) = 0 && x mod j = 0
-   *       then (max_idempotent.(j) <- a)
-   *     done
-   *   done
-   *
-   * let main () =
-   *   compute ();
-   *   max_idempotent
-   *   |> Array.sum (module Int) ~f:Fn.id
-   *   |> printf "%d\n" *)
+  (* 39782849136421
+     24.1107m *)
 end
 
 include Solution.Make (M)

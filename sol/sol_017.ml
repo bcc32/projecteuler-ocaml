@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 17
+  let problem = Number 17
 
   let how_many_letters n =
     if n > 1000 then ksprintf invalid_arg "n is too big: %d" n;

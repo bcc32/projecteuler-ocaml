@@ -295,7 +295,7 @@ end = struct
 end
 
 module M = struct
-  let problem = `Number 84
+  let problem = Number 84
 
   let main () =
     let g = ref Game_state_dist.init in

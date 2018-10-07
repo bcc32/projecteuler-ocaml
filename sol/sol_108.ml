@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 108
+  let problem = Number 108
 
   let num_solutions n =
     if n % 1000 = 0 then Debug.eprintf "%d" n;

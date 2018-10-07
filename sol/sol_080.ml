@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 80
+  let problem = Number 80
 
   let sqrt n =
     let open Bignum in

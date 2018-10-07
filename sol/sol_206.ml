@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 206
+  let problem = Number 206
 
   let main () =
     let pattern = "1.2.3.4.5.6.7.8.9.0" in

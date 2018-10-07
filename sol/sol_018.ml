@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 18
+  let problem = Number 18
   let path = "data/018.txt"
 
   let read_triangle path =

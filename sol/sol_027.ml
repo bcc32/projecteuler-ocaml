@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 27
+  let problem = Number 27
 
   let count_primes a b =
     let rec loop n count =

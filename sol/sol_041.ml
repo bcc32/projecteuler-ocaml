@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 41
+  let problem = Number 41
 
   let main () =
     Sequence.range ~stride:(-1) 9 0

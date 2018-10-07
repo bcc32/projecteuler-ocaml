@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Custom (14, `Tag "naive", `Description "brute-force method")
+  let problem = Custom { number = 14; tag = "naive"; description = "brute-force method" }
   let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
   let collatz_length n =

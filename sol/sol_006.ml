@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 6
+  let problem = Number 6
   let hund = List.range ~stop:`inclusive 1 100
   let sum = List.sum (module Int) ~f:Fn.id
   let sqr x = x * x

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 205
+  let problem = Number 205
 
   type dist = Percent.t Int.Map.t
 

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number ___
+  let problem = Number ___
   let main () = ___
 end
 

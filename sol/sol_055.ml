@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 55
+  let problem = Number 55
 
   let is_palindrome n =
     let s = Bigint.to_string n in

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 29
+  let problem = Number 29
 
   let main () =
     let powers = Bigint.Hash_set.create () in

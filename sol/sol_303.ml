@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 303
+  let problem = Number 303
 
   let small_digits =
     Number_theory.Int.natural_numbers () ~init:1

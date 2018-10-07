@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 9
+  let problem = Number 9
 
   let main () =
     with_return_option (fun r ->

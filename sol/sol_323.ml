@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 323
+  let problem = Number 323
   let word_size = 32
 
   (* probability of transitioning from [a] 1 bits to [b] 1 bits *)

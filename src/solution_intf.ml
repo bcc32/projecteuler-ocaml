@@ -3,8 +3,8 @@ open! Import
 
 module Solution_id = struct
   type t =
-    [ `Number of int
-    | `Custom of int * [`Tag of string] * [`Description of string] ]
+    | Number of int
+    | Custom of { number : int; tag : string; description : string }
 end
 
 module type Arg = sig

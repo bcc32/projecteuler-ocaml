@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 43
+  let problem = Number 43
 
   let check_digits d =
     let is_div d1 d2 d3 p = ((100 * d1) + (10 * d2) + d3) mod p = 0 in

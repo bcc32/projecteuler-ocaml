@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 30
+  let problem = Number 30
 
   (* Derived by observing that 9^5 * n < 10^(n - 1) for all n > 6. *)
   let max_digits = 6

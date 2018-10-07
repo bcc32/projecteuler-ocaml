@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 4
+  let problem = Number 4
   let is_palindrome s = String.( = ) s (String.rev s)
 
   let main () =

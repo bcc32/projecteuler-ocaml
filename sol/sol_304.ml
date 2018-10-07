@@ -23,7 +23,7 @@ module Int_modulo = struct
 end
 
 module M = struct
-  let problem = `Number 304
+  let problem = Number 304
 
   let main () =
     Sequence.take b 100_000 |> Sequence.sum (module Int_modulo) ~f:Fn.id |> printf "%d\n"

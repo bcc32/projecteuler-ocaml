@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 5
+  let problem = Number 5
 
   let main () =
     List.range ~stop:`inclusive 1 20

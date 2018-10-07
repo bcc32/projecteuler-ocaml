@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 139
+  let problem = Number 139
 
   let pythag_triples : (int * int * int) Sequence.t =
     Number_theory.Int.natural_numbers ~init:5 ()

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 22
+  let problem = Number 22
   let path = "data/022.txt"
 
   let names =

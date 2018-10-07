@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 19
+  let problem = Number 19
 
   let main () =
     let start = Date.of_string "1901-01-01" in

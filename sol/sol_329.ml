@@ -20,7 +20,7 @@ module Is_prime = struct
 end
 
 module M = struct
-  let problem = `Number 329
+  let problem = Number 329
 
   module Dist = Distribution.Bignum
 

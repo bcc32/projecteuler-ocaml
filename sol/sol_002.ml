@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 2
+  let problem = Number 2
 
   let fibs n =
     let rec iter a b acc = if b > n then acc else iter b (a + b) (b :: acc) in

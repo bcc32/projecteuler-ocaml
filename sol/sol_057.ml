@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 57
+  let problem = Number 57
 
   let is_more_num_digits r =
     let num = r |> Bignum.num_as_bigint |> Bigint.to_string |> String.length in

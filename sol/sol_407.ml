@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 407
+  let problem = Number 407
   let limit = 10_000_000
   let _primes = lazy (Number_theory.prime_sieve limit)
 

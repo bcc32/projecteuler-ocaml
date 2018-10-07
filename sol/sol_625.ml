@@ -25,7 +25,7 @@ let%expect_test "sum_gcd_upto" =
 ;;
 
 module M = struct
-  let problem = `Number 625
+  let problem = Number 625
   let main () = sum_gcd_upto 10 |> printf "%d\n"
 end
 

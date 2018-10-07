@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 10
+  let problem = Number 10
 
   let main () =
     Number_theory.prime_sieve 2_000_000

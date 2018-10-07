@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 504
+  let problem = Number 504
   let limit = 100
 
   (* https://en.wikipedia.org/wiki/Pick%27s_theorem *)

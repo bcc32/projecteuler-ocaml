@@ -27,7 +27,7 @@ let%test_unit "P(s, N)" =
 ;;
 
 module M = struct
-  let problem = `Number 601
+  let problem = Number 601
 
   let main () =
     let sum = ref 0L in

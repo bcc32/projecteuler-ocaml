@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 549
+  let problem = Number 549
 
   let limit =
     match Sys.getenv "LIMIT" with

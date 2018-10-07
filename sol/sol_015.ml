@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 15
+  let problem = Number 15
 
   let main () =
     let n = Bigint.of_int 40 in

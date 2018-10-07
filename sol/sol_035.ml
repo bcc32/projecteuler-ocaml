@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 35
+  let problem = Number 35
   let rotate ds = Doubly_linked.last_elt ds |> uw |> Doubly_linked.move_to_front ds
 
   let prime_circle n =

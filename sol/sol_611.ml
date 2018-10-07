@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 611
+  let problem = Number 611
 
   let f n =
     let opened = Int.Hash_set.create () in

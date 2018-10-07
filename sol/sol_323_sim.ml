@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Custom (323, `Tag "sim", `Description "Monte Carlo method")
+  let problem = Custom { number = 323; tag = "sim"; description = "Monte Carlo method" }
 
   let simulate_one bits =
     let end_ = Int.shift_left 1 bits in

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 293
+  let problem = Number 293
   let is_prime = lazy (Number_theory.prime_sieve 100_000)
 
   let is_admissible n =

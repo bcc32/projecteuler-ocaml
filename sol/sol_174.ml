@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 174
+  let problem = Number 174
 
   (* TODO think about this as a^2 - b^2 = (a + b)(a - b) *)
 

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 14
+  let problem = Number 14
   let limit = 1_000_000
   let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 

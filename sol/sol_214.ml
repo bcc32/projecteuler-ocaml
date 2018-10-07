@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 214
+  let problem = Number 214
   let limit = 40_000_000
 
   let totient_chain_length =

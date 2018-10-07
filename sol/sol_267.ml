@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 267
+  let problem = Number 267
 
   (* Each coin flip, all possible starting values [x] result in two equally
      likely outcomes: [x * (1 + 2 * f)] and [x * (1 - f)].

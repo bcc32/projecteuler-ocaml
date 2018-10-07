@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 166
+  let problem = Number 166
   let[@inline always] is_in_range x = x >= 0 && x <= 9
 
   (*

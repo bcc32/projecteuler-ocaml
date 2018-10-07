@@ -2,7 +2,9 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Custom (10, `Tag "seq", `Description "using primes Sequence.t")
+  let problem =
+    Custom { number = 10; tag = "seq"; description = "using primes Sequence.t" }
+  ;;
 
   let main () =
     Number_theory.Int.primes

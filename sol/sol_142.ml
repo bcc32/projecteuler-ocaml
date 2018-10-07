@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 142
+  let problem = Number 142
 
   (* let squares = Int.Hash_set.create () *)
   let squareq = Deque.create ()

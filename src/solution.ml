@@ -17,15 +17,16 @@ module Make (M : Solution_intf.Arg) = struct
     in
     let summary =
       match M.problem with
-      | `Number n -> sprintf "Problem %d" n
-      | `Custom (n, `Tag _, `Description d) -> sprintf "Problem %d (%s)" n d
+      | Number n -> sprintf "Problem %d" n
+      | Custom { number; tag = _; description } ->
+        sprintf "Problem %d (%s)" number description
     in
     Command.basic main ~summary
   ;;
 
   let command_name =
     match M.problem with
-    | `Number n -> Int.to_string n
-    | `Custom (n, `Tag k, `Description _) -> sprintf "%d-%s" n k
+    | Number n -> Int.to_string n
+    | Custom { number; tag; description = _ } -> sprintf "%d-%s" number tag
   ;;
 end

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 500
+  let problem = Number 500
   let modulo = 500_500_507
 
   (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first

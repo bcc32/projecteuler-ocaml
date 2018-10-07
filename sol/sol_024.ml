@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 24
+  let problem = Number 24
 
   let main () =
     let sequence = Array.init 10 ~f:Fn.id in

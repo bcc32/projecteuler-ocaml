@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 21
+  let problem = Number 21
 
   let sum_proper_divisors n =
     let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in

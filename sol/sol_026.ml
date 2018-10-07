@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 026
+  let problem = Number 026
 
   let rec divide_through k n =
     Bigint.(if n % k = zero then divide_through k (n / k) else n)

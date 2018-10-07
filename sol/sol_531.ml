@@ -51,7 +51,7 @@ let phi =
 let f n m = g (phi n) n (phi m) m
 
 module M = struct
-  let problem = `Number 531
+  let problem = Number 531
 
   let main () =
     let sum = ref 0 in

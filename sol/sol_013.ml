@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 13
+  let problem = Number 13
   let path = "data/013.txt"
   let prefix_length = 10
 

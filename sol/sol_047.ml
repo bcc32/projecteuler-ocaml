@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 47
+  let problem = Number 47
 
   let main () =
     let f n = List.length (Number_theory.Int.prime_factor n) = 4 in

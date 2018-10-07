@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 1
+  let problem = Number 1
 
   let threes_and_fives =
     List.range 1 1000

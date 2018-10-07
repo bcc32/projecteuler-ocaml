@@ -3,7 +3,11 @@ open! Import
 
 module M = struct
   let problem =
-    `Custom (14, `Tag "memo", `Description "slower method using memoized collatz_length")
+    Custom
+      { number = 4
+      ; tag = "memo"
+      ; description = "slower method using hashtbl-memoized collatz_length"
+      }
   ;;
 
   let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1

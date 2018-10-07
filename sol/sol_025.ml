@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 25
+  let problem = Number 25
 
   let main () =
     Sequence.findi Number_theory.Bigint.fibonacci ~f:(fun _ f ->

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = `Number 12
+  let problem = Number 12
   let triangle n = n * (n + 1) / 2
 
   let main () =

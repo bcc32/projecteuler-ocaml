@@ -14,9 +14,7 @@ module M = struct
     |> Option.value_exn
   ;;
 
-  let path = "data/008.txt"
-  let number = lazy (In_channel.with_file path ~f:In_channel.input_all |> String.strip)
-  let main () = doit (force number) |> printf "%d\n"
+  let main () = doit Problem_008.data |> printf "%d\n"
 
   (* 23514624000
      3.3ms *)

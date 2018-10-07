@@ -5,6 +5,7 @@
   bignum
   core
   euler
+  euler_data
   re)
  (preprocess (pps ppx_jane))
  (inline_tests)

@@ -3,19 +3,19 @@ open! Import
 
 module M = struct
   let problem = Number 22
-  let path = "data/022.txt"
+
+  let name_regexp =
+    lazy
+      (let open Re in
+       compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ]))
+  ;;
 
   let names =
     lazy
-      (let name_regexp =
-         let open Re in
-         compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ])
-       in
-       In_channel.with_file path ~f:(fun chan ->
-         In_channel.input_all chan
-         |> Re.all name_regexp
-         |> List.map ~f:(fun groups -> Re.get groups 1)
-         |> List.sort ~compare:String.compare))
+      (Problem_022.data
+       |> Re.all (force name_regexp)
+       |> List.map ~f:(fun groups -> Re.get groups 1)
+       |> List.sort ~compare:String.compare)
   ;;
 
   let letter_score ch = Char.to_int ch - Char.to_int 'A' + 1

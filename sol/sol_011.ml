@@ -3,17 +3,16 @@ open! Import
 
 module M = struct
   let problem = Number 11
-  let path = "data/011.txt"
   let size = 20
   let product_size = 4
 
   let grid =
     lazy
-      (In_channel.with_file path ~f:(fun chan ->
-         In_channel.input_lines chan
-         |> List.map ~f:(fun line ->
-           String.split line ~on:' ' |> List.map ~f:Int.of_string |> List.to_array)
-         |> List.to_array))
+      (Problem_011.data
+       |> String.split_lines
+       |> List.map ~f:(fun line ->
+         String.split line ~on:' ' |> List.map ~f:Int.of_string |> List.to_array)
+       |> List.to_array)
   ;;
 
   let horizontal_products grid =

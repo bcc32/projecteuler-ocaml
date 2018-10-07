@@ -3,18 +3,18 @@ open! Import
 
 module M = struct
   let problem = Number 42
-  let path = "data/042.txt"
+
+  let word_regexp =
+    lazy
+      (let open Re in
+       compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ]))
+  ;;
 
   let words =
     lazy
-      (let word_regexp =
-         let open Re in
-         compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ])
-       in
-       In_channel.with_file path ~f:(fun chan ->
-         In_channel.input_all chan
-         |> Re.all word_regexp
-         |> List.map ~f:(fun groups -> Re.get groups 1)))
+      (Problem_042.data
+       |> Re.all (force word_regexp)
+       |> List.map ~f:(fun groups -> Re.get groups 1))
   ;;
 
   let word_value word =
@@ -38,7 +38,7 @@ module M = struct
   ;;
 
   (* 162
-     1.6ms *)
+     0.708ms *)
 end
 
 include Solution.Make (M)

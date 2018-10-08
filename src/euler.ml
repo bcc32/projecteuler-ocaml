@@ -11,6 +11,11 @@ module Sequences = Sequences
 include Composition_infix
 include Solution_intf.Export
 
+(** When true, enable debugging and progress printing in various places in
+    solutions.
+
+    Enabled by setting the [EULER_DEBUG] environment variable to a non-empty
+    string.  *)
 let debug =
   match Sys.getenv "EULER_DEBUG" with
   | None

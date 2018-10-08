@@ -1,3 +1,5 @@
+(** Infix operators for function composition. *)
+
 open! Core
 open! Import
 

@@ -1,3 +1,5 @@
+(** Numerical integration, root-finding, etc. *)
+
 open! Core
 open! Import
 module Make (M : Numerics_intf.Real) : Numerics_intf.S with type real = M.t

@@ -9,6 +9,4 @@ module Numerics = Numerics
 module Number_theory = Number_theory
 module Sequences = Sequences
 
-type solution_id = Solution_intf.Solution_id.t =
-  | Number of int
-  | Custom of { number : int; tag : string; description : string }
+include Solution_intf.Export

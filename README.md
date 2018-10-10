@@ -8,4 +8,8 @@ dune build -p euler
 dune exec -- euler PROBLEM_NUMBER [-time]
 ```
 
-If passed the `-time` flag, the program will report the time taken to execute the solution code.
+If passed the `-time` flag, the program will report the time taken to execute
+the solution code.
+
+The `EULER_DEBUG` environment variable, when set to a non-empty string, will
+enable debug/progress printing in some solutions.

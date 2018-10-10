@@ -4,7 +4,6 @@ open! Import
 module M = struct
   let problem = Number 407
   let limit = 10_000_000
-  let debug = false
 
   let main () =
     let ms = Option_array.create ~len:(limit + 1) in

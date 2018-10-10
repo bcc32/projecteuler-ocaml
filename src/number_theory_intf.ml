@@ -4,8 +4,8 @@ open! Import
 module type S = sig
   type integer
 
-  val range :
-    ?stride:integer
+  val range
+    :  ?stride:integer
     -> ?start:[`inclusive | `exclusive]
     -> ?stop:[`exclusive | `inclusive]
     -> integer

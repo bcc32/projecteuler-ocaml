@@ -136,9 +136,21 @@ module Make (Integer : Int_intf.S_unbounded) = struct
       if n <= b then Yield (n, n + stride) else Done)
   ;;
 
+  (* TODO handle negative numbers? *)
+  (* TODO weird behavior for fold_digits 0 *)
+  let rec fold_digits ?(base = ten) n ~init ~f =
+    if n = zero then init else fold_digits ~base (n / base) ~init:(f init (n % base)) ~f
+  ;;
+
+  let rec iter_digits ?(base = ten) n ~f =
+    if n <> zero
+    then (
+      f (n % base);
+      iter_digits ~base (n / base) ~f)
+  ;;
+
   let digits_of_int ?(base = ten) n =
-    let rec aux n d = if n = zero then d else aux (n / base) ((n % base) :: d) in
-    aux n []
+    fold_digits ~base n ~init:[] ~f:(fun ac x -> x :: ac)
   ;;
 
   let int_of_digits ?(base = ten) ds =

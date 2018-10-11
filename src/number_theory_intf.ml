@@ -12,8 +12,13 @@ module type S = sig
     -> integer
     -> integer Sequence.t
 
-  (* digits *)
+  (** digits *)
 
+  (** [fold_digits ?base n ~init ~f] folds over the digits of [n] from least significant
+      to most significant. *)
+  val fold_digits : ?base:integer -> integer -> init:'a -> f:('a -> integer -> 'a) -> 'a
+
+  val iter_digits : ?base:integer -> integer -> f:(integer -> unit) -> unit
   val digits_of_int : ?base:integer -> integer -> integer list
   val int_of_digits : ?base:integer -> integer Sequence.t -> integer
   val sum_digits : ?base:integer -> integer -> integer

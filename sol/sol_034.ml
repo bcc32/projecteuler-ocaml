@@ -8,11 +8,10 @@ module M = struct
   let max_digits = 7
 
   let main () =
+    let factorial = Array.init 10 ~f:Number_theory.Int.factorial in
     Sequence.range 10 (Int.pow 10 max_digits)
     |> Sequence.filter ~f:(fun n ->
-      Number_theory.Int.digits_of_int n
-      |> List.sum (module Int) ~f:Number_theory.Int.factorial
-      |> Int.equal n)
+      n = Number_theory.Int.fold_digits n ~init:0 ~f:(fun ac d -> ac + factorial.(d)))
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;

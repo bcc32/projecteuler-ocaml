@@ -1,6 +1,29 @@
 open! Core
 open! Import
 
+let%expect_test "digits" =
+  let require_round_trip n digits =
+    require_equal
+      [%here]
+      (module Int)
+      n
+      (Number_theory.Int.int_of_digits (Sequence.of_list digits));
+    require_equal
+      [%here]
+      (module struct
+        type t = int list [@@deriving sexp]
+
+        let equal = [%compare.equal: int list]
+      end)
+      digits
+      (Number_theory.Int.digits_of_int n)
+  in
+  let examples =
+    [ 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]
+  in
+  List.iter examples ~f:(fun (n, digits) -> require_round_trip n digits)
+;;
+
 let%expect_test "is_prime" =
   let show a b =
     Number_theory.Int.range a b
@@ -59,11 +82,16 @@ let%expect_test "prime_factor" =
     print_s [%sexp (x, Number_theory.Int.prime_factor x : int * (int * int) list)]);
   [%expect
     {|
-    (10 ((2 1) (5 1)))
+    (10 (
+      (2 1)
+      (5 1)))
     (17 ((17 1)))
     (109 ((109 1)))
     (256 ((2 8)))
-    (480 ((2 5) (3 1) (5 1)))
+    (480 (
+      (2 5)
+      (3 1)
+      (5 1)))
     (9001 ((9001 1)))
   |}]
 ;;

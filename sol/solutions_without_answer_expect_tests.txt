@@ -27,6 +27,7 @@ sol_425.ml
 sol_429.ml
 sol_500.ml
 sol_504.ml
+sol_518.ml
 sol_531.ml
 sol_549.ml
 sol_587_int.ml

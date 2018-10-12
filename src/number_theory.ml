@@ -280,35 +280,43 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 end
 
-module Int = Make (Int)
+module Premade = struct
+  module Int = Make (Int)
 
-module Bigint = Make (struct
-    include Bigint
+  module Bigint = Make (struct
+      include Bigint
 
-    (* different signature in Int_intf.S_unbounded *)
-    let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
-  end)
+      (* different signature in Int_intf.S_unbounded *)
+      let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
+    end)
+end
 
-let prime_sieve limit =
-  let len = limit + 1 in
-  let primes = Array.create ~len true in
-  let rec mark p n =
-    if n < len
-    then (
-      primes.(n) <- false;
-      mark p (n + p))
-  in
-  let rec sieve p =
-    if p * p < len
-    then (
-      if primes.(p) then mark p (p * p);
-      sieve (Int.next_probable_prime p))
-  in
-  primes.(0) <- false;
-  primes.(1) <- false;
-  sieve 2;
-  primes
-;;
+module Using_premade = struct
+  open Premade
+
+  let prime_sieve limit =
+    let len = limit + 1 in
+    let primes = Array.create ~len true in
+    let rec mark p n =
+      if n < len
+      then (
+        primes.(n) <- false;
+        mark p (n + p))
+    in
+    let rec sieve p =
+      if p * p < len
+      then (
+        if primes.(p) then mark p (p * p);
+        sieve (Int.next_probable_prime p))
+    in
+    primes.(0) <- false;
+    primes.(1) <- false;
+    sieve 2;
+    primes
+  ;;
+end
+
+include Using_premade
 
 let factorial_prime_factor n =
   let primes = prime_sieve n in
@@ -332,3 +340,173 @@ let multinomial xs =
     done);
   !p
 ;;
+
+let[@inline never] raise_negative_exponent e =
+  raise_s [%message "negative exponent" (e : int)]
+;;
+
+let[@inline never] raise_exponent_too_large e =
+  raise_s [%message "large exponent not supported" (e : int)]
+;;
+
+(* https://en.wikipedia.org/wiki/Addition-chain_exponentiation
+
+   Table at: http://wwwhomes.uni-bielefeld.de/achim/addition_chain.html *)
+let[@inline always] addition_chain_pow ~one ~mul:( * ) a exponent =
+  match exponent with
+  | 0 -> one
+  | 1 -> a
+  | 2 -> a * a
+  | 3 -> a * a * a
+  | 4 ->
+    let b = a * a in
+    b * b
+  | 5 ->
+    let b = a * a in
+    b * b * a
+  | 6 ->
+    let b = a * a in
+    b * b * b
+  | 7 ->
+    let b = a * a in
+    b * b * b * a
+  | 8 ->
+    let b = a * a in
+    let d = b * b in
+    d * d
+  | 9 ->
+    let c = a * a * a in
+    c * c * c
+  | 10 ->
+    let b = a * a in
+    let d = b * b in
+    d * d * b
+  | 11 ->
+    let b = a * a in
+    let d = b * b in
+    d * d * b * a
+  | 12 ->
+    let b = a * a in
+    let d = b * b in
+    d * d * d
+  | 13 ->
+    let b = a * a in
+    let d = b * b in
+    d * d * d * a
+  | 14 ->
+    let b = a * a in
+    let d = b * b in
+    d * d * d * b
+  | 15 ->
+    let b = a * a in
+    let e = b * b * a in
+    e * e * e
+  | 16 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h
+  | 17 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h * a
+  | 18 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h * b
+  | 19 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h * b * a
+  | 20 ->
+    let b = a * a in
+    let e = b * b * a in
+    let j = e * e in
+    j * j
+  | 21 ->
+    let c = a * a * a in
+    let f = c * c in
+    f * f * f * c
+  | 22 ->
+    let b = a * a in
+    let e = b * b * a in
+    let k = e * e * a in
+    k * k
+  | 23 ->
+    let b = a * a in
+    let c = b * a in
+    let e = c * b in
+    let j = e * e in
+    j * j * c
+  | 24 ->
+    let c = a * a * a in
+    let f = c * c in
+    let l = f * f in
+    l * l
+  | 25 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h * h * a
+  | 26 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    let m = h * d * a in
+    m * m
+  | 27 ->
+    let c = a * a * a in
+    let f = c * c in
+    let l = f * f in
+    l * l * c
+  | 28 ->
+    let b = a * a in
+    let c = b * a in
+    let e = c * b in
+    let g = e * b in
+    let n = g * g in
+    n * n
+  | 29 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    h * h * h * d * a
+  | 30 ->
+    let b = a * a in
+    let e = b * b * a in
+    let o = e * e * e in
+    o * o
+  | 31 ->
+    let b = a * a in
+    let c = b * a in
+    let e = c * b in
+    let g = e * b in
+    let n = g * g in
+    n * n * c
+  | 32 ->
+    let b = a * a in
+    let d = b * b in
+    let h = d * d in
+    let p = h * h in
+    p * p
+  | e -> if e < 0 then raise_negative_exponent e else raise_exponent_too_large e
+;;
+
+let[@inline always] addition_chain_pow_int b e = addition_chain_pow b e ~one:1 ~mul:( * )
+
+let%test_unit "addition_chain_pow vs. Int.pow" =
+  let gen =
+    let open Quickcheck.Generator.Let_syntax in
+    let%map () = return ()
+    and b = Int.gen_incl 0 3
+    and e = Int.gen_incl 0 32 in
+    b, e
+  in
+  Quickcheck.test gen ~sexp_of:[%sexp_of: int * int] ~f:(fun (b, e) ->
+    [%test_result: int] (addition_chain_pow_int b e) ~expect:(Int.pow b e))
+;;
+
+include Premade

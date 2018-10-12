@@ -23,3 +23,15 @@ val multinomial : int list -> int
 (** [factorial_prime_factor n] returns the prime factorization of [n!], but
     without actually calculating the factorial. *)
 val factorial_prime_factor : int -> (int * int) list
+
+(** [addition_chain_pow ~one ~mul b e] performs
+    {{:https://en.wikipedia.org/wiki/Addition-chain_exponentiation} addition-chain
+    exponentiation} to calculate [b^e] using as few multiplications as possible.
+
+    Currently supports exponents up to and including 32.  Not functorized for performance
+    reasons. *)
+val addition_chain_pow : one:'a -> mul:('a -> 'a -> 'a) -> 'a -> int -> 'a
+(* TODO Maybe functorize when flambda becomes the default. *)
+
+(** [addition_chain_pow] specialized for ints. *)
+val addition_chain_pow_int : int -> int -> int

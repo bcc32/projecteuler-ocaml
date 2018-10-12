@@ -60,10 +60,32 @@ let primes_group =
   |> create_group ~name:"primes"
 ;;
 
+let pow_group =
+  let bench_exponents f ~name =
+    Bench.Test.create_indexed
+      ~name
+      ~args:[ 0; 1; 2; 4; 5; 10; 15; 20; 25; 30 ]
+      (fun exp -> stage (fun () -> f 3 exp))
+  in
+  let bench_constant_exponent f ~name = Bench.Test.create ~name (fun () -> f 3 5) in
+  Bench.Test.create_group
+    ~name:"integer exponentiation"
+    [ bench_exponents ~name:"Int.pow" Int.pow
+    ; bench_exponents
+        ~name:"pow_fast without functor"
+        Number_theory.addition_chain_pow_int
+    ; bench_constant_exponent ~name:"Int.pow const(5)" Int.pow
+    ; bench_constant_exponent
+        ~name:"pow_fast without functor const(5)"
+        Number_theory.addition_chain_pow_int
+    ]
+;;
+
 let command =
   let groups =
     [ "divisors", divisors_group
     ; "sqrt", sqrt_group
+    ; "pow", pow_group
     ; "primes", primes_group
     ; "rle", run_length_encode_group
     ]

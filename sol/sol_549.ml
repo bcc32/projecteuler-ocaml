@@ -28,7 +28,7 @@ module M = struct
         let rec loop_powers power k smallest =
           if power <= n
           then (
-            (* Debug.eprintf "power %d" power; *)
+            if debug then Debug.eprintf "power %d" power;
             let k, smallest =
               let rec ensure_enough_p k smallest =
                 if k <= 0

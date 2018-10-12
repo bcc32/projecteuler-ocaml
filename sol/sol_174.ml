@@ -19,7 +19,7 @@ module M = struct
       in
       loop (i - 2)
     done;
-    Debug.eprint "hi";
+    Debug.eprint "done iterating";
     printf !"%{sexp: int Int.Table.t}\n" counts
   ;;
 end

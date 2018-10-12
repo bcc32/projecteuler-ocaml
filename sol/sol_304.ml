@@ -5,7 +5,7 @@ let a =
   lazy
     (let a1 = Number_theory.Int.next_prime 100_000_000_000_000 in
      Sequence.unfold ~init:a1 ~f:(fun a ->
-       Debug.eprintf "%d" a;
+       if debug then Debug.eprintf "%d" a;
        let a' = Number_theory.Int.next_prime a in
        Some (a', a')))
   |> Sequence.of_lazy

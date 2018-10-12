@@ -6,7 +6,7 @@ module M = struct
   let is_prime = lazy (Number_theory.prime_sieve 100_000)
 
   let is_admissible n =
-    if n % 1_000_000 = 0 then Debug.eprintf !"%{Int#hum}" n;
+    if debug && n % 1_000_000 = 0 then Debug.eprintf !"%{Int#hum}" n;
     let rec start n i =
       if n = 1
       then true

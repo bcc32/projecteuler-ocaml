@@ -17,7 +17,7 @@ module M = struct
   let main () =
     let count = ref 0 in
     for a = 0 to 9 do
-      Debug.eprint_s [%message (a : int)];
+      if debug then Debug.eprint_s [%message (a : int)];
       for b = 0 to 9 do
         for c = 0 to 9 do
           for d = 0 to 9 do

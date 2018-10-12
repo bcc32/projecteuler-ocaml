@@ -5,7 +5,7 @@ module M = struct
   let problem = Number 108
 
   let num_solutions n =
-    if n % 1000 = 0 then Debug.eprintf "%d" n;
+    if debug && n % 1000 = 0 then Debug.eprintf "%d" n;
     let count = ref 2 in
     for i = n + 2 to (2 * n) - 1 do
       if n * i mod (i - n) = 0 then incr count

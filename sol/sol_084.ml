@@ -310,8 +310,8 @@ module M = struct
     for _ = 1 to 10000 do
       g := Game_state_dist.advance !g ~die
     done;
-    printf !"%{Game_state_dist#modal}\n" !g;
-    print_s (Game_state_dist.sexp_of_square_dist !g)
+    if debug then Debug.eprint_s (Game_state_dist.sexp_of_square_dist !g);
+    printf !"%{Game_state_dist#modal}\n" !g
   ;;
 
   (* 101524

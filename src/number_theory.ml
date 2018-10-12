@@ -136,6 +136,73 @@ module Make (Integer : Int_intf.S_unbounded) = struct
       if n <= b then Yield (n, n + stride) else Done)
   ;;
 
+  let[@inline never] raise_negative_exponent e =
+    raise_s [%message "negative exponent" (e : int)]
+  ;;
+
+  (* TODO expand to 64 *)
+  (* https://en.wikipedia.org/wiki/Addition-chain_exponentiation
+
+     Table at: http://wwwhomes.uni-bielefeld.de/achim/addition_chain.html *)
+  let pow_fast a exponent =
+    match exponent with
+    | 0 -> one
+    | 1 -> a
+    | 2 -> a * a
+    | 3 -> a * a * a
+    | 4 ->
+      let b = a * a in
+      b * b
+    | 5 ->
+      let b = a * a in
+      b * b * a
+    | 6 ->
+      let b = a * a in
+      b * b * b
+    | 7 ->
+      let b = a * a in
+      b * b * b * a
+    | 8 ->
+      let b = a * a in
+      let d = b * b in
+      d * d
+    | 9 ->
+      let c = a * a * a in
+      c * c * c
+    | 10 ->
+      let b = a * a in
+      let d = b * b in
+      d * d * b
+    | 11 ->
+      let b = a * a in
+      let d = b * b in
+      d * d * b * a
+    | 12 ->
+      let b = a * a in
+      let d = b * b in
+      d * d * d
+    | 13 ->
+      let b = a * a in
+      let d = b * b in
+      d * d * d * a
+    | 14 ->
+      let b = a * a in
+      let d = b * b in
+      d * d * d * b
+    | 15 ->
+      let b = a * a in
+      let e = b * b * a in
+      e * e * e
+    | 16 ->
+      let b = a * a in
+      let d = b * b in
+      let h = d * d in
+      h * h
+    | e
+      when Int.(e < 0) -> raise_negative_exponent e
+    | _ -> Integer.pow a (Integer.of_int_exn exponent)
+  ;;
+
   (* TODO handle negative numbers? *)
   (* TODO weird behavior for fold_digits 0 *)
   let rec fold_digits ?(base = ten) n ~init ~f =

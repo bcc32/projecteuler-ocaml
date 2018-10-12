@@ -12,6 +12,11 @@ module type S = sig
     -> integer
     -> integer Sequence.t
 
+  (** [pow_fast a b] calculates [a^b] efficiently for small exponents [b]. *)
+  val pow_fast : integer -> int -> integer
+
+  (* FIXME See if [pow_fast] is actually much faster under flambda. *)
+
   (** digits *)
 
   (** [fold_digits ?base n ~init ~f] folds over the digits of [n] from least significant

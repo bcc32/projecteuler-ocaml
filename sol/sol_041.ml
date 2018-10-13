@@ -7,14 +7,24 @@ module M = struct
   let main () =
     Sequence.range ~stride:(-1) 9 0
     |> Sequence.find_map ~f:(fun n ->
-      List.range 1 n ~stop:`inclusive
-      |> Sequences.permutations ~compare:Int.descending
-      |> Sequence.find_map ~f:(fun p ->
-        let n = Sequence.of_list p |> Number_theory.Int.int_of_digits in
-        Option.some_if (Number_theory.Int.is_prime n) n))
+      let digits = Array.init n ~f:(fun i -> n - i) in
+      let rec loop () =
+        let n =
+          Array.to_sequence_mutable digits |> Number_theory.Int.int_of_digits
+        in
+        if Number_theory.Int.is_prime n
+        then Some n
+        else if Sequences.next_permutation_inplace digits ~compare:Int.descending
+        then loop ()
+        else None
+      in
+      loop ())
     |> Option.value_exn
     |> printf "%d\n"
   ;;
+
+  (* 7652413
+     229.525ms *)
 end
 
 include Solution.Make (M)

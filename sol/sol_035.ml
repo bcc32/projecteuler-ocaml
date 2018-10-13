@@ -10,30 +10,30 @@ module M = struct
   let prime_circle n =
     let digits = Number_theory.Int.digits_of_int n |> Doubly_linked.of_list in
     let len = Doubly_linked.length digits in
-    let results = Array.create n ~len in
+    let results = ref [] in
     with_return (fun { return } ->
-      for i = 0 to len - 1 do
+      for _ = 0 to len - 1 do
         let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
         if (force is_prime).(n)
         then (
-          results.(i) <- n;
+          results := n :: !results;
           rotate digits)
         else return None
       done;
-      Some results)
+      Some !results)
   ;;
 
   let main () =
     let circular_primes = Int.Hash_set.create () in
     for n = 2 to limit do
       if not (Hash_set.mem circular_primes n)
-      then Option.iter (prime_circle n) ~f:(Array.iter ~f:(Hash_set.add circular_primes))
+      then Option.iter (prime_circle n) ~f:(List.iter ~f:(Hash_set.add circular_primes))
     done;
     printf "%d\n" (Hash_set.length circular_primes)
   ;;
 
   (* 55
-     916.686ms *)
+     835.332ms *)
 end
 
 include Solution.Make (M)

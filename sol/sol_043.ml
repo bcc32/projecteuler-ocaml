@@ -27,6 +27,9 @@ module M = struct
          ~f:(fun d -> Number_theory.Int.int_of_digits (Sequence.of_list d))
     |> printf "%d\n"
   ;;
+
+  (* 16695334890
+     1.42737s *)
 end
 
 include Solution.Make (M)

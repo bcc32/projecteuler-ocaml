@@ -36,6 +36,7 @@ let modules : (module Euler.Solution_intf.S) list = [
   (module Sol_029);
   (module Sol_030);
   (module Sol_031);
+  (module Sol_032);
   (module Sol_034);
   (module Sol_035);
   (module Sol_036);

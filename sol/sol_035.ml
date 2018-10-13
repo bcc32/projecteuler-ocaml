@@ -3,7 +3,9 @@ open! Import
 
 module M = struct
   let problem = Number 35
+  let limit = 1_000_000
   let rotate ds = Doubly_linked.last_elt ds |> uw |> Doubly_linked.move_to_front ds
+  let is_prime = lazy (Number_theory.prime_sieve limit)
 
   let prime_circle n =
     let digits = Number_theory.Int.digits_of_int n |> Doubly_linked.of_list in
@@ -12,7 +14,7 @@ module M = struct
     with_return (fun { return } ->
       for i = 0 to len - 1 do
         let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
-        if Number_theory.Int.is_prime n
+        if (force is_prime).(n)
         then (
           results.(i) <- n;
           rotate digits)
@@ -23,7 +25,7 @@ module M = struct
 
   let main () =
     let circular_primes = Int.Hash_set.create () in
-    for n = 2 to 1_000_000 do
+    for n = 2 to limit do
       if not (Hash_set.mem circular_primes n)
       then Option.iter (prime_circle n) ~f:(Array.iter ~f:(Hash_set.add circular_primes))
     done;
@@ -31,7 +33,7 @@ module M = struct
   ;;
 
   (* 55
-     2.8s *)
+     916.686ms *)
 end
 
 include Solution.Make (M)

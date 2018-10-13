@@ -5,10 +5,10 @@ module M = struct
   let problem = Number 46
 
   let cannot_be_written n =
-    let upper_bound = Float.(of_int n / 2.0 |> sqrt |> to_int) in
-    Sequence.range ~stop:`inclusive 1 upper_bound
-    |> Sequence.exists ~f:(fun s -> n - (2 * s * s) |> Number_theory.Int.is_prime)
-    |> not
+    let upper_bound = Number_theory.Int.isqrt (n / 2) in
+    not
+      (Sequence.range ~stop:`inclusive 1 upper_bound
+       |> Sequence.exists ~f:(fun s -> n - (2 * s * s) |> Number_theory.Int.is_prime))
   ;;
 
   let main () =

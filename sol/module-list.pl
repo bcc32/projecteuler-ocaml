@@ -3,8 +3,7 @@ use warnings;
 
 my @modules;
 
-opendir(my $dh, '.');
-while (readdir($dh)) {
+for (@ARGV) {
   if (/\A (?<module_name> sol [^.]*) [.]ml \z/xms) {
     push @modules, ucfirst $+{module_name};
   }

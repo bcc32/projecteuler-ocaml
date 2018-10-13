@@ -12,10 +12,6 @@
  (modules (:standard \ template)))
 
 (rule
- (targets euler_solutions.ml-gen)
+ (targets euler_solutions.ml)
  (deps (:script module-list.pl) (glob_files sol*.ml))
  (action (with-stdout-to %{targets} (run perl %{script}))))
-
-(alias
- (name runtest)
- (action (diff euler_solutions.ml euler_solutions.ml-gen)))

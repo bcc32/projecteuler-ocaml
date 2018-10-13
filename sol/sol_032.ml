@@ -1,13 +1,13 @@
 open! Core
 open! Import
 
-(* WLOG a < b, so a has at most 3 digits (actually almost certainly fewer) *)
+(* WLOG a < b, so a has at most 2 digits *)
 let pandigital () =
   let expected_digits = List.range 1 10 in
   let open Sequence.Let_syntax in
-  let%bind a = Sequence.range 1 1000 in
+  let%bind a = Sequence.range 1 100 in
   let digits = Number_theory.Int.digits_of_int a in
-  let%bind b = Sequence.range (a + 1) 10_000 in
+  let%bind b = Sequence.range (a + 1) (Number_theory.Int.isqrt (1_000_000_000 / a)) in
   let digits = digits @ Number_theory.Int.digits_of_int b in
   let c = a * b in
   let digits = digits @ Number_theory.Int.digits_of_int c in
@@ -28,7 +28,7 @@ module M = struct
   ;;
 
   (* 45228
-     8.76643s *)
+     404.011ms *)
 end
 
 include Solution.Make (M)

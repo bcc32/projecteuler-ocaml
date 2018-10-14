@@ -3,4 +3,8 @@
 
 open! Core
 open! Import
-module Make (M : Solution_intf.Arg) : Solution_intf.S
+
+module type Arg = Solution_intf.Arg
+module type S = Solution_intf.S
+
+module Make (M : Arg) : S

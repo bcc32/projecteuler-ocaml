@@ -4,7 +4,7 @@ open! Import
 let solution_commands =
   Euler_solutions.all
   |> List.map ~f:(fun m ->
-    let module M = (val m : Euler.Solution_intf.S) in
+    let module M = (val m : Euler.Solution.S) in
     M.command_name, M.command)
 ;;
 

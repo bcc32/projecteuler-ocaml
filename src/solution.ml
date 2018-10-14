@@ -1,6 +1,9 @@
 open! Core
 open! Import
 
+module type Arg = Solution_intf.Arg
+module type S = Solution_intf.S
+
 let time_unit f () =
   let start = Time_ns.now () in
   protect ~f ~finally:(fun () ->
@@ -8,7 +11,7 @@ let time_unit f () =
     print_s [%sexp (Time_ns.diff finish start : Time_ns.Span.t)])
 ;;
 
-module Make (M : Solution_intf.Arg) = struct
+module Make (M : Arg) : S = struct
   let command =
     let main =
       let open Command.Let_syntax in

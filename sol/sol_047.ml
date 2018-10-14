@@ -22,15 +22,18 @@ module M = struct
     in
     each_consecutive_4
     |> Sequence.find_map ~f:(function (a, apf), (_, bpf), (_, cpf), (_, dpf) ->
-      (* Ideally, we'd like to skip multiple 4-tuples immediately if, e.g.,
-         [apf <> 4]. *)
-      if apf = 4 && bpf = 4 && cpf = 4 && dpf = 4 then Some a else None)
+      (* Check [dpf] first à la Boyer-Moore:
+         https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm
+
+         Ideally, we'd like to skip multiple 4-tuples immediately if [dpf <>
+         4], but that's a bit harder to implement. *)
+      if dpf = 4 && cpf = 4 && bpf = 4 && apf = 4 then Some a else None)
     |> uw
     |> printf "%d\n"
   ;;
 
   (* 134043
-     210.016ms *)
+     192.31ms *)
 end
 
 include Solution.Make (M)

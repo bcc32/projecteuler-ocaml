@@ -9,8 +9,8 @@ let%test_unit "integrate" =
       ()
       ~method_:`Simpson's_rule
       ~f
-      ~low:(of_int 1)
-      ~high:(of_int 5)
+      ~lo:(of_int 1)
+      ~hi:(of_int 5)
       ~intervals:2
   in
   let expect =

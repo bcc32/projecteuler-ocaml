@@ -17,7 +17,7 @@ module M = struct
   ;;
 
   let concave_triangle_area n =
-    Numerics.Float.integrate () ~f:(height n) ~low:0. ~high:1. ~intervals:1000
+    Numerics.Float.integrate () ~f:(height n) ~lo:0. ~hi:1. ~intervals:1000
   ;;
 
   let main () =

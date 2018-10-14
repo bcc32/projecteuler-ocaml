@@ -25,11 +25,7 @@ let sqrt_group =
       ~init:1.0
   in
   let sqrt_bisect x =
-    Numerics.Float.bisect
-      ~f:(fun y -> Float.((y * y) - x))
-      ~epsilon:1e-12
-      ~low:1.0
-      ~high:x
+    Numerics.Float.bisect ~f:(fun y -> Float.((y * y) - x)) ~epsilon:1e-12 ~lo:1.0 ~hi:x
   in
   let nums = [ 1.0; 1.5; 2.0; 3.0; 100.0; 20_000.0 ] in
   let methods =

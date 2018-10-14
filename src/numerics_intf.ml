@@ -21,12 +21,14 @@ module type S = sig
   type real
   (* FIXME either rename to delta or make it a relative error *)
 
-  (** [bisect ~f ~epsilon ~low ~high] finds a solution [x] to the equation [f x = 0].
+  (** [bisect ~f ~epsilon ~lo ~hi] finds a solution [x] to the equation [f x =
+      0].
 
-      @return a value no farther than [epsilon] from a solution to [f x = 0]. *)
-  val bisect : f:(real -> real) -> epsilon:real -> low:real -> high:real -> real
+      @return a value in [[lo, hi]] no farther than [epsilon] from a solution to
+      [f x = 0]. *)
+  val bisect : f:(real -> real) -> epsilon:real -> lo:real -> hi:real -> real
 
-  (** Integrate [f] numerically on the interval (low, high), approximating with
+  (** Integrate [f] numerically on the interval (lo, hi), approximating with
       the given number of [intervals].
 
       @param method_ default is [`Simpson's_rule] *)
@@ -34,12 +36,10 @@ module type S = sig
     ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
     -> unit
     -> f:(real -> real)
-    -> low:real
-    -> high:real
+    -> lo:real
+    -> hi:real
     -> intervals:int
     -> real
-  (* TODO rename the two above to lo and hi or start and end_ *)
-
   (* FIXME consistent use of error in x or y *)
 
   (** [newton's_method ~f ~f' ~epsilon ~init] finds a solution [x] to the

@@ -4,7 +4,7 @@ open! Import
 module M = struct
   let problem =
     Custom
-      { number = 4
+      { number = 14
       ; tag = "memo"
       ; description = "slower method using hashtbl-memoized collatz_length"
       }

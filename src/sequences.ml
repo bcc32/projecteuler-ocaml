@@ -1,12 +1,7 @@
 open! Core
 open! Import
 
-(* FIXME this module needs a better name *)
-
-let digits_of_string n =
-  let zero = Char.to_int '0' in
-  String.to_list_rev n |> List.rev_map ~f:(fun c -> Char.to_int c - zero)
-;;
+let digits_of_string n = String.to_list_rev n |> List.rev_map ~f:Char.get_digit_exn
 
 let run_length_encode lst ~equal =
   let rec start lst ac =

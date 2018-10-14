@@ -24,6 +24,10 @@ module type S = sig
 
   include Monad.S with type 'a t := 'a t
 
+  (** [support t] returns a list of the possible outcomes described by the
+      distribution [t] *)
+  val support : 'k t -> 'k list
+
   (** [singleton k] returns a distribution whose support consists of a single
       element, [k], with probability 1. *)
   val singleton : 'k -> 'k t
@@ -51,6 +55,10 @@ module type S = sig
       distribution, by selecting elements from [d1] with probability [p1] and
       elements from [d2] with probability [1 - p1]. *)
   val combine : d1:'k t -> d2:'k t -> p1:prob -> 'k t
+
+  (** Same as [combine], but distinguishes between events from the different
+      distributions. *)
+  val combine' : d1:'a t -> d2:'b t -> p1:prob -> ('a, 'b) Either.t t
 
   (** [uniform ts] returns a distribution that selects uniformly from the
       distributions in [ts]. *)

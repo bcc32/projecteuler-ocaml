@@ -10,6 +10,7 @@ module Make (Prob : Prob) : S with type prob = Prob.t = struct
   type prob = Prob.t
 
   let one = Prob.of_int 1
+  let support = Map.keys
   let singleton key = Map.Poly.singleton key one
   let scale t x = Map.map t ~f:(fun p -> Prob.(p * x))
   let total t = Map.data t |> List.sum (module Prob) ~f:Fn.id
@@ -65,6 +66,12 @@ module Make (Prob : Prob) : S with type prob = Prob.t = struct
       let map = `Custom map
     end)
 
+  let combine' ~d1 ~d2 ~p1 =
+    merge
+      (scale (map d1 ~f:Either.first) p1)
+      (scale (map d2 ~f:Either.second) Prob.(one - p1))
+  ;;
+
   let cartesian_product t1 t2 =
     let open Let_syntax in
     let%bind k1 = t1 in
@@ -74,4 +81,13 @@ module Make (Prob : Prob) : S with type prob = Prob.t = struct
 end
 
 module Float = Make (Float)
+
+module Percent = Make (struct
+    include Percent
+
+    let of_int n = Percent.of_mult (float n)
+    let one = of_int 1
+    let ( / ) x y = Percent.of_mult (Percent.to_mult x /. Percent.to_mult y)
+  end)
+
 module Bignum = Make (Bignum)

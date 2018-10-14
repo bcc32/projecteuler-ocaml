@@ -2,6 +2,10 @@
 
 open! Core
 open! Import
-module Make (Prob : Distribution_intf.Prob) : Distribution_intf.S with type prob = Prob.t
-module Float : Distribution_intf.S with type prob = float
-module Bignum : Distribution_intf.S with type prob = Bignum.t
+
+module type Prob = Distribution_intf.Prob
+module type S = Distribution_intf.S
+
+module Make (Prob : Prob) : S with type prob = Prob.t
+module Float : S with type prob = float
+module Bignum : S with type prob = Bignum.t

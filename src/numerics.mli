@@ -2,6 +2,10 @@
 
 open! Core
 open! Import
-module Make (M : Numerics_intf.Real) : Numerics_intf.S with type real = M.t
-module Float : Numerics_intf.S with type real = float
-module Bignum : Numerics_intf.S with type real = Bignum.t
+
+module type Real = Numerics_intf.Real
+module type S = Numerics_intf.S
+
+module Make (M : Real) : S with type real = M.t
+module Float : S with type real = float
+module Bignum : S with type real = Bignum.t

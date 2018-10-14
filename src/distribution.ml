@@ -1,7 +1,10 @@
 open! Core
 open! Import
 
-module Make (Prob : Distribution_intf.Prob) = struct
+module type Prob = Distribution_intf.Prob
+module type S = Distribution_intf.S
+
+module Make (Prob : Prob) : S with type prob = Prob.t = struct
   (* FIXME See if you can avoid using [Map.Poly.t]. *)
   type 'key t = ('key, Prob.t) Map.Poly.t [@@deriving compare, sexp]
   type prob = Prob.t

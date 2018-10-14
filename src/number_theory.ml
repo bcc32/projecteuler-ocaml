@@ -1,7 +1,9 @@
 open! Core
 open! Import
 
-module Make (Integer : Int_intf.S_unbounded) = struct
+module type S = Number_theory_intf.S
+
+module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t = struct
   open Integer.O
 
   type integer = Integer.t [@@deriving sexp]

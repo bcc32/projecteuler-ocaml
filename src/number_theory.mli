@@ -2,9 +2,12 @@
 
 open! Core
 open! Import
-module Make (Int : Int_intf.S_unbounded) : Number_theory_intf.S with type integer = Int.t
-module Int : Number_theory_intf.S with type integer = int
-module Bigint : Number_theory_intf.S with type integer = Bigint.t
+
+module type S = Number_theory_intf.S
+
+module Make (Int : Int_intf.S_unbounded) : S with type integer = Int.t
+module Int : S with type integer = int
+module Bigint : S with type integer = Bigint.t
 
 (** [prime_sieve limit] uses the Sieve of Eratosthenes to determine which of
     [[0, n]] are prime.

@@ -1,12 +1,16 @@
 opam-version: "2.0"
-version: "0.3.0"
+synopsis: "Solutions to ProjectEuler problems in OCaml"
+description: """
+My solutions to ProjectEuler problems in OCaml.  Don't spoil yourself, please!
+"""
 maintainer: "Aaron L. Zeng <me@bcc32.com>"
 authors: "Aaron L. Zeng <me@bcc32.com>"
 homepage: "https://github.com/bcc32/projecteuler-ocaml"
 bug-reports: "https://github.com/bcc32/projecteuler-ocaml/issues"
 dev-repo: "git://github.com/bcc32/projecteuler-ocaml.git"
 build: [
-  ["dune" "build" "-p" name "-j" jobs]
+  ["dune" "subst"]                       {pinned}
+  ["dune" "build"   "-p" name "-j" jobs]
   ["dune" "runtest" "-p" name "-j" jobs] {with-test}
 ]
 depends: [

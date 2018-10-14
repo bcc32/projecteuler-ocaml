@@ -4,10 +4,16 @@ open! Import
 module M = struct
   let problem = Number 48
 
-  let modulus =
-    let ten = Bigint.of_int 10 in
-    Bigint.pow ten ten
-  ;;
+  module Bigint = struct
+    include Bigint
+
+    let modulus =
+      let ten = Bigint.of_int 10 in
+      Bigint.pow ten ten
+    ;;
+
+    let ( + ) a b = (a + b) % modulus
+  end
 
   let main () =
     let sum =
@@ -18,7 +24,7 @@ module M = struct
              let n = Bigint.of_int n in
              Bigint.pow n n)
     in
-    Bigint.(sum % modulus) |> printf !"%{Bigint}\n"
+    sum |> printf !"%{Bigint}\n"
   ;;
 end
 

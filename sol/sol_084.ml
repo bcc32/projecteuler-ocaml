@@ -313,6 +313,9 @@ module M = struct
     printf !"%{Game_state_dist#modal}\n" !g;
     print_s (Game_state_dist.sexp_of_square_dist !g)
   ;;
+
+  (* 101524
+     1.3696s *)
 end
 
 include Solution.Make (M)

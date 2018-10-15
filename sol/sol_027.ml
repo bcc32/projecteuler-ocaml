@@ -4,6 +4,12 @@ open! Import
 module M = struct
   let problem = Number 27
 
+  type answer =
+    { mutable a : int
+    ; mutable b : int
+    ; mutable number_of_primes : int
+    }
+
   let count_primes a b =
     let rec loop n count =
       if Number_theory.Int.is_prime ((n * n) + (a * n) + b)
@@ -14,22 +20,22 @@ module M = struct
   ;;
 
   let main () =
-    let max = ref None in
+    let answer = { a = 0; b = 0; number_of_primes = 0 } in
     for a = -999 to 999 do
-      for b = -999 to 999 do
-        match !max with
-        | None -> max := Some (a, b, count_primes a b)
-        | Some (_, _, primes') ->
-          let primes = count_primes a b in
-          if primes > primes' then max := Some (a, b, primes)
+      for b = -1000 to 1000 do
+        let primes = count_primes a b in
+        if primes > answer.number_of_primes
+        then (
+          answer.a <- a;
+          answer.b <- b;
+          answer.number_of_primes <- primes)
       done
     done;
-    let a, b, _ = uw !max in
-    printf "%d\n" (a * b)
+    printf "%d\n" (answer.a * answer.b)
   ;;
 
   (* -59231
-     926ms *)
+     625.911ms *)
 end
 
 include Solution.Make (M)

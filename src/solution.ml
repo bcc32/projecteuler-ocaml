@@ -15,8 +15,20 @@ module Make (M : Arg) : S = struct
   let command =
     let main =
       let open Command.Let_syntax in
-      let%map_open time = flag "-time" no_arg ~doc:" measure and print runtime" in
-      fun () -> if time then time_unit M.main () else M.main ()
+      let%map_open () = return ()
+      and debug = flag "-debug" no_arg ~doc:" enable debug/progress printing"
+      and time = flag "-time" no_arg ~doc:" measure and print runtime" in
+      fun () ->
+        (* re-exec self with [EULER_DEBUG] set *)
+        if debug && not Debug_printing.Export.debug
+        then
+          never_returns
+            (Unix.exec
+               ()
+               ~prog:Sys.executable_name
+               ~argv:(Array.to_list Sys.argv)
+               ~env:(`Extend [ "EULER_DEBUG", "1" ]));
+        if time then time_unit M.main () else M.main ()
     in
     let summary =
       match M.problem with

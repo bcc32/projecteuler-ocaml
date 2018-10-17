@@ -1,4 +1,4 @@
 open! Core
 open! Import
 
-val all : (module Euler.Solution.S) list
+val all : (module Solution.S) list

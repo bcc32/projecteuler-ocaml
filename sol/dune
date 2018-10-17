@@ -6,6 +6,7 @@
   core
   euler
   euler_data
+  euler_solution_helpers
   re)
  (preprocess (pps ppx_jane))
  (inline_tests)

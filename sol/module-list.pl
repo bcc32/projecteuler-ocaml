@@ -13,7 +13,7 @@ print <<HEADER;
 open! Core
 open! Import
 
-let all : (module Euler.Solution.S) list = [
+let all : (module Solution.S) list = [
 HEADER
 
 say "  (module $_);" for sort @modules;

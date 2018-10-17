@@ -1,1 +1,4 @@
-include Euler.Solution.S
+open! Core
+open! Import
+
+include Solution.S

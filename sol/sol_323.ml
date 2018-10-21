@@ -21,7 +21,7 @@ module M = struct
       if n = 32
       then 0.0
       else
-        Hashtbl.find_or_add cache n ~default:(fun () ->
+        Hashtbl.findi_or_add cache n ~default:(fun n ->
           let e = ref 1. in
           (* E[n] = 1 + P[n] E[n] + P[n + 1]E[n + 1] + ... + P[32]E[32] *)
           (* E[n] = (P[n + 1]E[n + 1] + ... + P[32]E[32]) / (1 - P[n]) *)
@@ -33,7 +33,8 @@ module M = struct
 
   let main () = printf "%.10f\n" @@ expectation_to_32 0
 
-  (* 6.3551758451 4.3ms *)
+  (* 6.3551758451
+     0.747ms *)
 end
 
 include Solution.Make (M)

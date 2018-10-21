@@ -45,7 +45,7 @@ let%test_unit _ =
 
 let phi =
   let cache = Int.Table.create () in
-  fun n -> Hashtbl.find_or_add cache n ~default:(fun () -> Number_theory.Int.totient n)
+  fun n -> Hashtbl.findi_or_add cache n ~default:Number_theory.Int.totient
 ;;
 
 let f n m = g (phi n) n (phi m) m

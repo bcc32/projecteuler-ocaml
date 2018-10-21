@@ -15,7 +15,7 @@ module M = struct
   let rec collatz_length =
     let cache = Int.Table.create () in
     fun n ->
-      Int.Table.find_or_add cache n ~default:(fun () ->
+      Int.Table.findi_or_add cache n ~default:(fun n ->
         match n with
         | 1 -> 1
         | n -> 1 + collatz_length (collatz n))
@@ -28,6 +28,9 @@ module M = struct
     |> Option.value_exn
     |> printf "%d\n"
   ;;
+
+  (* 837799
+     3.37354s *)
 end
 
 include Solution.Make (M)

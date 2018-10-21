@@ -11,7 +11,7 @@ module M = struct
 
   let sum_proper_divisors =
     let cache = Int.Table.create () in
-    fun n -> Hashtbl.find_or_add cache n ~default:(fun () -> sum_proper_divisors n)
+    fun n -> Hashtbl.findi_or_add cache n ~default:sum_proper_divisors
   ;;
 
   let amicable n =
@@ -25,6 +25,9 @@ module M = struct
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
+
+  (* 31626
+     20.397ms *)
 end
 
 include Solution.Make (M)

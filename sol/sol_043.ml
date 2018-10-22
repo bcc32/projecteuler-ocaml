@@ -23,7 +23,7 @@ module M = struct
     let sum = ref 0 in
     let rec loop () =
       if check_digits digits
-      then sum := !sum + Number_theory.Int.int_of_digits (Array.to_sequence digits);
+      then sum := !sum + Number_theory.Int.int_of_digits (Array.to_sequence_mutable digits);
       if Sequences.next_permutation_inplace digits ~compare:Int.compare then loop ()
     in
     loop ();

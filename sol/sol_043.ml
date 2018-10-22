@@ -1,37 +1,49 @@
 open! Core
 open! Import
 
+let is_div d1 d2 d3 p = ((100 * d1) + (10 * d2) + d3) mod p = 0
+
+let follows ~requirements digit digits =
+  match requirements.(digit) with
+  | None -> true
+  | Some modulus
+    when is_div digits.(digit - 2) digits.(digit - 1) digits.(digit) modulus -> true
+  | _ -> false
+;;
+
+let rec iter digit digits ~is_used ~requirements ~f =
+  if digit >= Array.length requirements
+  then f (digits |> Array.to_sequence_mutable |> Number_theory.Int.int_of_digits)
+  else
+    for d = 0 to 9 do
+      digits.(digit) <- d;
+      if not is_used.(d) && follows ~requirements digit digits
+      then (
+        is_used.(d) <- true;
+        iter (digit + 1) digits ~is_used ~requirements ~f;
+        is_used.(d) <- false)
+    done
+;;
+
+let sum_pandigital () =
+  let sum = ref 0 in
+  let digits = Array.create ~len:10 0 in
+  let is_used = Array.create ~len:10 false in
+  let requirements =
+    [| None; None; None; Some 2; Some 3; Some 5; Some 7; Some 11; Some 13; Some 17 |]
+  in
+  iter 0 digits ~is_used ~requirements ~f:(fun n ->
+    if debug then Debug.eprintf "%d" n;
+    sum := !sum + n);
+  !sum
+;;
+
 module M = struct
   let problem = Number 43
-
-  let check_digits d =
-    let is_div d1 d2 d3 p = ((100 * d1) + (10 * d2) + d3) mod p = 0 in
-    match d with
-    | [| _d1; d2; d3; d4; d5; d6; d7; d8; d9; d10 |] ->
-      is_div d2 d3 d4 2
-      && is_div d3 d4 d5 3
-      && is_div d4 d5 d6 5
-      && is_div d5 d6 d7 7
-      && is_div d6 d7 d8 11
-      && is_div d7 d8 d9 13
-      && is_div d8 d9 d10 17
-    | _ -> invalid_arg "wrong number of digits"
-  ;;
-
-  let main () =
-    let digits = List.range 0 10 |> Array.of_list in
-    let sum = ref 0 in
-    let rec loop () =
-      if check_digits digits
-      then sum := !sum + Number_theory.Int.int_of_digits (Array.to_sequence_mutable digits);
-      if Sequences.next_permutation_inplace digits ~compare:Int.compare then loop ()
-    in
-    loop ();
-    printf "%d\n" !sum
-  ;;
+  let main () = sum_pandigital () |> printf "%d\n"
 
   (* 16695334890
-     694.092ms *)
+     2.789ms *)
 end
 
 include Solution.Make (M)

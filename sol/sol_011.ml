@@ -5,15 +5,7 @@ module M = struct
   let problem = Number 11
   let size = 20
   let product_size = 4
-
-  let grid =
-    lazy
-      (Problem_011.data
-       |> String.split_lines
-       |> List.map ~f:(fun line ->
-         String.split line ~on:' ' |> List.map ~f:Int.of_string |> List.to_array)
-       |> List.to_array)
-  ;;
+  let grid = lazy (Problem_011.data |> Parse.space_separated_grid)
 
   let horizontal_products grid =
     Array.to_sequence grid

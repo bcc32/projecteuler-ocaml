@@ -3,19 +3,7 @@ open! Import
 
 module M = struct
   let problem = Number 42
-
-  let word_regexp =
-    lazy
-      (let open Re in
-       compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ]))
-  ;;
-
-  let words =
-    lazy
-      (Problem_042.data
-       |> Re.all (force word_regexp)
-       |> List.map ~f:(fun groups -> Re.get groups 1))
-  ;;
+  let words = lazy (Problem_042.data |> Parse.comma_separated_quoted_words)
 
   let word_value word =
     let letter_value letter = Char.to_int letter - Char.to_int 'A' + 1 in

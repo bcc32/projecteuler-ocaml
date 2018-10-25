@@ -14,7 +14,8 @@
  (action (diff dune.inc dune.inc.gen)))
 
 (library
- (name euler_data))
+ (name euler_data)
+ (libraries core re))
 
 (rule
  (targets euler_data.ml)

@@ -4,17 +4,10 @@ open! Import
 module M = struct
   let problem = Number 22
 
-  let name_regexp =
-    lazy
-      (let open Re in
-       compile (seq [ char '"'; group (non_greedy (rep1 upper)); char '"' ]))
-  ;;
-
   let names =
     lazy
       (Problem_022.data
-       |> Re.all (force name_regexp)
-       |> List.map ~f:(fun groups -> Re.get groups 1)
+       |> Parse.comma_separated_quoted_words
        |> List.sort ~compare:String.compare)
   ;;
 

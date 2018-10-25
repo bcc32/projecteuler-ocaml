@@ -1,6 +1,8 @@
 open! Core
 open! Import
 
+(* TODO: After solving 110, see if the below can be made faster. *)
+
 module M = struct
   let problem = Number 108
 
@@ -14,8 +16,9 @@ module M = struct
   ;;
 
   let main () =
-    let rec loop n = if num_solutions n > 1000 then n else loop (n + 1) in
-    loop 1 |> printf "%d\n"
+    Number_theory.Int.natural_numbers () ~init:1
+    |> Sequence.find_exn ~f:(fun n -> num_solutions n > 1000)
+    |> printf "%d\n"
   ;;
 
   (* 180180

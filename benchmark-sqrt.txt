@@ -1,0 +1,23 @@
+Estimated testing time 3m (18 benchmarks x 10s). Change using -quota SECS.
+┌──────────────────────────────────────┬──────────┬─────────┬────────────┐
+│ Name                                 │ Time/Run │ mWd/Run │ Percentage │
+├──────────────────────────────────────┼──────────┼─────────┼────────────┤
+│ sqrt/Newton's method/1.              │   7.83ns │   8.00w │      1.58% │
+│ sqrt/Newton's method/1.5             │  46.39ns │  32.00w │      9.34% │
+│ sqrt/Newton's method/2.              │  59.44ns │  38.00w │     11.97% │
+│ sqrt/Newton's method/3.              │  59.88ns │  38.00w │     12.06% │
+│ sqrt/Newton's method/100.            │ 127.37ns │  56.00w │     25.65% │
+│ sqrt/Newton's method/20000.          │ 182.20ns │  80.00w │     36.69% │
+│ sqrt/bisection/1.                    │  12.18ns │  16.00w │      2.45% │
+│ sqrt/bisection/1.5                   │ 331.66ns │ 250.00w │     66.80% │
+│ sqrt/bisection/2.                    │ 363.36ns │ 256.00w │     73.18% │
+│ sqrt/bisection/3.                    │ 349.09ns │ 262.00w │     70.31% │
+│ sqrt/bisection/100.                  │ 408.88ns │ 298.01w │     82.35% │
+│ sqrt/bisection/20000.                │ 496.53ns │ 346.01w │    100.00% │
+│ sqrt/built-in [sqrt] function/1.     │   3.02ns │   2.00w │      0.61% │
+│ sqrt/built-in [sqrt] function/1.5    │   5.97ns │   2.00w │      1.20% │
+│ sqrt/built-in [sqrt] function/2.     │   5.97ns │   2.00w │      1.20% │
+│ sqrt/built-in [sqrt] function/3.     │   5.97ns │   2.00w │      1.20% │
+│ sqrt/built-in [sqrt] function/100.   │   5.98ns │   2.00w │      1.20% │
+│ sqrt/built-in [sqrt] function/20000. │   5.96ns │   2.00w │      1.20% │
+└──────────────────────────────────────┴──────────┴─────────┴────────────┘

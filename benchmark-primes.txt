@@ -1,0 +1,15 @@
+Estimated testing time 1.33333m (8 benchmarks x 10s). Change using -quota SECS.
+┌────────────────────────────────────┬──────────────┬────────────────┬───────────────┬──────────┬────────────┐
+│ Name                               │     Time/Run │        mWd/Run │      mjWd/Run │ Prom/Run │ Percentage │
+├────────────────────────────────────┼──────────────┼────────────────┼───────────────┼──────────┼────────────┤
+│ primes/Sequence.t/1000             │     105.19us │     12_346.62w │         0.71w │    0.71w │      0.03% │
+│ primes/Sequence.t/10000            │   1_432.16us │    116_991.77w │         6.69w │    6.69w │      0.38% │
+│ primes/Sequence.t/100000           │  22_080.75us │  1_139_115.67w │        33.65w │   33.65w │      5.85% │
+│ primes/Sequence.t/1000000          │ 377_517.75us │ 11_197_297.15w │       266.96w │  266.96w │    100.00% │
+│ primes/Eratosthenes' sieve/1000    │       6.74us │         12.01w │     1_002.00w │          │            │
+│ primes/Eratosthenes' sieve/10000   │      69.13us │         12.07w │    10_002.00w │          │      0.02% │
+│ primes/Eratosthenes' sieve/100000  │     831.57us │         12.67w │   100_002.01w │          │      0.22% │
+│ primes/Eratosthenes' sieve/1000000 │  11_907.56us │         14.40w │ 1_000_002.01w │          │      3.15% │
+└────────────────────────────────────┴──────────────┴────────────────┴───────────────┴──────────┴────────────┘
+Benchmarks that take 1ns to 100ms can be estimated precisely. For more reliable 
+estimates, redesign your benchmark to have a shorter execution time.

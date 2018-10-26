@@ -1,0 +1,27 @@
+Estimated testing time 3.66667m (22 benchmarks x 10s). Change using -quota SECS.
+┌──────────────────────────────────────────────────────────┬──────────┬────────────┐
+│ Name                                                     │ Time/Run │ Percentage │
+├──────────────────────────────────────────────────────────┼──────────┼────────────┤
+│ integer exponentiation/Int.pow:0                         │   8.14ns │     74.26% │
+│ integer exponentiation/Int.pow:1                         │   8.67ns │     79.05% │
+│ integer exponentiation/Int.pow:2                         │   8.67ns │     79.05% │
+│ integer exponentiation/Int.pow:4                         │  10.16ns │     92.60% │
+│ integer exponentiation/Int.pow:5                         │  10.15ns │     92.59% │
+│ integer exponentiation/Int.pow:10                        │  10.15ns │     92.60% │
+│ integer exponentiation/Int.pow:15                        │  10.16ns │     92.62% │
+│ integer exponentiation/Int.pow:20                        │  10.97ns │     99.99% │
+│ integer exponentiation/Int.pow:25                        │  10.95ns │     99.87% │
+│ integer exponentiation/Int.pow:30                        │  10.97ns │    100.00% │
+│ integer exponentiation/pow_fast without functor:0        │   2.67ns │     24.39% │
+│ integer exponentiation/pow_fast without functor:1        │   2.68ns │     24.45% │
+│ integer exponentiation/pow_fast without functor:2        │   2.67ns │     24.38% │
+│ integer exponentiation/pow_fast without functor:4        │   2.67ns │     24.38% │
+│ integer exponentiation/pow_fast without functor:5        │   2.68ns │     24.41% │
+│ integer exponentiation/pow_fast without functor:10       │   2.68ns │     24.43% │
+│ integer exponentiation/pow_fast without functor:15       │   2.68ns │     24.43% │
+│ integer exponentiation/pow_fast without functor:20       │   2.68ns │     24.42% │
+│ integer exponentiation/pow_fast without functor:25       │   2.68ns │     24.44% │
+│ integer exponentiation/pow_fast without functor:30       │   2.67ns │     24.36% │
+│ integer exponentiation/Int.pow const(5)                  │   7.13ns │     64.99% │
+│ integer exponentiation/pow_fast without functor const(5) │   2.08ns │     18.95% │
+└──────────────────────────────────────────────────────────┴──────────┴────────────┘

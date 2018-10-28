@@ -8,6 +8,10 @@ let space_separated_grid string =
     String.split line ~on:' ' |> Array.of_list_map ~f:Int.of_string)
 ;;
 
+let comma_separated_integers line =
+  String.split line ~on:',' |> List.map ~f:Int.of_string
+;;
+
 let comma_separated_quoted_words string =
   let word =
     Re.compile

@@ -29,6 +29,11 @@
  (action (with-stdout-to %{targets} (run ./gen-problem.sh 042))))
 
 (rule
+ (targets problem_059.ml)
+ (deps "059.txt")
+ (action (with-stdout-to %{targets} (run ./gen-problem.sh 059))))
+
+(rule
  (targets problem_067.ml)
  (deps "067.txt")
  (action (with-stdout-to %{targets} (run ./gen-problem.sh 067))))

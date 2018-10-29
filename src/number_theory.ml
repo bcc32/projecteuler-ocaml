@@ -509,4 +509,8 @@ let%test_unit "addition_chain_pow vs. Int.pow" =
     [%test_result: int] (addition_chain_pow_int b e) ~expect:(Int.pow b e))
 ;;
 
+let[@inline always] addition_chain_pow_bigint b e =
+  addition_chain_pow b e ~one:Bigint.one ~mul:Bigint.( * )
+;;
+
 include Premade

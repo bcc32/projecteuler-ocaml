@@ -6,8 +6,6 @@ open! Import
 module type S = Number_theory_intf.S
 
 module Make (Int : Int_intf.S_unbounded) : S with type integer = Int.t
-module Int : S with type integer = int
-module Bigint : S with type integer = Bigint.t
 
 (** [prime_sieve limit] uses the Sieve of Eratosthenes to determine which of
     [[0, n]] are prime.
@@ -35,3 +33,9 @@ val addition_chain_pow : one:'a -> mul:('a -> 'a -> 'a) -> 'a -> int -> 'a
 
 (** [addition_chain_pow] specialized for ints. *)
 val addition_chain_pow_int : int -> int -> int
+
+(** [addition_chain_pow] specialized for [Bigint.t]. *)
+val addition_chain_pow_bigint : Bigint.t -> int -> Bigint.t
+
+module Int : S with type integer = int
+module Bigint : S with type integer = Bigint.t

@@ -12,7 +12,7 @@ module M = struct
   let main () =
     fibs 4000000
     |> List.filter ~f:(fun x -> x mod 2 = 0)
-    |> List.fold ~init:0 ~f:( + )
+    |> List.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
 end

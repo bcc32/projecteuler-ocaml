@@ -17,7 +17,7 @@ module M = struct
   let main () =
     let names = force names in
     List.mapi names ~f:(fun i name -> name_score name * (i + 1))
-    |> List.fold ~init:0 ~f:( + )
+    |> List.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
 

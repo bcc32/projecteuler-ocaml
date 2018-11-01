@@ -3,16 +3,18 @@ open! Import
 
 module M = struct
   let problem = Number 52
+  let count_digits = Number_theory.Int.fold_digits ~init:0 ~f:(fun ac _ -> ac + 1)
 
   let same_digits n =
     let sort_digits n =
       Number_theory.Int.digits_of_int n |> List.sort ~compare:Int.compare
     in
     let n_digits = sort_digits n in
-    List.range 2 6 ~stop:`inclusive
-    |> List.map ~f:(( * ) n)
-    |> List.map ~f:sort_digits
-    |> List.for_all ~f:(List.equal ~equal:Int.equal n_digits)
+    count_digits (n * 6) = List.length n_digits
+    && List.range 2 6 ~stop:`inclusive
+       |> List.map ~f:(( * ) n)
+       |> List.map ~f:sort_digits
+       |> List.for_all ~f:(List.equal ~equal:Int.equal n_digits)
   ;;
 
   let main () =
@@ -21,6 +23,9 @@ module M = struct
     |> Option.value_exn
     |> printf "%d\n"
   ;;
+
+  (* 142857
+     138.157ms *)
 end
 
 include Solution.Make (M)

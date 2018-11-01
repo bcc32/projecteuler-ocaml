@@ -17,20 +17,23 @@ let decrypt ciphertext ~key =
   Bytes.unsafe_to_string ~no_mutation_while_string_reachable:plaintext
 ;;
 
-let iter_keys ~f =
-  let key = Bytes.create 3 in
-  List.iter Char.all ~f:(fun c ->
-    Bytes.unsafe_set key 0 c;
-    List.iter Char.all ~f:(fun c ->
-      Bytes.unsafe_set key 1 c;
-      List.iter Char.all ~f:(fun c ->
-        Bytes.unsafe_set key 2 c;
-        f (Bytes.unsafe_to_string ~no_mutation_while_string_reachable:key))))
-;;
+let key_length = 3
+let ( lxor ) a b = Char.unsafe_of_int (Char.to_int a lxor Char.to_int b)
+let is_english_char char = Char.is_alpha char || Char.is_whitespace char
 
-let count_english =
-  let is_english_char char = Char.is_alpha char || Char.is_whitespace char in
-  String.count ~f:is_english_char
+let best_key_char ~key_index ~ciphertext =
+  let ciphertext =
+    Bytes.unsafe_to_string ~no_mutation_while_string_reachable:ciphertext
+  in
+  List.map Char.all ~f:(fun c ->
+    ( c
+    , String.foldi ciphertext ~init:0 ~f:(fun i ac x ->
+        if i mod key_length = key_index && is_english_char (c lxor x)
+        then ac + 1
+        else ac) ))
+  |> List.max_elt ~compare:(Comparable.lift Int.compare ~f:snd)
+  |> uw
+  |> fst
 ;;
 
 module M = struct
@@ -43,21 +46,16 @@ module M = struct
       |> List.map ~f:Char.of_int_exn
       |> Bytes.of_char_list
     in
-    let max_english = ref 0 in
-    let max_english_plaintext = ref "" in
-    iter_keys ~f:(fun key ->
-      let plaintext = decrypt ciphertext ~key in
-      let english_chars = count_english plaintext in
-      if english_chars > !max_english
-      then (
-        max_english := english_chars;
-        max_english_plaintext := plaintext));
-    if debug then Debug.eprint_s [%sexp (!max_english_plaintext : string)];
-    !max_english_plaintext |> String.sum (module Int) ~f:Char.to_int |> printf "%d\n"
+    let a = best_key_char ~ciphertext ~key_index:0 in
+    let b = best_key_char ~ciphertext ~key_index:1 in
+    let c = best_key_char ~ciphertext ~key_index:2 in
+    let plaintext = decrypt ciphertext ~key:(String.of_char_list [ a; b; c ]) in
+    if debug then Debug.eprint_s [%sexp (plaintext : string)];
+    plaintext |> String.sum (module Int) ~f:Char.to_int |> printf "%d\n"
   ;;
 
   (* 107359
-     6.52568m *)
+     7.376ms *)
 end
 
 include Solution.Make (M)

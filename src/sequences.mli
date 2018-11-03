@@ -43,3 +43,11 @@ val prev_permutation_inplace : 'a array -> compare:('a -> 'a -> int) -> bool
     lexicographic order, starting with sorted ascending and ending with sorted
     descending. *)
 val permutations : 'a list -> compare:('a -> 'a -> int) -> 'a list Sequence.t
+
+(** [iter_permutations xs ~f] calls [f] with a read-only view of each
+    permutation of [xs]. *)
+val iter_permutations :
+  'a list
+  -> compare:('a -> 'a -> int)
+  -> f:(('a, read) Array.Permissioned.t -> unit)
+  -> unit

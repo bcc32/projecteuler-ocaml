@@ -44,10 +44,8 @@ let next_permutation_inplace a ~compare =
     false)
 ;;
 
-let reverse compare a b = compare b a
-
 let prev_permutation_inplace a ~compare =
-  next_permutation_inplace a ~compare:(reverse compare)
+  next_permutation_inplace a ~compare:(fun a b -> compare b a)
 ;;
 
 let permutations list ~compare =
@@ -62,4 +60,14 @@ let permutations list ~compare =
       else None)
   in
   Sequence.shift_right next_permutations init
+;;
+
+let iter_permutations list ~compare ~f =
+  let sequence = Array.of_list list in
+  Array.sort sequence ~compare;
+  let rec loop () =
+    f (Array.Permissioned.of_array_id sequence);
+    if next_permutation_inplace sequence ~compare then loop ()
+  in
+  loop ()
 ;;

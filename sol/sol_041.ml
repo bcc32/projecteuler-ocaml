@@ -7,17 +7,13 @@ module M = struct
   let main () =
     with_return (fun { return } ->
       for n = 9 downto 0 do
-        let digits = Array.init n ~f:(fun i -> n - i) in
-        let rec loop () =
+        let digits = List.init n ~f:(fun i -> n - i) in
+        Sequences.iter_permutations digits ~compare:Int.descending ~f:(fun digits ->
           let n =
-            Array.to_sequence_mutable digits |> Number_theory.Int.int_of_digits
+            Array.Permissioned.to_sequence_mutable digits
+            |> Number_theory.Int.int_of_digits
           in
-          if Number_theory.Int.is_prime n
-          then return n
-          else if Sequences.next_permutation_inplace digits ~compare:Int.descending
-          then loop ()
-        in
-        loop ()
+          if Number_theory.Int.is_prime n then return n)
       done;
       assert false)
     |> printf "%d\n"

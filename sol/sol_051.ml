@@ -1,89 +1,110 @@
 open! Core
 open! Import
 
-(* Consider each digit in a pattern as either 0-9 or a wildcard.  We can model
-   this as base-11 numbers where digit A represents a wildcard. *)
-module Pattern : sig
-  type t [@@deriving sexp_of]
+let all_same n mask =
+  let rec loop n prev mask =
+    if n = 0
+    then true
+    else (
+      let digit = n mod 10 in
+      if mask land 1 <> 0
+      then (prev = -1 || prev = digit) && loop (n / 10) digit (mask lsr 1)
+      else loop (n / 10) prev (mask lsr 1))
+  in
+  loop n (-1) mask
+;;
 
-  val all : t Sequence.t
-  val instances : t -> int list
-end = struct
-  type t = int list
+(* TODO make mask a type *)
+(* masked numbers are ints in base-11 where digit A represents a masked digit *)
+let sexp_of_mask mask =
+  Number_theory.Int.to_digits mask ~base:11
+  |> List.rev_map ~f:(function
+    | 10 -> "?"
+    | n -> Int.to_string n)
+  |> String.concat
+  |> Sexp.Atom
+;;
 
-  (* digits *)
+let apply_mask n mask =
+  let rec loop n mask acc =
+    if n = 0
+    then acc
+    else (
+      let digit = if mask land 1 <> 0 then 10 else n mod 10 in
+      loop (n / 10) (mask lsr 1) ((11 * acc) + digit))
+  in
+  loop n mask 0
+;;
 
-  let sexp_of_t t =
-    List.map t ~f:(function
-      | 10 -> "?"
-      | n -> Int.to_string n)
-    |> String.concat
-    |> Sexp.Atom
-  ;;
+let iter_masked n ~digits ~f =
+  for mask = 0 to (1 lsl digits) - 1 do
+    if all_same n mask then f (apply_mask n mask)
+  done
+;;
 
-  let all =
-    Number_theory.Int.natural_numbers ()
-    |> Sequence.filter_map ~f:(fun pattern ->
-      let digits = Number_theory.Int.to_digits pattern ~base:11 in
-      Option.some_if (List.mem digits 10 ~equal:Int.equal) digits)
-  ;;
+let%expect_test "iter_masked" =
+  iter_masked 121313 ~digits:6 ~f:(printf !"%{sexp: mask}\n");
+  [%expect
+    {|
+    121313
+    12131?
+    1213?3
+    121?13
+    121?1?
+    12?313
+    12?3?3
+    1?1313
+    ?21313
+    ?213?3
+    ?2?313
+    ?2?3?3 |}]
+;;
 
-  let replace_wildcards t ~fill_digit =
-    List.fold t ~init:0 ~f:(fun acc -> function
-      | 10 -> (10 * acc) + fill_digit
+let fill_mask mask =
+  let fill mask digit =
+    Number_theory.Int.fold_digits mask ~base:11 ~init:0 ~f:(fun acc d ->
+      match d with
+      | 10 -> (10 * acc) + digit
       | n -> (10 * acc) + n)
-  ;;
-
-  let instances t =
-    match t with
-    | 10 :: _ ->
-      (* avoid leading zero *)
-      List.init 9 ~f:(fun fill_digit_minus_one ->
-        replace_wildcards t ~fill_digit:(fill_digit_minus_one + 1))
-    | t -> List.init 10 ~f:(fun fill_digit -> replace_wildcards t ~fill_digit)
-  ;;
-end
-
-module Prime_sieve = struct
-  type t =
-    { mutable upper_limit : int
-    ; mutable is_prime : bool array
-    }
-
-  let create () = { upper_limit = 1; is_prime = [| false; false |] }
-
-  let rec is_prime t n =
-    if n > t.upper_limit
-    then (
-      let old_size = t.upper_limit in
-      let new_size = old_size * 10 in
-      let new_sieve = Number_theory.prime_sieve new_size in
-      t.upper_limit <- new_size;
-      t.is_prime <- new_sieve;
-      is_prime t n)
-    else t.is_prime.(n)
-  ;;
-end
+  in
+  List.init 10 ~f:(fill mask)
+;;
 
 module M = struct
   let problem = Number 51
   let threshold = 8
 
   let main () =
-    let sieve = Prime_sieve.create () in
-    Pattern.all
-    |> Sequence.find_map ~f:(fun pattern ->
-      if debug then Debug.eprint_s [%sexp (pattern : Pattern.t)];
-      let instances = Pattern.instances pattern in
-      if List.count instances ~f:(Prime_sieve.is_prime sieve) >= threshold
-      then Some (List.hd_exn instances)
-      else None)
-    |> uw
-    |> printf "%d\n"
+    let rec loop digits =
+      let mask_counts = Int.Table.create () in
+      let is_prime = Number_theory.prime_sieve (Int.pow 10 digits) in
+      for p = Int.pow 10 (digits - 1) to Int.pow 10 digits - 1 do
+        if is_prime.(p)
+        then
+          iter_masked p ~digits ~f:(fun masked_int -> Hashtbl.incr mask_counts masked_int)
+      done;
+      match
+        with_return_option (fun { return } ->
+          Hashtbl.iteri mask_counts ~f:(fun ~key:mask ~data:count ->
+            if count >= threshold
+            then (
+              let primes =
+                fill_mask mask |> List.filter ~f:(fun n -> is_prime.(n))
+              in
+              if debug
+              then (
+                Debug.eprint_s [%sexp (mask : mask)];
+                Debug.eprint_s [%sexp (primes : int list)]);
+              primes |> List.min_elt ~compare:Int.compare |> uw |> return)))
+      with
+      | None -> loop (digits + 1)
+      | Some lowest -> printf "%d\n" lowest
+    in
+    loop 1
   ;;
 
   (* 121313
-     1.29861s *)
+     720.07ms *)
 end
 
 include Solution.Make (M)

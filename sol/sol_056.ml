@@ -13,6 +13,9 @@ module M = struct
     |> Option.value_exn
     |> printf !"%{Bigint}\n"
   ;;
+
+  (* 972
+     134.391ms *)
 end
 
 include Solution.Make (M)

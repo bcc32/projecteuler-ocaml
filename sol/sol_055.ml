@@ -24,6 +24,9 @@ module M = struct
     |> Sequence.count ~f:is_lychrel
     |> printf "%d\n"
   ;;
+
+  (* 249
+     38.775ms *)
 end
 
 include Solution.Make (M)

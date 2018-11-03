@@ -23,6 +23,9 @@ module M = struct
     |> Sequence.count ~f:is_more_num_digits
     |> printf "%d\n"
   ;;
+
+  (* 153
+     19.716ms *)
 end
 
 include Solution.Make (M)

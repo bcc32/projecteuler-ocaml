@@ -5,7 +5,7 @@ module M = struct
   let problem = Number 11
   let size = 20
   let product_size = 4
-  let grid = lazy (Problem_011.data |> Parse.space_separated_grid)
+  let grid = lazy (Problem_011.data |> Parse.space_separated_grid ~conv:Int.of_string)
 
   let horizontal_products grid =
     Array.to_sequence grid

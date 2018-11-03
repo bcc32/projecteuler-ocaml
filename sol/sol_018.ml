@@ -26,7 +26,7 @@ module M = struct
   let problem = Number 18
 
   let main () =
-    let triangle = Parse.space_separated_grid Problem_018.data in
+    let triangle = Parse.space_separated_grid Problem_018.data ~conv:Int.of_string in
     max_sum_exn triangle |> printf "%d\n"
   ;;
 

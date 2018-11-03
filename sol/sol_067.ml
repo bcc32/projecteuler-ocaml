@@ -6,7 +6,7 @@ module M = struct
 
   let main () =
     Problem_067.data
-    |> Parse.space_separated_grid
+    |> Parse.space_separated_grid ~conv:Int.of_string
     |> Sol_018.max_sum_exn
     |> printf "%d\n"
   ;;

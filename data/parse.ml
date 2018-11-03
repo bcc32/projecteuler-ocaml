@@ -1,11 +1,11 @@
 open! Core
 open! Import
 
-let space_separated_grid string =
+let space_separated_grid string ~conv =
   string
   |> String.split_lines
   |> Array.of_list_map ~f:(fun line ->
-    String.split line ~on:' ' |> Array.of_list_map ~f:Int.of_string)
+    String.split line ~on:' ' |> Array.of_list_map ~f:conv)
 ;;
 
 let comma_separated_integers line =

@@ -3,7 +3,7 @@ open! Import
 
 module M = struct
   let problem =
-    Custom { number = 10; tag = "seq"; description = "using primes Sequence.t" }
+    Tagged { number = 10; tag = "seq"; description = "using primes Sequence.t" }
   ;;
 
   let main () =

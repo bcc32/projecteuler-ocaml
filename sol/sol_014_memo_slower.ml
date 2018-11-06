@@ -3,7 +3,7 @@ open! Import
 
 module M = struct
   let problem =
-    Custom
+    Tagged
       { number = 14
       ; tag = "memo"
       ; description = "slower method using hashtbl-memoized collatz_length"

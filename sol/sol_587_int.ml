@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 module M = struct
-  let problem = Custom { number = 587; tag = "int"; description = "integration" }
+  let problem = Tagged { number = 587; tag = "int"; description = "integration" }
 
   (* fix the circle radius to be 1 *)
   let l_section_area = Float.(1. - (pi / 4.))

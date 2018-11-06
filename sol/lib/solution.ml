@@ -33,8 +33,9 @@ module Make (M : Arg) : S = struct
     let summary =
       match M.problem with
       | Number n -> sprintf "Problem %d" n
-      | Custom { number; tag = _; description } ->
+      | Tagged { number; tag = _; description } ->
         sprintf "Problem %d (%s)" number description
+      | Custom { name = _; description } -> description
     in
     Command.basic main ~summary
   ;;
@@ -42,6 +43,7 @@ module Make (M : Arg) : S = struct
   let command_name =
     match M.problem with
     | Number n -> Int.to_string n
-    | Custom { number; tag; description = _ } -> sprintf "%d-%s" number tag
+    | Tagged { number; tag; description = _ } -> sprintf "%d-%s" number tag
+    | Custom { name; description = _ } -> name
   ;;
 end

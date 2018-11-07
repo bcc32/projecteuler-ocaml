@@ -22,7 +22,7 @@ let%expect_test "g(3, 4, 4, 6)" =
 ;;
 
 let%test_unit _ =
-  let limit = 50 in
+  let limit = 25 in
   let max_result = limit * limit in
   let gen =
     let open Quickcheck.Generator.Let_syntax in

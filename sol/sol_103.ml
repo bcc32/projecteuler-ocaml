@@ -51,7 +51,8 @@ let optimum_special_set n ~ubound =
 ;;
 
 let%expect_test _ =
-  for n = 1 to 6 do
+  let limit = 4 in  (* change to 6 to see the example from the problem *)
+  for n = 1 to limit do
     print_s [%message "" (n : int) (optimum_special_set n ~ubound:30 : int list)]
   done;
   [%expect
@@ -59,9 +60,7 @@ let%expect_test _ =
     ((n 1) ("optimum_special_set n ~ubound:30" (1)))
     ((n 2) ("optimum_special_set n ~ubound:30" (2 1)))
     ((n 3) ("optimum_special_set n ~ubound:30" (4 3 2)))
-    ((n 4) ("optimum_special_set n ~ubound:30" (7 6 5 3)))
-    ((n 5) ("optimum_special_set n ~ubound:30" (13 12 11 9 6)))
-    ((n 6) ("optimum_special_set n ~ubound:30" (25 22 20 19 18 11))) |}]
+    ((n 4) ("optimum_special_set n ~ubound:30" (7 6 5 3))) |}]
 ;;
 
 module M = struct

@@ -16,7 +16,7 @@ let%test_unit "singleton" =
 ;;
 
 let%test_unit "scale" =
-  Quickcheck.test gen_prob ~f:(fun p ->
+  Q.test gen_prob ~f:(fun p ->
     let d = D.scale (D.singleton 0) p in
     [%test_result: Bignum.t] ~expect:p (D.find_exn d 0))
 ;;
@@ -24,7 +24,7 @@ let%test_unit "scale" =
 let%test_unit "combine" =
   let d1 = D.singleton 1 in
   let d2 = D.singleton 2 in
-  Quickcheck.test gen_prob ~f:(fun p1 ->
+  Q.test gen_prob ~f:(fun p1 ->
     let d = D.combine ~d1 ~d2 ~p1 in
     [%test_result: Bignum.t] (D.find_exn d 1) ~expect:p1;
     [%test_result: Bignum.t] (D.find_exn d 2) ~expect:Bignum.(one - p1))
@@ -37,7 +37,7 @@ let%test_unit "monad laws" =
     D.combine ~p1 ~d1:(D.singleton x) ~d2:(D.singleton (-x))
   in
   let t = D.singleton 0 in
-  Quickcheck.test Int.gen ~f:(fun v ->
+  Q.test Int.gen ~f:(fun v ->
     let open D.Let_syntax in
     [%test_result: int D.t] (return v >>= f) ~expect:(f v);
     [%test_result: int D.t] (return v >>= g) ~expect:(g v);
@@ -63,10 +63,9 @@ let%test_unit "bind" =
 
 let%test_unit "uniform" =
   List.gen_non_empty gen_distribution
-  |> Quickcheck.test
-       ~trials:(Quickcheck.default_trial_count / 10)
+  |> Q.test
        ~sexp_of:[%sexp_of: int D.t list]
-       ~shrinker:(List.shrinker (Quickcheck.Shrinker.empty ()))
+       ~shrinker:(List.shrinker (Shr.empty ()))
        ~f:(fun ds ->
          let n = List.length ds in
          let d = D.uniform ds in
@@ -88,9 +87,8 @@ let%test_unit "uniform'" =
     let%map xs = List.gen_non_empty Int.gen in
     List.dedup_and_sort xs ~compare:Int.compare
   in
-  Quickcheck.test
+  Q.test
     gen
-    ~trials:(Quickcheck.default_trial_count / 10)
     ~sexp_of:[%sexp_of: int list]
     ~shrinker:(List.shrinker Int.shrinker)
     ~f:(fun ks ->
@@ -105,13 +103,9 @@ let%test_unit "uniform'" =
 
 let%test_unit "cartesian_product" =
   let gen = Gen.both gen_distribution gen_distribution in
-  Quickcheck.test
-    gen
-    ~trials:(Quickcheck.default_trial_count / 10)
-    ~sexp_of:[%sexp_of: int D.t * int D.t]
-    ~f:(fun (d1, d2) ->
-      let d = D.cartesian_product d1 d2 in
-      Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
-        Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
-          [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))))
+  Q.test gen ~sexp_of:[%sexp_of: int D.t * int D.t] ~f:(fun (d1, d2) ->
+    let d = D.cartesian_product d1 d2 in
+    Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
+      Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
+        [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))))
 ;;

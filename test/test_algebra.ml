@@ -16,7 +16,7 @@ let%test_unit "quadratic_formula" =
     and c = reasonable_ranges in
     a, b, c
   in
-  Quickcheck.test gen ~sexp_of:[%sexp_of: float * float * float] ~f:(fun (a, b, c) ->
+  Q.test gen ~sexp_of:[%sexp_of: float * float * float] ~f:(fun (a, b, c) ->
     let expect =
       match Float.(sign_or_nan ((b * b) - (4. * a * c))) with
       | Neg | Nan -> 0

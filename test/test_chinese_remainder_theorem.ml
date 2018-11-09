@@ -18,16 +18,17 @@ let%test_unit "Chinese remainder theorem" =
     let%bind moduli =
       Bigint.gen_positive |> List.gen_non_empty |> Gen.filter ~f:are_pairwise_coprime
     in
-    let%map residues =
-      List.map moduli ~f:(fun m -> Bigint.gen_incl Bigint.zero (Bigint.pred m))
-      |> Gen.all
-    in
-    List.zip_exn residues moduli
+    List.map moduli ~f:(fun modulus ->
+      let%map residue = Bigint.gen_incl Bigint.zero (Bigint.pred modulus) in
+      residue, modulus)
+    |> Gen.all
   in
   let big = Bigint.of_int in
   Quickcheck.test
-    gen (* cf https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
+    gen
+    (* example from https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
     ~examples:[ [ big 0, big 3; big 3, big 4; big 4, big 5 ] ]
+    ~trials:(Quickcheck.default_trial_count / 10)
     ~sexp_of:[%sexp_of: (Bigint.t * Bigint.t) list]
     ~f:(fun residues ->
       let x, m = Number_theory.Bigint.chinese_remainder_theorem residues in

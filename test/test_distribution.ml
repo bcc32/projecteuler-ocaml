@@ -64,6 +64,7 @@ let%test_unit "bind" =
 let%test_unit "uniform" =
   List.gen_non_empty gen_distribution
   |> Quickcheck.test
+       ~trials:(Quickcheck.default_trial_count / 10)
        ~sexp_of:[%sexp_of: int D.t list]
        ~shrinker:(List.shrinker (Quickcheck.Shrinker.empty ()))
        ~f:(fun ds ->
@@ -89,6 +90,7 @@ let%test_unit "uniform'" =
   in
   Quickcheck.test
     gen
+    ~trials:(Quickcheck.default_trial_count / 10)
     ~sexp_of:[%sexp_of: int list]
     ~shrinker:(List.shrinker Int.shrinker)
     ~f:(fun ks ->
@@ -102,16 +104,14 @@ let%test_unit "uniform'" =
 ;;
 
 let%test_unit "cartesian_product" =
-  let gen =
-    let open Gen.Let_syntax in
-    let%map () = return ()
-    and d1 = gen_distribution
-    and d2 = gen_distribution in
-    d1, d2
-  in
-  Quickcheck.test gen ~sexp_of:[%sexp_of: int D.t * int D.t] ~f:(fun (d1, d2) ->
-    let d = D.cartesian_product d1 d2 in
-    Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
-      Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
-        [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))))
+  let gen = Gen.both gen_distribution gen_distribution in
+  Quickcheck.test
+    gen
+    ~trials:(Quickcheck.default_trial_count / 10)
+    ~sexp_of:[%sexp_of: int D.t * int D.t]
+    ~f:(fun (d1, d2) ->
+      let d = D.cartesian_product d1 d2 in
+      Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
+        Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
+          [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))))
 ;;

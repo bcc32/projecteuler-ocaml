@@ -31,30 +31,34 @@ let%test_unit "permutations" =
     let%bind length = Int.gen_incl 0 5 in
     List.gen_with_length length Int.gen
   in
-  Quickcheck.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
-    let compare = Int.compare in
-    let seq = Sequences.permutations l ~compare in
-    let perms = Sequence.to_list seq in
-    let elts = List.sort l ~compare in
-    (* expected number of permutations *)
-    let num_permutations =
-      List.fold l ~init:Int.Map.empty ~f:(fun ac x ->
-        Map.update ac x ~f:(Option.value_map ~default:1 ~f:(( + ) 1)))
-      |> Map.data
-      |> Number_theory.multinomial
-    in
-    [%test_result: int] (List.length perms) ~expect:num_permutations;
-    (* permutations have the same elements as the original list *)
-    List.iter perms ~f:(fun perm ->
-      [%test_result: int list] (List.sort perm ~compare) ~expect:elts);
-    (* permutations should be in order *)
-    [%test_result: int list list]
-      ~expect:perms
-      (List.sort perms ~compare:[%compare: int list]);
-    (* permutations should be unique *)
-    [%test_result: int list option]
-      ~expect:None
-      (List.find_a_dup perms ~compare:[%compare: int list]))
+  Quickcheck.test
+    gen
+    ~trials:(Quickcheck.default_trial_count / 10)
+    ~sexp_of:[%sexp_of: int list]
+    ~f:(fun l ->
+      let compare = Int.compare in
+      let seq = Sequences.permutations l ~compare in
+      let perms = Sequence.to_list seq in
+      let elts = List.sort l ~compare in
+      (* expected number of permutations *)
+      let num_permutations =
+        List.fold l ~init:Int.Map.empty ~f:(fun ac x ->
+          Map.update ac x ~f:(Option.value_map ~default:1 ~f:(( + ) 1)))
+        |> Map.data
+        |> Number_theory.multinomial
+      in
+      [%test_result: int] (List.length perms) ~expect:num_permutations;
+      (* permutations have the same elements as the original list *)
+      List.iter perms ~f:(fun perm ->
+        [%test_result: int list] (List.sort perm ~compare) ~expect:elts);
+      (* permutations should be in order *)
+      [%test_result: int list list]
+        ~expect:perms
+        (List.sort perms ~compare:[%compare: int list]);
+      (* permutations should be unique *)
+      [%test_result: int list option]
+        ~expect:None
+        (List.find_a_dup perms ~compare:[%compare: int list]))
 ;;
 
 let%test_unit "run_length_encode" =

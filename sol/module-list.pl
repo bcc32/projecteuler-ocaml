@@ -4,7 +4,7 @@ use warnings;
 
 my @modules;
 
-for (@ARGV) {
+for (glob 'sol*.ml') {
   if (/\A (?<module_name> sol [^.]*) [.]ml \z/xms) {
     push @modules, ucfirst $+{module_name};
   }

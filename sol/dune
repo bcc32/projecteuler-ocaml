@@ -14,5 +14,5 @@
 
 (rule
  (targets euler_solutions.ml)
- (deps (:script ./module-list.pl) (:ml-files (glob_files sol*.ml)))
- (action (with-stdout-to %{targets} (run %{script} %{ml-files}))))
+ (deps (:script ./module-list.pl) (glob_files sol*.ml))
+ (action (with-stdout-to %{targets} (run %{script}))))

@@ -1,0 +1,40 @@
+The $n$th die (counting from 1) is turned $nd(n) - 1$ times, where $nd(n)$ is
+the number of divisors of n.
+
+For the wanted dice, $nd(n) - 1 \equiv 0 \pmod{6}$, so $nd(n) \equiv 1
+\pmod{6}$.  In particular, this requires that $nd(n)$ is coprime to 6.
+
+We can calculate $nd(n)$ from the prime factorization of $n$ as $(a_1 + 1) (a_2
++ 1) \dots (a_k + 1)$ where $n = p_1^{a_1} \times p_2^{a_2} \times \dots \times
+p_k^{a_k}$.
+
+Since $nd(n)$ must be coprime to 6, we know that none of $(a_i + 1)$ may be
+divisible by 2 or 3.  This means that $a_i \ge 4$ and $a_i$ is even.
+
+So, we must consider the possible combinations of prime factors such that:
+
+\[
+\Product_{i=1}^{k} (a_i + 1) \equiv 1 \pmod{6}
+\]
+
+We also know that the maximum sum of exponents we need to consider is
+$\log_2{10^{36}} \approx 119.6$.  The upper bound on primes we need to consider
+is $\sqrt[4]{10^{36}} = 10^{9}$.  In fact, since $n = p^{4}$ would not satisfy
+$nd(n)$, and we either need at least two prime factors or $n = p^{6}$, say, we
+can reduce our upper bound to:
+
+\[
+\max(\sqrt[4]{10^{36} / 2^{4}}, \sqrt[6]{10^{36}} = 10^{6}) = 500 000 000
+\]
+
+which might be tractable for an in-memory Sieve of Eratosthenes.
+
+The following is the set of allowable prime factor exponents:
+
+\[
+\{
+0, 4, 6, 10, 12, 16, 18, 22, 24, 28, 30, 34, 36, 40, 42, 46, 48, 52, 54, 58, 60,
+64, 66, 70, 72, 76, 78, 82, 84, 88, 90, 94, 96, 100, 102, 106, 108, 112, 114,
+118
+\}
+\]

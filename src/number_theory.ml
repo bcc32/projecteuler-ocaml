@@ -280,43 +280,38 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 end
 
-module Premade = struct
-  module Int = Make (Int)
+(* Copied from above to avoid functorization cost. *)
+let[@inline always] int_next_probable_prime n =
+  match n mod 6 with
+  | 1 -> n + 4
+  | 5 -> n + 2
+  | 0 -> n + 1
+  | 2 -> n + 1
+  | 3 -> n + 2
+  | 4 -> n + 1
+  | _ -> assert false
+;;
 
-  module Bigint = Make (struct
-      include Bigint
-
-      (* different signature in Int_intf.S_unbounded *)
-      let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
-    end)
-end
-
-module Using_premade = struct
-  open Premade
-
-  let prime_sieve limit =
-    let len = limit + 1 in
-    let primes = Array.create ~len true in
-    let rec mark p n =
-      if n < len
-      then (
-        primes.(n) <- false;
-        mark p (n + p))
-    in
-    let rec sieve p =
-      if p * p < len
-      then (
-        if primes.(p) then mark p (p * p);
-        sieve (Int.next_probable_prime p))
-    in
-    primes.(0) <- false;
-    primes.(1) <- false;
-    sieve 2;
-    primes
-  ;;
-end
-
-include Using_premade
+let prime_sieve limit =
+  let len = limit + 1 in
+  let primes = Array.create ~len true in
+  let rec mark p n =
+    if n < len
+    then (
+      primes.(n) <- false;
+      mark p (n + p))
+  in
+  let rec sieve p =
+    if p * p < len
+    then (
+      if primes.(p) then mark p (p * p);
+      sieve (int_next_probable_prime p))
+  in
+  primes.(0) <- false;
+  primes.(1) <- false;
+  sieve 2;
+  primes
+;;
 
 let factorial_prime_factor n =
   let primes = prime_sieve n in
@@ -513,4 +508,11 @@ let[@inline always] addition_chain_pow_bigint b e =
   addition_chain_pow b e ~one:Bigint.one ~mul:Bigint.( * )
 ;;
 
-include Premade
+module Int = Make (Int)
+
+module Bigint = Make (struct
+    include Bigint
+
+    (* different signature in Int_intf.S_unbounded *)
+    let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
+  end)

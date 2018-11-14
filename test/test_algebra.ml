@@ -27,7 +27,7 @@ let%test_unit "quadratic_formula" =
       [%test_pred: float] (fun x ->
         let open Float.O in
         let y = (a * (x ** 2.)) + (b * x) + c in
-        y < 1e-9)
+        abs y < 1e-7)
     in
     match Algebra.quadratic_formula a b c with
     | `None -> [%test_result: int] 0 ~expect

@@ -18,6 +18,7 @@ sol_206.ml
 sol_214.ml
 sol_293.ml
 sol_303.ml
+sol_304.ml
 sol_315.ml
 sol_323_sim.ml
 sol_348.ml

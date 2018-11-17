@@ -26,6 +26,7 @@ sol_162.ml
 sol_166.ml
 sol_169.ml
 sol_169_naive.ml
+sol_174.ml
 sol_205.ml
 sol_206.ml
 sol_207.ml

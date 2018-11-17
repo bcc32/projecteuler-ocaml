@@ -13,6 +13,7 @@ module Export = struct
   ;;
 
   (* FIXME: Use [@sexp.option] attribute when public ppx_sexp_conv supports it. *)
+  (* TODO: Make [here] and [task] required. *)
   let debug_timing ?here ?task f x =
     if not debug
     then f x

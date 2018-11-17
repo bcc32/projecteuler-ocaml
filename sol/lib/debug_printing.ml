@@ -8,4 +8,25 @@ module Export = struct
     | Some "" -> false
     | Some _ -> true
   ;;
+
+  let debug_timing ?here ?task f x =
+    if not debug
+    then f x
+    else (
+      let start = Time_ns.now () in
+      Debug.eprint_s
+        [%message
+          "starting"
+            (task : string sexp_option)
+            (here : Source_code_position.t sexp_option)];
+      protectx ~f x ~finally:(fun _ ->
+        let end_ = Time_ns.now () in
+        let elapsed = Time_ns.diff end_ start in
+        Debug.eprint_s
+          [%message
+            "done"
+              (task : string sexp_option)
+              (here : Source_code_position.t sexp_option)
+              (elapsed : Time_ns.Span.t)]))
+  ;;
 end

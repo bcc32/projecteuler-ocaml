@@ -21,7 +21,7 @@ module M = struct
 
   let main () =
     let totient_chain_length = unstage (totient_chain_length limit) in
-    Number_theory.prime_sieve limit
+    debug_timing ~task:"sieving" Number_theory.prime_sieve limit
     |> Array.foldi ~init:0 ~f:(fun i acc is_prime ->
       if is_prime && totient_chain_length i = 25 then acc + i else acc)
     |> printf "%d\n"

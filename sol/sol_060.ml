@@ -101,9 +101,7 @@ module M = struct
   let length = 5
 
   let main () =
-    if debug then Debug.eprintf !"%{Time} starting" (Time.now ());
-    ignore (force primes : (int, _) Array.Permissioned.t);
-    if debug then Debug.eprintf !"%{Time} done sieving" (Time.now ());
+    ignore (debug_timing ~task:"sieving" force primes : (int, _) Array.Permissioned.t);
     find_prime_pair_sets length length
     |> Sequence.map ~f:(fun x ->
       if debug then Debug.eprint_s [%sexp (x : int list)];

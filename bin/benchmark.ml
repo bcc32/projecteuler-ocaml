@@ -42,22 +42,8 @@ let sqrt_group =
 ;;
 
 let primes_group =
-  let primes_sequence limit =
-    Number_theory.Int.primes
-    |> Sequence.take_while ~f:(fun x -> x < limit)
-    |> Sequence.iter ~f:(fun x -> ignore (Sys.opaque_identity x))
-  in
-  let primes_sieve limit =
-    ignore (Sys.opaque_identity (Number_theory.prime_sieve limit))
-  in
-  let limits = [ 1000; 10_000; 100_000; 1_000_000 ] in
-  let methods = [ primes_sequence, "Sequence.t"; primes_sieve, "Eratosthenes' sieve" ] in
-  let open Bench.Test in
-  List.map methods ~f:(fun (f, name) ->
-    List.map limits ~f:(fun limit ->
-      create ~name:(Int.to_string limit) (fun () -> f limit))
-    |> create_group ~name)
-  |> create_group ~name:"primes"
+  Bench.Test.create ~name:"prime_sieve(10^6)" (fun () ->
+    Number_theory.prime_sieve 1_000_000)
 ;;
 
 let pow_group =

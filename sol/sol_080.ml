@@ -41,6 +41,9 @@ module M = struct
     |> Sequence.sum (module Int) ~f:digital_sum
     |> printf "%d\n"
   ;;
+
+  (* 40886
+     95.364ms *)
 end
 
 include Solution.Make (M)

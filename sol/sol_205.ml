@@ -56,6 +56,9 @@ module M = struct
     let colin = dice_set ~faces:6 ~len:6 in
     win_prob peter colin |> Percent.to_mult |> printf "%.07f\n"
   ;;
+
+  (* 0.5731441
+     0.168ms *)
 end
 
 include Solution.Make (M)

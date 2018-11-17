@@ -36,6 +36,9 @@ module M = struct
     done;
     printf "%Ld\n" !sum
   ;;
+
+  (* 1617243
+     0.047ms *)
 end
 
 include Solution.Make (M)

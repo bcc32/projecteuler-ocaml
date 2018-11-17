@@ -51,6 +51,9 @@ module M = struct
     |> Sequence.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;
+
+  (* 1004195061
+     15.5233s *)
 end
 
 include Solution.Make (M)

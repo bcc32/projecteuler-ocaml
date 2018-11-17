@@ -46,7 +46,8 @@ module M = struct
     printf "%d\n" !count
   ;;
 
-  (* 694687 15s *)
+  (* 694687
+     15s *)
 end
 
 include Solution.Make (M)

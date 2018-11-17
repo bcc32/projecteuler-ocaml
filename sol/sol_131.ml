@@ -85,6 +85,9 @@ module M = struct
   ;;
 
   (* This is about 4000x faster than the previous solution. *)
+
+  (* 173
+     0.902ms *)
 end
 
 include Solution.Make (M)

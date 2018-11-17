@@ -27,6 +27,9 @@ module M = struct
       if is_prime && totient_chain_length i = 25 then acc + i else acc)
     |> printf "%d\n"
   ;;
+
+  (* 1677366278943
+     46.0785s *)
 end
 
 include Solution.Make (M)

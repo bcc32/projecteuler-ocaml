@@ -35,7 +35,8 @@ module M = struct
     |> printf "%d\n"
   ;;
 
-  (* 2240 764us *)
+  (* 2240
+     764us *)
 end
 
 include Solution.Make (M)

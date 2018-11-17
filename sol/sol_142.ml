@@ -47,6 +47,9 @@ module M = struct
     in
     with_return (fun { return } -> loop return 1) |> printf "%d\n"
   ;;
+
+  (* 1006193
+     3.32094s *)
 end
 
 include Solution.Make (M)

@@ -84,7 +84,8 @@ module M = struct
     printf "%d\n" !diff
   ;;
 
-  (* 13625242 1s *)
+  (* 13625242
+     1s *)
 end
 
 include Solution.Make (M)

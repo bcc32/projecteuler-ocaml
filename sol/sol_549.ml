@@ -55,7 +55,8 @@ module M = struct
 
   let main () = sieve limit |> printf "%d\n"
 
-  (* 476001479068717, 9.4s *)
+  (* 476001479068717
+     9.4s *)
 end
 
 include Solution.Make (M)

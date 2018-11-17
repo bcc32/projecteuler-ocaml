@@ -22,6 +22,9 @@ module M = struct
     |> Tuple2.get2
     |> printf "%d\n"
   ;;
+
+  (* 44043947822
+     4.557ms *)
 end
 
 include Solution.Make (M)

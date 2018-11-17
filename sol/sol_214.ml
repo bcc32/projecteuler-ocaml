@@ -7,15 +7,15 @@ module M = struct
 
   let totient_chain_length =
     lazy
-      (let table = Array.create None ~len:(limit + 1) in
-       table.(1) <- Some 1;
+      (let table = Option_array.create ~len:(limit + 1) in
+       Option_array.set_some table 1 1;
        let rec totient_chain_length n =
-         match Array.unsafe_get table n with
-         | None ->
+         if Option_array.is_some table n
+         then Option_array.get_some_exn table n
+         else (
            let result = totient_chain_length (Number_theory.Int.totient n) + 1 in
-           Array.unsafe_set table n (Some result);
-           result
-         | Some n -> n
+           Option_array.set_some table n result;
+           result)
        in
        totient_chain_length)
   ;;

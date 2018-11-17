@@ -307,7 +307,7 @@ module M = struct
       and b = one_die in
       a + b
     in
-    for _ = 1 to 10000 do
+    for _ = 1 to 100 do
       g := Game_state_dist.advance !g ~die
     done;
     if debug then Debug.eprint_s (Game_state_dist.sexp_of_square_dist !g);
@@ -315,7 +315,7 @@ module M = struct
   ;;
 
   (* 101524
-     1.3696s *)
+     18.507ms *)
 end
 
 include Solution.Make (M)

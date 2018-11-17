@@ -366,6 +366,8 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       let to_array = C.to_array
       let min_elt = C.min_elt
       let max_elt = C.max_elt
+
+      (* TODO: Reimplement lazily. *)
       let to_sequence = to_list >> Sequence.of_list
     end
 
@@ -408,6 +410,8 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       let to_array = C.to_array
       let min_elt = C.min_elt
       let max_elt = C.max_elt
+
+      (* TODO: Reimplement lazily. *)
       let to_sequence = to_list >> Sequence.of_list
     end
 

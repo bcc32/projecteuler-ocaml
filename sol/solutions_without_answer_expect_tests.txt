@@ -32,6 +32,7 @@ sol_206.ml
 sol_207.ml
 sol_214.ml
 sol_293.ml
+sol_303.ml
 sol_315.ml
 sol_323.ml
 sol_323_sim.ml

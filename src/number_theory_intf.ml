@@ -11,6 +11,8 @@ module type S = sig
     -> integer
     -> integer
     -> integer Sequence.t
+  (* FIXME Some of this doesn't really belong in "number theory", maybe separate
+     out the combinatorics, digits, arithmetic, etc. *)
 
   (* TODO rename to to_digits, of_digits *)
 

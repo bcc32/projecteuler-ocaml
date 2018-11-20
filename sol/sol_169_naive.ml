@@ -172,7 +172,10 @@ let%test_unit _ =
 ;;
 
 module M = struct
-  let problem = Number 169
+  let problem =
+    Tagged { number = 169; tag = "naive"; description = "slow, naive counting" }
+  ;;
+
   let main () = Number.n_initial |> Number.count_candidates |> printf "%d\n"
 
   (* 178653872807

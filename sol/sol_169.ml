@@ -3,8 +3,9 @@ open! Import
 
 module Number : sig
   (** left-to-right *)
-  type t [@@deriving sexp_of]
+  type t [@@deriving compare, sexp_of]
 
+  val of_bigint : Bigint.t -> t
   val n_initial : t
   val ten : t
   val iter_candidates : t -> f:(t -> unit) -> unit
@@ -14,8 +15,35 @@ end = struct
     | Zero
     | One
     | Two
+  [@@deriving compare]
 
-  type t = digit list
+  type t = digit list [@@deriving compare]
+
+  let of_bigint bigint =
+    let digit_of_int = function
+      | 0 -> Zero
+      | 1 -> One
+      | _ -> assert false
+    in
+    let bin_of_hex hex_digit =
+      let value =
+        match hex_digit with
+        | '0' .. '9' -> Char.get_digit_exn hex_digit
+        | 'a' .. 'f' -> Char.to_int hex_digit - Char.to_int 'a' + 10
+        | _ -> assert false
+      in
+      [ digit_of_int ((value lsr 3) land 1)
+      ; digit_of_int ((value lsr 2) land 1)
+      ; digit_of_int ((value lsr 1) land 1)
+      ; digit_of_int ((value lsr 0) land 1)
+      ]
+    in
+    bigint
+    |> Bigint.Hex.to_string
+    |> String.chop_prefix_exn ~prefix:"0x"
+    |> String.to_list
+    |> List.concat_map ~f:bin_of_hex
+  ;;
 
   (* 10^25 *)
   let n_initial =
@@ -112,6 +140,35 @@ let%expect_test _ =
     (2^2 2^1 2^1 2^0 2^0) |}];
   print_s [%sexp (Number.count_candidates Number.ten : int)];
   [%expect {| 5 |}]
+;;
+
+let%expect_test "pattern" =
+  for i = 1 to 10 do
+    print_s
+      [%sexp
+        (i : Int.Hex.t)
+      , (Number.count_candidates (i |> Bigint.of_int |> Number.of_bigint) : int)]
+  done;
+  [%expect
+    {|
+    (0x1 1)
+    (0x2 2)
+    (0x3 1)
+    (0x4 3)
+    (0x5 2)
+    (0x6 3)
+    (0x7 1)
+    (0x8 4)
+    (0x9 3)
+    (0xa 5) |}]
+;;
+
+let%test_unit _ = [%test_eq: Number.t] Number.ten (Number.of_bigint (Bigint.of_int 10))
+
+let%test_unit _ =
+  [%test_eq: Number.t]
+    Number.n_initial
+    (Number.of_bigint Bigint.(pow (of_int 10) (of_int 25)))
 ;;
 
 module M = struct

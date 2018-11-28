@@ -1,9 +1,11 @@
 open! Core
 open! Import
 
+let isqrt n = Float.iround_down_exn (sqrt (float n))
+
 (* https://en.wikipedia.org/wiki/Pentagonal_number#Tests_for_pentagonal_numbers *)
 let is_pentagonal n =
-  let s = Number_theory.Int.isqrt (1 + (24 * n)) in
+  let s = isqrt (1 + (24 * n)) in
   s * s = 1 + (24 * n) && s mod 6 = 5
 ;;
 
@@ -24,7 +26,7 @@ module M = struct
   ;;
 
   (* 5482660
-     637.46ms *)
+     25.063ms *)
 end
 
 include Solution.Make (M)

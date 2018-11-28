@@ -37,5 +37,8 @@ val addition_chain_pow_int : int -> int -> int
 (** [addition_chain_pow] specialized for [Bigint.t]. *)
 val addition_chain_pow_bigint : Bigint.t -> int -> Bigint.t
 
+(** [isqrt] specialized for ints *)
+val isqrt_int : int -> int
+
 module Int : S with type integer = int
 module Bigint : S with type integer = Bigint.t

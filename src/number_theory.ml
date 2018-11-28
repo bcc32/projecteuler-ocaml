@@ -508,6 +508,21 @@ let[@inline always] addition_chain_pow_bigint b e =
   addition_chain_pow b e ~one:Bigint.one ~mul:Bigint.( * )
 ;;
 
+let isqrt_int_upper_bound =
+  let mantissa_bits = 52 in
+  1 lsl mantissa_bits
+;;
+
+let[@inline never] raise_isqrt_int_overflow n =
+  raise_s [%message "isqrt_int would lose precision due to overflow" (n : int)]
+;;
+
+let[@inline always] isqrt_int n =
+  if n < isqrt_int_upper_bound
+  then Float.iround_down_exn (sqrt (float n))
+  else raise_isqrt_int_overflow n
+;;
+
 module Int = Make (Int)
 
 module Bigint = Make (struct

@@ -12,7 +12,7 @@ module M = struct
     let len = Doubly_linked.length digits in
     let results = ref [] in
     let rec loop rotations =
-      let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
+      let n = Doubly_linked.fold digits ~init:0 ~f:(fun acc d -> (10 * acc) + d) in
       if (force is_prime).(n)
       then (
         results := n :: !results;

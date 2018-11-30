@@ -11,16 +11,19 @@ module M = struct
     let digits = Number_theory.Int.digits_of_int n |> Doubly_linked.of_list in
     let len = Doubly_linked.length digits in
     let results = ref [] in
-    with_return (fun { return } ->
-      for _ = 0 to len - 1 do
-        let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
-        if (force is_prime).(n)
+    let rec loop rotations =
+      let n = Doubly_linked.to_sequence digits |> Number_theory.Int.int_of_digits in
+      if (force is_prime).(n)
+      then (
+        results := n :: !results;
+        if rotations > 0
         then (
-          results := n :: !results;
-          rotate digits)
-        else return None
-      done;
-      Some !results)
+          rotate digits;
+          loop (rotations - 1))
+        else Some !results)
+      else None
+    in
+    loop (len - 1)
   ;;
 
   let main () =

@@ -3,7 +3,7 @@ open! Import
 
 module M = struct
   let problem = Number 35
-  let limit = 1_000_000
+  let limit = 999_999
   let rotate ds = Doubly_linked.last_elt ds |> uw |> Doubly_linked.move_to_front ds
   let is_prime = lazy (Number_theory.prime_sieve limit)
 

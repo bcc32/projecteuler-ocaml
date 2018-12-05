@@ -35,7 +35,7 @@ module M = struct
   let main () =
     let circular_primes = Int.Hash_set.create () in
     for n = 2 to limit do
-      if not (Hash_set.mem circular_primes n)
+      if (force is_prime).(n) && not (Hash_set.mem circular_primes n)
       then Option.iter (prime_circle n) ~f:(List.iter ~f:(Hash_set.add circular_primes))
     done;
     printf "%d\n" (Hash_set.length circular_primes)

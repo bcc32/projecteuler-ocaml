@@ -9,12 +9,16 @@ module M = struct
     ; mutable b : int
     ; mutable number_of_primes : int
     }
+  [@@deriving sexp]
+
+  let is_prime = lazy (Number_theory.prime_sieve 20_000)
+  let largest_q = ref 0
 
   let count_primes a b =
     let rec loop n count =
-      if Number_theory.Int.is_prime ((n * n) + (a * n) + b)
-      then loop (n + 1) (count + 1)
-      else count
+      let q = (n * n) + (a * n) + b in
+      if q > !largest_q then largest_q := q;
+      if q >= 0 && (force is_prime).(q) then loop (n + 1) (count + 1) else count
     in
     loop 0 0
   ;;
@@ -31,10 +35,11 @@ module M = struct
           answer.number_of_primes <- primes)
       done
     done;
+    if debug then Debug.eprint_s [%message "" (answer : answer) (!largest_q : int)];
     printf "%d\n" (answer.a * answer.b)
   ;;
 
-  (* 492ms *)
+  (* 50ms *)
   let%expect_test "answer" =
     main ();
     [%expect {| -59231 |}]

@@ -29,19 +29,17 @@ end = struct
   ;;
 
   let replace_wildcards t ~fill_digit =
-    t
-    |> List.map ~f:(function
-      | 10 -> fill_digit
-      | n -> n)
-    |> Sequence.of_list
-    |> Number_theory.Int.of_digits
+    List.fold t ~init:0 ~f:(fun acc -> function
+      | 10 -> (10 * acc) + fill_digit
+      | n -> (10 * acc) + n)
   ;;
 
   let instances t =
     match t with
     | 10 :: _ ->
       (* avoid leading zero *)
-      List.range 1 10 |> List.map ~f:(fun fill_digit -> replace_wildcards t ~fill_digit)
+      List.init 9 ~f:(fun fill_digit_minus_one ->
+        replace_wildcards t ~fill_digit:(fill_digit_minus_one + 1))
     | t -> List.init 10 ~f:(fun fill_digit -> replace_wildcards t ~fill_digit)
   ;;
 end

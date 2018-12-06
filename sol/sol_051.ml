@@ -15,7 +15,7 @@ end = struct
 
   let sexp_of_t t =
     List.map t ~f:(function
-      | 10 -> "*"
+      | 10 -> "?"
       | n -> Int.to_string n)
     |> String.concat
     |> Sexp.Atom

@@ -523,6 +523,11 @@ let[@inline always] isqrt_int n =
   else raise_isqrt_int_overflow n
 ;;
 
+let[@inline always] is_perfect_square_int n =
+  let s = isqrt_int n in
+  s * s = n
+;;
+
 module Int = Make (Int)
 
 module Bigint = Make (struct

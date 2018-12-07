@@ -37,8 +37,11 @@ val addition_chain_pow_int : int -> int -> int
 (** [addition_chain_pow] specialized for [Bigint.t]. *)
 val addition_chain_pow_bigint : Bigint.t -> int -> Bigint.t
 
-(** [isqrt] specialized for ints *)
+(** [isqrt] specialized for ints. *)
 val isqrt_int : int -> int
+
+(** [is_perfect_square] specialized for ints. *)
+val is_perfect_square_int : int -> bool
 
 module Int : S with type integer = int
 module Bigint : S with type integer = Bigint.t

@@ -29,7 +29,7 @@ module Make (Prob : Prob) : S with type prob = Prob.t = struct
     match List.length ts with
     | 0 -> invalid_arg "uniform"
     | n ->
-      let x = Prob.(one / of_int n) in
+      let x = Prob.(1 // n) in
       ts |> List.map ~f:(fun t -> scale t x) |> List.reduce_exn ~f:merge
   ;;
 
@@ -80,14 +80,18 @@ module Make (Prob : Prob) : S with type prob = Prob.t = struct
   ;;
 end
 
-module Float = Make (Float)
+module Float = Make (struct
+    include Float
+
+    let ( // ) x y = of_int x / of_int y
+  end)
 
 module Percent = Make (struct
     include Percent
 
     let of_int n = Percent.of_mult (float n)
-    let one = of_int 1
     let ( / ) x y = Percent.of_mult (Percent.to_mult x /. Percent.to_mult y)
+    let ( // ) x y = Percent.of_mult (float x /. float y)
   end)
 
 module Bignum = Make (Bignum)

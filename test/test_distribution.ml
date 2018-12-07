@@ -33,7 +33,7 @@ let%test_unit "combine" =
 let%test_unit "monad laws" =
   let f x = D.singleton (x + 1) in
   let g x =
-    let p1 = Bignum.(one / of_int 2) in
+    let p1 = Bignum.(1 // 2) in
     D.combine ~p1 ~d1:(D.singleton x) ~d2:(D.singleton (-x))
   in
   let t = D.singleton 0 in
@@ -47,15 +47,12 @@ let%test_unit "monad laws" =
 ;;
 
 let%test_unit "bind" =
-  let half = Bignum.(one / of_int 2) in
-  let fifth = Bignum.(one / of_int 5) in
+  let half = Bignum.(1 // 2) in
+  let fifth = Bignum.(1 // 5) in
   let f x = D.combine ~p1:half ~d1:(D.singleton x) ~d2:(D.singleton (x + 1)) in
   let t = D.combine ~p1:fifth ~d1:(D.singleton 0) ~d2:(D.singleton 1) in
   let expect =
-    [ (0, Bignum.(of_int 1 / ten))
-    ; (1, Bignum.(of_int 5 / ten))
-    ; (2, Bignum.(of_int 4 / ten))
-    ]
+    [ (0, Bignum.(1 // 10)); (1, Bignum.(5 // 10)); (2, Bignum.(4 // 10)) ]
     |> D.of_alist_exn
   in
   [%test_result: int D.t] (D.bind t ~f) ~expect
@@ -95,7 +92,7 @@ let%test_unit "uniform'" =
       let t = D.uniform' ks in
       let expect =
         let length = List.length ks in
-        let prob = Bignum.(one / of_int length) in
+        let prob = Bignum.(1 // length) in
         ks |> List.map ~f:(fun k -> k, prob) |> D.of_alist_exn
       in
       [%test_result: int D.t] t ~expect)

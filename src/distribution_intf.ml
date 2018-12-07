@@ -6,12 +6,12 @@ module type Prob = sig
   type t [@@deriving compare, sexp]
 
   val zero : t
-  val one : t
   val of_int : int -> t
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t
   val ( * ) : t -> t -> t
   val ( / ) : t -> t -> t
+  val ( // ) : int -> int -> t
 end
 
 (** Discrete probability distributions *)

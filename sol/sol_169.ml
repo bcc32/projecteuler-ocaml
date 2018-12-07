@@ -9,7 +9,7 @@ let rec f =
       if n = zero
       then Bigint.of_int 1
       else if n % Bigint.of_int 2 = zero
-      then f (n asr 1) + f ((n asr 1) - Bigint.of_int 1)
+      then f (n asr 1) + f (Bigint.pred (n asr 1))
       else f (n asr 1))
 ;;
 

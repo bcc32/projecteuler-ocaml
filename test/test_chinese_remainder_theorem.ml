@@ -23,11 +23,13 @@ let%test_unit "Chinese remainder theorem" =
       residue, modulus)
     |> Gen.all
   in
-  let big = Bigint.of_int in
   Q.test
     gen
     (* example from https://en.wikipedia.org/wiki/Chinese_remainder_theorem#Computation *)
-    ~examples:[ [ big 0, big 3; big 3, big 4; big 4, big 5 ] ]
+    ~examples:
+      [ [ 0, 3; 3, 4; 4, 5 ]
+        |> List.map ~f:(fun (x, y) -> Bigint.of_int x, Bigint.of_int y)
+      ]
     ~sexp_of:[%sexp_of: (Bigint.t * Bigint.t) list]
     ~f:(fun residues ->
       let x, m = Number_theory.Bigint.chinese_remainder_theorem residues in

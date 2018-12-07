@@ -16,8 +16,7 @@ module M = struct
   ;;
 
   let scale_div_n dist ~n : dist =
-    let factor = Percent.of_mult (1.0 /. Float.of_int n) in
-    Map.map dist ~f:Percent.(( * ) factor)
+    Map.map dist ~f:(fun p -> Percent.scale p (1. /. float n))
   ;;
 
   let merge_dist ~key:_ data =

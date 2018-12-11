@@ -218,7 +218,7 @@ module Hand = struct
     in
     let high_rank = e.rank in
     if is_flush && is_straight
-    then if Rank.(e.rank = Ace) then Royal_flush else Straight_flush high_rank
+    then if Rank.(high_rank = Ace) then Royal_flush else Straight_flush high_rank
     else (
       match rank_counts with
       | [ (quadruple, 4); (single, 1) ] -> Four_of_a_kind (quadruple, single)

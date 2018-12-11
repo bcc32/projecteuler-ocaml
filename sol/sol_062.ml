@@ -24,7 +24,7 @@ end
 
 let find min_permutations =
   let cubes_by_digit_set = Digit_set.Table.create () in
-  let[@inline] cube n = Number_theory.addition_chain_pow_int n 3 in
+  let[@inline] cube n = Number_theory.Int.addition_chain_pow n 3 in
   let rec loop n =
     let c = cube n in
     let ds = Digit_set.of_int c in

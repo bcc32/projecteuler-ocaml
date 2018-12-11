@@ -3,7 +3,7 @@ open! Import
 
 (* https://en.wikipedia.org/wiki/Pentagonal_number#Tests_for_pentagonal_numbers *)
 let is_pentagonal n =
-  let s = Number_theory.isqrt_int (1 + (24 * n)) in
+  let s = Number_theory.Int.isqrt (1 + (24 * n)) in
   s * s = 1 + (24 * n) && s mod 6 = 5
 ;;
 

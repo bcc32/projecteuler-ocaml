@@ -28,20 +28,7 @@ val factorial_prime_factor : int -> (int * int) list
 
     Currently supports exponents up to and including 32.  Not functorized for performance
     reasons. *)
-val addition_chain_pow : one:'a -> mul:('a -> 'a -> 'a) -> 'a -> int -> 'a
-(* TODO Maybe functorize when flambda becomes the default. *)
-
-(** [addition_chain_pow] specialized for ints. *)
-val addition_chain_pow_int : int -> int -> int
-
-(** [addition_chain_pow] specialized for [Bigint.t]. *)
-val addition_chain_pow_bigint : Bigint.t -> int -> Bigint.t
-
-(** [isqrt] specialized for ints. *)
-val isqrt_int : int -> int
-
-(** [is_perfect_square] specialized for ints. *)
-val is_perfect_square_int : int -> bool
+val addition_chain_pow_gen : one:'a -> mul:('a -> 'a -> 'a) -> 'a -> int -> 'a
 
 module Int : S with type integer = int
 module Bigint : S with type integer = Bigint.t

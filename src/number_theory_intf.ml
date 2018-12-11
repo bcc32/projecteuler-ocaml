@@ -4,13 +4,14 @@ open! Import
 module type S = sig
   type integer
 
-  val range :
-    ?stride:integer
+  val range
+    :  ?stride:integer
     -> ?start:[`inclusive | `exclusive]
     -> ?stop:[`exclusive | `inclusive]
     -> integer
     -> integer
     -> integer Sequence.t
+
   (* FIXME Some of this doesn't really belong in "number theory", maybe separate
      out the combinatorics, digits, arithmetic, etc. *)
 
@@ -107,4 +108,11 @@ module type S = sig
   val isqrt : integer -> integer
 
   val is_perfect_square : integer -> bool
+
+  (* TODO This probably doesn't belong in the Number_theory module.  Consider moving it
+     into its own module, along with [isqrt] and [is_perfect_square]. *)
+
+  (** {1 Optimized basic arithmetic} *)
+
+  val addition_chain_pow : integer -> int -> integer
 end

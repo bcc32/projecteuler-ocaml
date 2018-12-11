@@ -59,11 +59,11 @@ let pow_group =
     [ bench_exponents ~name:"Int.pow" Int.pow
     ; bench_exponents
         ~name:"pow_fast without functor"
-        Number_theory.addition_chain_pow_int
+        Number_theory.Int.addition_chain_pow
     ; bench_constant_exponent ~name:"Int.pow const(5)" Int.pow
     ; bench_constant_exponent
         ~name:"pow_fast without functor const(5)"
-        Number_theory.addition_chain_pow_int
+        Number_theory.Int.addition_chain_pow
     ]
 ;;
 

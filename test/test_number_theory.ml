@@ -98,7 +98,7 @@ let%expect_test "prime_factor" =
 
 let%test_unit "isqrt_int" =
   Q.test (Int.gen_incl 0 Int.max_value) ~sexp_of:[%sexp_of: int] ~f:(fun n ->
-    match Number_theory.isqrt_int n with
+    match Number_theory.Int.isqrt n with
     | isqrt -> [%test_result: int] isqrt ~expect:(Number_theory.Int.isqrt n)
     (* would overflow *)
     | exception _ -> ())

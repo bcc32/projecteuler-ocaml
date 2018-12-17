@@ -17,6 +17,7 @@ let main () =
   for _ = 1 to 500_500 do
     let factor = Heap.pop_exn queue in
     number := !number * factor mod modulo;
+    (* CR azeng: Is this right? *)
     let factor = factor * factor in
     if factor < upper_bound then Heap.add queue factor
   done;

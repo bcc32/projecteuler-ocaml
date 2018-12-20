@@ -23,8 +23,8 @@ module Potential_prime_pair : sig
 
   val create : int -> int -> t
 
-  include Comparable.S with type t := t
-  include Hashable.S with type t := t
+  include Comparable with type t := t
+  include Hashable with type t := t
 end = struct
   module T = struct
     type t =

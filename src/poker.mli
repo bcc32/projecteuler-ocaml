@@ -18,14 +18,13 @@ module Rank : sig
     | Queen
     | King
     | Ace
+  [@@deriving compare, hash, sexp]
 
   val pred : t -> t option
   val succ : t -> t option
 
-  include Comparable.S with type t := t
-  include Hashable.S with type t := t
-  include Sexpable.S with type t := t
-  include Stringable.S with type t := t
+  include Comparable with type t := t
+  include Stringable with type t := t
 end
 
 module Suit : sig
@@ -34,11 +33,10 @@ module Suit : sig
     | Diamonds
     | Hearts
     | Spades
+  [@@deriving compare, hash, sexp]
 
-  include Comparable.S with type t := t
-  include Hashable.S with type t := t
-  include Sexpable.S with type t := t
-  include Stringable.S with type t := t
+  include Comparable with type t := t
+  include Stringable with type t := t
 end
 
 module Card : sig
@@ -46,16 +44,13 @@ module Card : sig
     { rank : Rank.t
     ; suit : Suit.t
     }
-  [@@deriving fields]
+  [@@deriving compare, fields, hash, sexp]
 
   (** 2C, QH, etc. *)
-  include Stringable.S with type t := t
+  include Stringable with type t := t
 
   (** compare by rank, then by suit *)
-  include Comparable.S with type t := t
-
-  include Hashable.S with type t := t
-  include Sexpable.S with type t := t
+  include Comparable with type t := t
 end
 
 module Hand_classification : sig
@@ -72,10 +67,10 @@ module Hand_classification : sig
     | Four_of_a_kind of Rank.t * Rank.t
     | Straight_flush of Rank.t  (** [rank < Ace] *)
     | Royal_flush
+  [@@deriving compare, sexp]
 
-  include Comparable.S with type t := t
+  include Comparable with type t := t
   include Invariant.S with type t := t
-  include Sexpable.S with type t := t
 end
 
 module Hand : sig

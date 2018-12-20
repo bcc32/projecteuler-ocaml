@@ -13,7 +13,7 @@ module type Real = sig
   val abs : t -> t
   val sign_exn : t -> Sign.t
 
-  include Comparable.S with type t := t
+  include Comparable with type t := t
 end
 
 module type S = sig

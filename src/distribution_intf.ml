@@ -20,7 +20,7 @@ module type S = sig
   type 'key t [@@deriving compare, quickcheck, sexp]
 
   module Prob : Prob
-  include Monad.S with type 'a t := 'a t
+  include Monad with type 'a t := 'a t
 
   (** [support t] returns a list of the possible outcomes described by the
       distribution [t] *)

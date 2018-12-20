@@ -6,8 +6,8 @@ module Digit_set : sig
 
   val of_int : int -> t
 
-  include Comparable.S with type t := t
-  include Hashable.S with type t := t
+  include Comparable with type t := t
+  include Hashable with type t := t
 end = struct
   module T = struct
     type t = int list [@@deriving compare, hash, sexp]

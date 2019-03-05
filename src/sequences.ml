@@ -10,8 +10,7 @@ let run_length_encode lst ~equal =
     | hd :: tl -> count tl hd 1 ac
   and count lst x c ac =
     match lst with
-    | hd :: tl
-      when equal x hd -> count tl x (c + 1) ac
+    | hd :: tl when equal x hd -> count tl x (c + 1) ac
     | _ -> start lst ((x, c) :: ac)
   in
   List.rev (start lst [])
@@ -25,7 +24,9 @@ let%expect_test _ =
   [%expect {| (a a b b b b c) |}]
 ;;
 
-let is_palindrome l ~equal = List.equal ~equal l (List.rev l)
+let is_palindrome (type a) (module M : Equal.S with type t = a) l =
+  [%equal: M.t list] l (List.rev l)
+;;
 
 let next_permutation_inplace a ~compare =
   let ( <<< ) i j = compare a.(i) a.(j) < 0 in

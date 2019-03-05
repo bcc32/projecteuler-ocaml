@@ -4,6 +4,7 @@
  (libraries
   bignum
   core
+  core_kernel.total_map
   euler
   euler_data
   euler_solution_helpers

@@ -7,7 +7,7 @@ open! Import
     left-to-right.  Handles bases up to 10. *)
 val digits_of_string : string -> int list
 
-val is_palindrome : 'a list -> equal:'a Equal.t -> bool
+val is_palindrome : (module Equal.S with type t = 'a) -> 'a list -> bool
 
 (** {1 Run-length encoding}
 

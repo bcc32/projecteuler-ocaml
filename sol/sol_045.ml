@@ -6,7 +6,7 @@ module M = struct
   let prev = 40755
 
   let merge_keeping_only_dups xs ys =
-    Sequence.merge_with_duplicates xs ys ~cmp:Int.compare
+    Sequence.merge_with_duplicates xs ys ~compare:Int.compare
     |> Sequence.filter_map ~f:(function
       | Left _ | Right _ -> None
       | Both (x, _) -> Some x)

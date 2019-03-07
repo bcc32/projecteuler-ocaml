@@ -32,8 +32,8 @@ module type S = sig
       the given number of [intervals].
 
       @param method_ default is [`Simpson's_rule] *)
-  val integrate :
-    ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
+  val integrate
+    :  ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
     -> unit
     -> f:(real -> real)
     -> lo:real
@@ -48,8 +48,8 @@ module type S = sig
       @param f' the derivative of [f]
 
       @return a value no farther than [epsilon] from a solution to [f x = 0]. *)
-  val newton's_method :
-    f:(real -> real)
+  val newton's_method
+    :  f:(real -> real)
     -> f':(real -> real)
     -> epsilon:real
     -> init:real

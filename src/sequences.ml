@@ -10,7 +10,8 @@ let run_length_encode lst ~equal =
     | hd :: tl -> count tl hd 1 ac
   and count lst x c ac =
     match lst with
-    | hd :: tl when equal x hd -> count tl x (c + 1) ac
+    | hd :: tl
+      when equal x hd -> count tl x (c + 1) ac
     | _ -> start lst ((x, c) :: ac)
   in
   List.rev (start lst [])

@@ -108,6 +108,5 @@ let%test_unit "cartesian_product" =
     let d = D.cartesian_product d1 d2 in
     Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->
       Map.iteri (D.to_map d2) ~f:(fun ~key:k2 ~data:p2 ->
-        [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))
-    ))
+        [%test_result: Bignum.t] ~expect:Bignum.(p1 * p2) (D.find_exn d (k1, k2)))))
 ;;

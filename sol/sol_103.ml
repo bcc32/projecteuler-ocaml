@@ -51,7 +51,8 @@ let optimum_special_set n ~ubound =
 ;;
 
 let%expect_test _ =
-  let limit = 4 in  (* change to 6 to see the example from the problem *)
+  let limit = 4 in
+  (* change to 6 to see the example from the problem *)
   for n = 1 to limit do
     print_s [%message "" (n : int) (optimum_special_set n ~ubound:30 : int list)]
   done;

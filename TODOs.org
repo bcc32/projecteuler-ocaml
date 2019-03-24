@@ -1,0 +1,5 @@
+* TODO one separate library for answer tests
+So it's easier to run separately, and so we can test by shelling out
+to euler, which means we can run in parallel.
+
+Alternatively, figure out how to [[https://github.com/ocaml/dune/issues/1516][make dune run tests in parallel]].

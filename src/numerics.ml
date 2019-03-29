@@ -50,6 +50,26 @@ module Make (Real : Real) : S with type real = Real.t = struct
     if y_lo = zero then x_lo else if y_hi = zero then x_hi else loop x_lo x_hi y_lo y_hi
   ;;
 
+  let rec newton's_method ~f ~f' ~epsilon ~init =
+    check_epsilon_is_positive epsilon;
+    let delta = f init / f' init in
+    if abs delta < epsilon
+    then init
+    else newton's_method ~f ~f' ~epsilon ~init:(init - delta)
+  ;;
+
+  let[@inline never] raise_expected_lo_hi ~lo ~hi =
+    raise_s [%message "expected lo < hi" (lo : Real.t) (hi : Real.t)]
+  ;;
+
+  let[@inline always] check_lo_hi ~lo ~hi =
+    if not (lo < hi) then raise_expected_lo_hi ~lo ~hi
+  ;;
+
+  let[@inline never] raise_expected_positive_intervals intervals =
+    raise_s [%message "expected intervals > 0" (intervals : int)]
+  ;;
+
   let integrate ?(method_ = `Simpson's_rule) () ~f ~lo ~hi ~intervals =
     let rule =
       match method_ with
@@ -58,6 +78,8 @@ module Make (Real : Real) : S with type real = Real.t = struct
       | `Simpson's_rule ->
         fun x_lo y_lo x_hi y_hi -> ((four * f ((x_lo + x_hi) / two)) + y_lo + y_hi) / six
     in
+    if Int.( <= ) intervals 0 then raise_expected_positive_intervals intervals;
+    check_lo_hi ~lo ~hi;
     let dx = (hi - lo) / of_int intervals in
     let rec loop x_lo y_lo i ac =
       if Int.(i >= intervals)
@@ -68,14 +90,6 @@ module Make (Real : Real) : S with type real = Real.t = struct
         loop x_hi y_hi Int.(i + 1) (ac + (dx * rule x_lo y_lo x_hi y_hi)))
     in
     loop lo (f lo) 0 zero
-  ;;
-
-  let rec newton's_method ~f ~f' ~epsilon ~init =
-    check_epsilon_is_positive epsilon;
-    let delta = f init / f' init in
-    if abs delta < epsilon
-    then init
-    else newton's_method ~f ~f' ~epsilon ~init:(init - delta)
   ;;
 end
 

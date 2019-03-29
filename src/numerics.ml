@@ -14,7 +14,18 @@ module Make (Real : Real) : S with type real = Real.t = struct
   let four = of_int 4
   let six = of_int 6
 
+  let[@inline never] raise_expected_positive_epsilon epsilon =
+    raise_s [%message "expected positive epsilon" (epsilon : Real.t)]
+  ;;
+
+  let[@inline always] check_epsilon_is_positive epsilon =
+    match sign_exn epsilon with
+    | Neg | Zero -> raise_expected_positive_epsilon epsilon
+    | Pos -> ()
+  ;;
+
   let bisect ~f ~epsilon ~lo:x_lo ~hi:x_hi =
+    check_epsilon_is_positive epsilon;
     let rec loop x_lo x_hi y_lo y_hi =
       let x_mi = (x_lo + x_hi) / two in
       if x_hi - x_lo < epsilon
@@ -60,6 +71,7 @@ module Make (Real : Real) : S with type real = Real.t = struct
   ;;
 
   let rec newton's_method ~f ~f' ~epsilon ~init =
+    check_epsilon_is_positive epsilon;
     let delta = f init / f' init in
     if abs delta < epsilon
     then init

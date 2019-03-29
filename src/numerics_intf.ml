@@ -3,7 +3,7 @@ open! Import
 
 (** Real numbers *)
 module type Real = sig
-  type t
+  type t [@@deriving sexp_of]
 
   val ( + ) : t -> t -> t
   val ( - ) : t -> t -> t

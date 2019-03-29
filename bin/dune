@@ -1,10 +1,6 @@
 (executables
- (names        main)
+ (names main)
  (public_names euler)
- (libraries
-  core
-  core_bench
-  euler
-  euler_solution_helpers
-  euler_solutions)
- (preprocess (pps ppx_jane)))
+ (libraries core core_bench euler euler_solution_helpers euler_solutions)
+ (preprocess
+  (pps ppx_jane)))

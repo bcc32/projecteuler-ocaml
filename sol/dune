@@ -1,19 +1,20 @@
 (library
  (name euler_solutions)
  (synopsis "A collection of OCaml solutions to ProjectEuler problems")
- (libraries
-  bignum
-  core
-  core_kernel.total_map
-  euler
-  euler_data
-  euler_solution_helpers
-  re)
- (preprocess (pps ppx_jane))
+ (libraries bignum core core_kernel.total_map euler euler_data
+   euler_solution_helpers re)
+ (preprocess
+  (pps ppx_jane))
  (inline_tests)
- (modules (:standard \ template)))
+ (modules
+  (:standard \ template)))
 
 (rule
  (targets euler_solutions.ml)
- (deps (:script ./module-list.pl) (glob_files sol*.ml))
- (action (with-stdout-to %{targets} (run %{script}))))
+ (deps
+  (:script ./module-list.pl)
+  (glob_files sol*.ml))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run %{script}))))

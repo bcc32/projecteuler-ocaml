@@ -2,16 +2,22 @@
 ;;
 ;; see https://jbuilder.readthedocs.io/en/latest/dune-files.html#include for
 ;; example
+
 (include dune.inc)
 
 (rule
  (targets dune.inc.gen)
- (deps (glob_files *.txt))
- (action (with-stdout-to %{targets} (run ./gen-dune.sh))))
+ (deps
+  (glob_files *.txt))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen-dune.sh))))
 
 (alias
  (name runtest)
- (action (diff dune.inc dune.inc.gen)))
+ (action
+  (diff dune.inc dune.inc.gen)))
 
 (library
  (name euler_data)
@@ -19,5 +25,9 @@
 
 (rule
  (targets euler_data.ml)
- (deps (glob_files *.txt))
- (action (with-stdout-to %{targets} (run ./gen-data.sh))))
+ (deps
+  (glob_files *.txt))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run ./gen-data.sh))))

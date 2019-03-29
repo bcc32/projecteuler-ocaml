@@ -1,18 +1,6 @@
 open! Core
 open! Import
-
-let gen_prob = Bignum.(gen_incl zero one)
-
-module D = struct
-  include Distribution.Bignum
-
-  (* CR azeng: Should take key generator? *)
-  let quickcheck_generator =
-    let open Gen.Let_syntax in
-    let%map keys = Int.Map.quickcheck_generator Int.quickcheck_generator gen_prob in
-    keys |> Map.to_alist |> of_alist_exn |> normalize
-  ;;
-end
+module D = Distribution.Bignum
 
 let%test_unit "singleton" =
   let d = D.singleton 0 in
@@ -20,7 +8,7 @@ let%test_unit "singleton" =
 ;;
 
 let%test_unit "scale" =
-  Q.test gen_prob ~f:(fun p ->
+  Q.test D.Prob.quickcheck_generator ~f:(fun p ->
     let d = D.scale (D.singleton 0) p in
     [%test_result: Bignum.t] ~expect:p (D.find_exn d 0))
 ;;
@@ -28,7 +16,7 @@ let%test_unit "scale" =
 let%test_unit "combine" =
   let d1 = D.singleton 1 in
   let d2 = D.singleton 2 in
-  Q.test gen_prob ~f:(fun p1 ->
+  Q.test D.Prob.quickcheck_generator ~f:(fun p1 ->
     let d = D.combine ~d1 ~d2 ~p1 in
     [%test_result: Bignum.t] (D.find_exn d 1) ~expect:p1;
     [%test_result: Bignum.t] (D.find_exn d 2) ~expect:Bignum.(one - p1))
@@ -64,7 +52,7 @@ let%test_unit "bind" =
 
 let%test_unit "uniform" =
   Q.test
-    (List.gen_non_empty [%quickcheck.generator: D.t])
+    (List.gen_non_empty [%quickcheck.generator: int D.t])
     ~sexp_of:[%sexp_of: int D.t list]
     ~shrinker:[%quickcheck.shrinker: _ list]
     ~f:(fun ds ->
@@ -103,7 +91,7 @@ let%test_unit "uniform'" =
 ;;
 
 let%test_unit "cartesian_product" =
-  let gen = [%quickcheck.generator: D.t * D.t] in
+  let gen = [%quickcheck.generator: int D.t * int D.t] in
   Q.test gen ~sexp_of:[%sexp_of: int D.t * int D.t] ~f:(fun (d1, d2) ->
     let d = D.cartesian_product d1 d2 in
     Map.iteri (D.to_map d1) ~f:(fun ~key:k1 ~data:p1 ->

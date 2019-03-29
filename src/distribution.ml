@@ -4,10 +4,11 @@ open! Import
 module type Prob = Distribution_intf.Prob
 module type S = Distribution_intf.S
 
-module Make (Prob : Prob) : S with type prob = Prob.t = struct
+module Make (Prob : Prob) : S with module Prob = Prob = struct
+  module Prob = Prob
+
   (* FIXME See if you can avoid using [Map.Poly.t]. *)
-  type 'key t = ('key, Prob.t) Map.Poly.t [@@deriving compare, sexp]
-  type prob = Prob.t
+  type 'key t = ('key, Prob.t) Map.Poly.t [@@deriving compare, quickcheck, sexp]
 
   let one = Prob.of_int 1
   let support = Map.keys
@@ -84,14 +85,34 @@ module Float = Make (struct
     include Float
 
     let ( // ) x y = of_int x / of_int y
+    let quickcheck_generator = Float.gen_incl 0. 1.
+    let quickcheck_shrinker = Quickcheck.Shrinker.empty ()
   end)
 
 module Percent = Make (struct
     include Percent
 
-    let of_int n = Percent.of_mult (float n)
-    let ( / ) x y = Percent.of_mult (Percent.to_mult x /. Percent.to_mult y)
-    let ( // ) x y = Percent.of_mult (float x /. float y)
+    let of_int n = of_mult (float n)
+    let ( / ) x y = of_mult (to_mult x /. to_mult y)
+    let ( // ) x y = of_mult (float x /. float y)
+
+    let quickcheck_generator =
+      Float.Prob.quickcheck_generator |> Quickcheck.Generator.map ~f:of_mult
+    ;;
+
+    let quickcheck_shrinker =
+      Float.Prob.quickcheck_shrinker
+      |> Quickcheck.Shrinker.map ~f:of_mult ~f_inverse:to_mult
+    ;;
+
+    let quickcheck_observer =
+      Float.Prob.quickcheck_observer |> Quickcheck.Observer.unmap ~f:to_mult
+    ;;
   end)
 
-module Bignum = Make (Bignum)
+module Bignum = Make (struct
+    include Bignum
+
+    let quickcheck_generator = Bignum.gen_incl Bignum.zero Bignum.one
+    let quickcheck_shrinker = Quickcheck.Shrinker.empty ()
+  end)

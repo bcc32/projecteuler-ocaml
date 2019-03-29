@@ -3,7 +3,7 @@ open! Import
 
 (** Numbers that can represent probabilities *)
 module type Prob = sig
-  type t [@@deriving compare, sexp]
+  type t [@@deriving compare, quickcheck, sexp]
 
   val zero : t
   val of_int : int -> t
@@ -17,11 +17,9 @@ end
 (** Discrete probability distributions *)
 module type S = sig
   (** a discrete probability distribution over elements (outcomes) of type 'key *)
-  type 'key t [@@deriving compare, sexp]
+  type 'key t [@@deriving compare, quickcheck, sexp]
 
-  (** a numerical type capable of representing probabilities *)
-  type prob
-
+  module Prob : Prob
   include Monad.S with type 'a t := 'a t
 
   (** [support t] returns a list of the possible outcomes described by the
@@ -35,18 +33,18 @@ module type S = sig
   (** {1 Accessors} *)
 
   (** usually 1 *)
-  val total : 'k t -> prob
+  val total : 'k t -> Prob.t
 
   (** [find t k] returns the probability of [k], or [None] if [k] is not in
       [support t]. *)
-  val find : 'k t -> 'k -> prob option
+  val find : 'k t -> 'k -> Prob.t option
 
-  val find_exn : 'k t -> 'k -> prob
-  val find_or_zero : 'k t -> 'k -> prob
+  val find_exn : 'k t -> 'k -> Prob.t
+  val find_or_zero : 'k t -> 'k -> Prob.t
 
   (** {1 Basic operations} *)
 
-  val scale : 'k t -> prob -> 'k t
+  val scale : 'k t -> Prob.t -> 'k t
   val normalize : 'k t -> 'k t
 
   (** {1 Combinators} *)
@@ -54,11 +52,11 @@ module type S = sig
   (** [combine ~d1 ~d2 ~p1] combines two distributions into a single
       distribution, by selecting elements from [d1] with probability [p1] and
       elements from [d2] with probability [1 - p1]. *)
-  val combine : d1:'k t -> d2:'k t -> p1:prob -> 'k t
+  val combine : d1:'k t -> d2:'k t -> p1:Prob.t -> 'k t
 
   (** Same as [combine], but distinguishes between events from the different
       distributions. *)
-  val combine' : d1:'a t -> d2:'b t -> p1:prob -> ('a, 'b) Either.t t
+  val combine' : d1:'a t -> d2:'b t -> p1:Prob.t -> ('a, 'b) Either.t t
 
   (** [uniform ts] returns a distribution that selects uniformly from the
       distributions in [ts]. *)
@@ -74,8 +72,8 @@ module type S = sig
 
   (** {1 Conversion functions}*)
 
-  val of_map : ('k, prob) Map.Poly.t -> 'k t
-  val to_map : 'k t -> ('k, prob) Map.Poly.t
-  val of_alist_exn : ('k, prob) List.Assoc.t -> 'k t
-  val to_alist : 'k t -> ('k, prob) List.Assoc.t
+  val of_map : ('k, Prob.t) Map.Poly.t -> 'k t
+  val to_map : 'k t -> ('k, Prob.t) Map.Poly.t
+  val of_alist_exn : ('k, Prob.t) List.Assoc.t -> 'k t
+  val to_alist : 'k t -> ('k, Prob.t) List.Assoc.t
 end

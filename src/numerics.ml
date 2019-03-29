@@ -36,7 +36,7 @@ module Make (Real : Real) : S with type real = Real.t = struct
     in
     let y_lo = f x_lo in
     let y_hi = f x_hi in
-    loop x_lo x_hi y_lo y_hi
+    if y_lo = zero then x_lo else if y_hi = zero then x_hi else loop x_lo x_hi y_lo y_hi
   ;;
 
   let integrate ?(method_ = `Simpson's_rule) () ~f ~lo ~hi ~intervals =

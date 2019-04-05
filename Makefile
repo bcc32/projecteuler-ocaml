@@ -1,6 +1,6 @@
 .PHONY: all check clean fmt test
 
-all: test fmt
+all: check test fmt
 
 check:
 	dune build @check

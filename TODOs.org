@@ -3,3 +3,6 @@ So it's easier to run separately, and so we can test by shelling out
 to euler, which means we can run in parallel.
 
 Alternatively, figure out how to [[https://github.com/ocaml/dune/issues/1516][make dune run tests in parallel]].
+* TODO ~Solution_intf.Arg.main~ should return a string
+Might be easier to automate things if it returns a string instead of
+printing.

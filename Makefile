@@ -1,6 +1,7 @@
 .PHONY: all check clean fmt test
 
-all: check test fmt
+all:
+	dune build @check @runtest @fmt --auto-promote
 
 check:
 	dune build @check

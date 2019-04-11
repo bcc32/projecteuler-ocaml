@@ -3,7 +3,7 @@ open! Import
 
 module M = struct
   let problem = Number 42
-  let words = lazy (Problem_042.data |> Parse.comma_separated_quoted_words)
+  let words = lazy (Problem_042.data |> Parse.csv_line ~f:Fn.id)
 
   let word_value word =
     let letter_value letter = Char.to_int letter - Char.to_int 'A' + 1 in

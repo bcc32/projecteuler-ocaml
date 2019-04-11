@@ -8,17 +8,13 @@ let space_separated_grid string ~conv =
     String.split line ~on:' ' |> Array.of_list_map ~f:conv)
 ;;
 
-let comma_separated_integers line =
-  String.split line ~on:',' |> List.map ~f:Int.of_string
-;;
-
-let comma_separated_quoted_words string =
+let csv_line line ~f =
   let reader =
     let open Csv.Let_syntax in
     let%map row = Csv.Row.builder in
-    Csv.Row.to_list row
+    List.init (Csv.Row.length row) ~f:(fun i -> Csv.Row.nth_conv_exn row i [%here] f)
   in
-  match string |> Csv.list_of_string reader with
+  match line |> Csv.list_of_string reader with
   | [] -> failwith "no rows"
   | [ row ] -> row
   | rows ->

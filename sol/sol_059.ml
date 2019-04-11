@@ -42,7 +42,7 @@ module M = struct
   let main () =
     let ciphertext =
       Problem_059.data
-      |> Parse.comma_separated_integers
+      |> Parse.csv_line ~f:Int.of_string
       |> List.map ~f:Char.of_int_exn
       |> Bytes.of_char_list
     in

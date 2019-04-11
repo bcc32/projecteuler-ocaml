@@ -6,9 +6,7 @@ module M = struct
 
   let names =
     lazy
-      (Problem_022.data
-       |> Parse.comma_separated_quoted_words
-       |> List.sort ~compare:String.compare)
+      (Problem_022.data |> Parse.csv_line ~f:Fn.id |> List.sort ~compare:String.compare)
   ;;
 
   let letter_score ch = Char.to_int ch - Char.to_int 'A' + 1

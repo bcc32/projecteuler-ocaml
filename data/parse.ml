@@ -13,8 +13,12 @@ let comma_separated_integers line =
 ;;
 
 let comma_separated_quoted_words string =
-  let reader = Csv_reader.Row.builder |> Csv_reader.map ~f:Csv_reader.Row.to_list in
-  match string |> Csv_reader.list_of_string reader with
+  let reader =
+    let open Csv.Let_syntax in
+    let%map row = Csv.Row.builder in
+    Csv.Row.to_list row
+  in
+  match string |> Csv.list_of_string reader with
   | [] -> failwith "no rows"
   | [ row ] -> row
   | rows ->

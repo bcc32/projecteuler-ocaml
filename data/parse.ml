@@ -9,6 +9,7 @@ let space_separated_grid string ~conv =
 ;;
 
 let csv_line line ~f =
+  (* TODO: Use Csv.Let_syntax with infix applicative operators, once it is supported. *)
   let reader =
     let open Csv.Let_syntax in
     let%map row = Csv.Row.builder in

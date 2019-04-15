@@ -19,10 +19,10 @@ module M = struct
         then (
           let prime_permutations =
             a
-            |> Number_theory.Int.digits_of_int
+            |> Number_theory.Int.to_digits
             |> Sequences.permutations ~compare:Int.compare
             |> Sequence.map ~f:(fun digits ->
-              digits |> Sequence.of_list |> Number_theory.Int.int_of_digits)
+              digits |> Sequence.of_list |> Number_theory.Int.of_digits)
             |> Sequence.filter ~f:(Array.get is_prime)
             |> Sequence.to_array
           in

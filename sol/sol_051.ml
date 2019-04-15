@@ -24,7 +24,7 @@ end = struct
   let all =
     Number_theory.Int.natural_numbers ()
     |> Sequence.filter_map ~f:(fun pattern ->
-      let digits = Number_theory.Int.digits_of_int pattern ~base:11 in
+      let digits = Number_theory.Int.to_digits pattern ~base:11 in
       Option.some_if (List.mem digits 10 ~equal:Int.equal) digits)
   ;;
 
@@ -34,7 +34,7 @@ end = struct
       | 10 -> fill_digit
       | n -> n)
     |> Sequence.of_list
-    |> Number_theory.Int.int_of_digits
+    |> Number_theory.Int.of_digits
   ;;
 
   let instances t =

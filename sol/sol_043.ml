@@ -13,7 +13,7 @@ let follows ~requirements digit digits =
 
 let rec iter digit digits ~is_used ~requirements ~f =
   if digit >= Array.length requirements
-  then f (digits |> Array.to_sequence_mutable |> Number_theory.Int.int_of_digits)
+  then f (digits |> Array.to_sequence_mutable |> Number_theory.Int.of_digits)
   else
     for d = 0 to 9 do
       digits.(digit) <- d;

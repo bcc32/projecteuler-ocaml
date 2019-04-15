@@ -7,7 +7,7 @@ let%expect_test "digits" =
       [%here]
       (module Int)
       n
-      (Number_theory.Int.int_of_digits (Sequence.of_list digits));
+      (Number_theory.Int.of_digits (Sequence.of_list digits));
     require_equal
       [%here]
       (module struct
@@ -16,7 +16,7 @@ let%expect_test "digits" =
         let equal = [%compare.equal: int list]
       end)
       digits
-      (Number_theory.Int.digits_of_int n)
+      (Number_theory.Int.to_digits n)
   in
   let examples =
     [ 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]

@@ -305,11 +305,9 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       iter_digits ~base (n / base) ~f)
   ;;
 
-  let digits_of_int ?(base = ten) n =
-    fold_digits ~base n ~init:[] ~f:(fun ac x -> x :: ac)
-  ;;
+  let to_digits ?(base = ten) n = fold_digits ~base n ~init:[] ~f:(fun ac x -> x :: ac)
 
-  let int_of_digits ?(base = ten) ds =
+  let of_digits ?(base = ten) ds =
     Sequence.fold ds ~init:zero ~f:(fun acc n -> (base * acc) + n)
   ;;
 

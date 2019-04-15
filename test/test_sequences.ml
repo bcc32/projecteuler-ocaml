@@ -14,7 +14,7 @@ let%test_unit "digits_of_string" =
       (s
        |> Sequences.digits_of_string
        |> Sequence.of_list
-       |> Number_theory.Int.int_of_digits))
+       |> Number_theory.Int.of_digits))
 ;;
 
 let%test_unit "is_palindrome" =

@@ -12,9 +12,7 @@ end = struct
   module T = struct
     type t = int list [@@deriving compare, hash, sexp]
 
-    let of_int int =
-      Number_theory.Int.digits_of_int int |> List.sort ~compare:Int.compare
-    ;;
+    let of_int int = Number_theory.Int.to_digits int |> List.sort ~compare:Int.compare
   end
 
   include T

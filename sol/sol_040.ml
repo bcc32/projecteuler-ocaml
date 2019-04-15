@@ -4,7 +4,7 @@ open! Import
 let champernowne's_constant =
   let open Sequence.Let_syntax in
   let%bind nat = Number_theory.Int.natural_numbers () ~init:1 in
-  Number_theory.Int.digits_of_int nat |> Sequence.of_list
+  Number_theory.Int.to_digits nat |> Sequence.of_list
 ;;
 
 module M = struct

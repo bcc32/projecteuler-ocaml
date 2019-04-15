@@ -15,8 +15,6 @@ module type S = sig
   (* FIXME Some of this doesn't really belong in "number theory", maybe separate
      out the combinatorics, digits, arithmetic, etc. *)
 
-  (* TODO rename to to_digits, of_digits *)
-
   (** {1 Digits} *)
 
   (** [fold_digits ?base n ~init ~f] folds over the digits of [n] from least significant
@@ -27,10 +25,10 @@ module type S = sig
   val iter_digits : ?base:integer -> integer -> f:(integer -> unit) -> unit
 
   (** left-to-right *)
-  val digits_of_int : ?base:integer -> integer -> integer list
+  val to_digits : ?base:integer -> integer -> integer list
 
   (** left-to-right *)
-  val int_of_digits : ?base:integer -> integer Sequence.t -> integer
+  val of_digits : ?base:integer -> integer Sequence.t -> integer
 
   val sum_digits : ?base:integer -> integer -> integer
 

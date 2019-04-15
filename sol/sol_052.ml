@@ -7,7 +7,7 @@ module M = struct
 
   let same_digits n =
     let sort_digits n =
-      Number_theory.Int.digits_of_int n |> List.sort ~compare:Int.compare
+      Number_theory.Int.to_digits n |> List.sort ~compare:Int.compare
     in
     let n_digits = sort_digits n in
     count_digits (n * 6) = List.length n_digits

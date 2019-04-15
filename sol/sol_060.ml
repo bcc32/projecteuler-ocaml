@@ -48,9 +48,9 @@ let is_prime_pair =
     Hashtbl.findi_or_add cache t ~default:(fun { a; b } ->
       let concat a b =
         Sequence.append
-          (Sequence.of_list (Number_theory.Int.digits_of_int a))
-          (Sequence.of_list (Number_theory.Int.digits_of_int b))
-        |> Number_theory.Int.int_of_digits
+          (Sequence.of_list (Number_theory.Int.to_digits a))
+          (Sequence.of_list (Number_theory.Int.to_digits b))
+        |> Number_theory.Int.of_digits
       in
       let c, d = concat a b, concat b a in
       let is_prime = force is_prime in

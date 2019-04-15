@@ -7,7 +7,7 @@ let pandigital () =
   let merge n ~into:sorted_digits =
     List.merge
       ~compare:Int.compare
-      (List.sort ~compare:Int.compare (Number_theory.Int.digits_of_int n))
+      (List.sort ~compare:Int.compare (Number_theory.Int.to_digits n))
       sorted_digits
   in
   let has_consecutive_duplicate =

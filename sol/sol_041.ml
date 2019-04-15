@@ -11,7 +11,7 @@ module M = struct
         Sequences.iter_permutations digits ~compare:Int.descending ~f:(fun digits ->
           let n =
             Array.Permissioned.to_sequence_mutable digits
-            |> Number_theory.Int.int_of_digits
+            |> Number_theory.Int.of_digits
           in
           if Number_theory.Int.is_prime n then return n)
       done;

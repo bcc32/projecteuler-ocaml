@@ -29,7 +29,7 @@ let iter_allprime_subsets set ~f =
           let n =
             n
             |> Array.Permissioned.to_sequence_mutable
-            |> Number_theory.Int.int_of_digits
+            |> Number_theory.Int.of_digits
           in
           if n >= min && Number_theory.Int.is_prime n
           then loop (set_diff set subset ~equal:Int.equal) (n + 1) (subset :: subsets)))

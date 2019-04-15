@@ -7,7 +7,7 @@ module M = struct
   let is_prime = lazy (Number_theory.prime_sieve limit)
 
   let prime_circle n =
-    let digits = Number_theory.Int.digits_of_int n |> Array.of_list in
+    let digits = Number_theory.Int.to_digits n |> Array.of_list in
     let len = Array.length digits in
     let double_digits = Array.append digits digits in
     let results = ref [] in

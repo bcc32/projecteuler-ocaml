@@ -3,20 +3,28 @@ open! Import
 module D = Distribution.Float
 
 module Chance_card = struct
-  type t =
-    | No_op
-    | Advance_to_go
-    | Go_to_jail
-    | Go_to_C1
-    | Go_to_E3
-    | Go_to_H2
-    | Go_to_R1
-    | Go_to_next_R
-    | Go_to_next_U
-    | Go_back_3_squares
+  module T = struct
+    type t =
+      | No_op
+      | Advance_to_go
+      | Go_to_jail
+      | Go_to_C1
+      | Go_to_E3
+      | Go_to_H2
+      | Go_to_R1
+      | Go_to_next_R
+      | Go_to_next_U
+      | Go_back_3_squares
+    [@@deriving compare, quickcheck, sexp_of]
+
+    include (val Comparator.make ~compare ~sexp_of_t)
+  end
+
+  include T
 
   let dist =
     D.uniform'
+      (module T)
       [ No_op
       ; No_op
       ; No_op
@@ -38,13 +46,21 @@ module Chance_card = struct
 end
 
 module Community_chest_card = struct
-  type t =
-    | No_op
-    | Advance_to_go
-    | Go_to_jail
+  module T = struct
+    type t =
+      | No_op
+      | Advance_to_go
+      | Go_to_jail
+    [@@deriving compare, quickcheck, sexp_of]
+
+    include (val Comparator.make ~compare ~sexp_of_t)
+  end
+
+  include T
 
   let dist =
     D.uniform'
+      (module T)
       [ No_op
       ; No_op
       ; No_op
@@ -66,10 +82,12 @@ module Community_chest_card = struct
 end
 
 module Square : sig
-  type t [@@deriving compare, enumerate, sexp]
+  type t [@@deriving compare, enumerate, quickcheck, sexp]
+
+  include Comparator.S with type t := t
 
   val index : t -> int
-  val move_and_maybe_go_to_jail : t -> int D.t -> t D.t
+  val move_and_maybe_go_to_jail : t -> (int, _) D.t -> (t, comparator_witness) D.t
   val is_chance : t -> bool
   val is_community_chest : t -> bool
   val apply_chance : t -> Chance_card.t -> t
@@ -94,7 +112,7 @@ end = struct
       | R of int
       | T of int
       | U of int
-    [@@deriving bin_io, compare, sexp]
+    [@@deriving bin_io, compare, quickcheck, sexp]
 
     let all =
       [ Go
@@ -139,10 +157,12 @@ end = struct
       ; H 2
       ]
     ;;
+
+    include (val Comparator.make ~compare ~sexp_of_t)
   end
 
   include T
-  include Comparable.Make (T)
+  include Comparable.Make_using_comparator (T)
 
   let all_array = Array.of_list all
 
@@ -176,10 +196,12 @@ end = struct
 
   let move_and_maybe_go_to_jail t die =
     let i = index t in
-    let open D.Let_syntax in
-    let%map n = die in
-    let dest = all_array.((i + n) % Array.length all_array) in
-    if dest = Go_to_jail then Jail else dest
+    D.map'
+      (module T)
+      die
+      ~f:(fun n ->
+        let dest = all_array.((i + n) % Array.length all_array) in
+        if dest = Go_to_jail then Jail else dest)
   ;;
 
   let find_next t ~f =
@@ -220,7 +242,7 @@ module Game_state_dist : sig
   type t
 
   val init : t
-  val advance : t -> die:int D.t -> t
+  val advance : t -> die:(int, _) D.t -> t
   val to_string_modal : t -> string
   val sexp_of_square_dist : t -> Sexp.t
 end = struct
@@ -228,15 +250,16 @@ end = struct
      probably give the same result but (shrug). *)
   type t =
     { square :
-        Square.t D.t
+        (Square.t, Square.comparator_witness) D.t
     (* chance and community_chest are stored in order of the top of the stack to
        the bottom *)
-    ; chance : Chance_card.t D.t list
-    ; community_chest : Community_chest_card.t D.t list
+    ; chance : (Chance_card.t, Chance_card.comparator_witness) D.t list
+    ; community_chest :
+        (Community_chest_card.t, Community_chest_card.comparator_witness) D.t list
     }
 
   let init =
-    { square = D.uniform' Square.all
+    { square = D.uniform' (module Square) Square.all
     ; chance = List.init 16 ~f:(fun _ -> Chance_card.dist)
     ; community_chest = List.init 16 ~f:(fun _ -> Community_chest_card.dist)
     }
@@ -261,21 +284,29 @@ end = struct
       match%bind square with
       | sq
         when Square.is_chance sq ->
-        let%map card = List.hd_exn t.chance in
-        Square.apply_chance sq card
+        D.map'
+          (module Square)
+          (List.hd_exn t.chance)
+          ~f:(fun card -> Square.apply_chance sq card)
       | sq
         when Square.is_community_chest sq ->
-        let%map card = List.hd_exn t.community_chest in
-        Square.apply_community_chest sq card
-      | s -> return s
+        D.map'
+          (module Square)
+          (List.hd_exn t.community_chest)
+          ~f:(fun card -> Square.apply_community_chest sq card)
+      | s -> return (module Square) s
     in
     let chance =
-      let p_chance = square >>| Square.is_chance |> Fn.flip D.find_or_zero true in
+      let p_chance =
+        square |> D.map' (module Bool) ~f:Square.is_chance |> Fn.flip D.find_or_zero true
+      in
       flip_card t.chance ~p_flip:p_chance
     in
     let community_chest =
       let p_community_chest =
-        square >>| Square.is_community_chest |> Fn.flip D.find_or_zero true
+        square
+        |> D.map' (module Bool) ~f:Square.is_community_chest
+        |> Fn.flip D.find_or_zero true
       in
       flip_card t.community_chest ~p_flip:p_community_chest
     in
@@ -291,7 +322,7 @@ end = struct
     |> String.concat
   ;;
 
-  let sexp_of_square_dist t = [%sexp (t.square : Square.t D.t)]
+  let sexp_of_square_dist t = [%sexp (t.square : D.M(Square).t)]
 end
 
 module M = struct
@@ -300,12 +331,8 @@ module M = struct
   let main () =
     let g = ref Game_state_dist.init in
     let die =
-      let one_die = D.uniform' [ 1; 2; 3; 4 ] in
-      let open D.Let_syntax in
-      let%map () = return ()
-      and a = one_die
-      and b = one_die in
-      a + b
+      let one_die = D.uniform' (module Int) [ 1; 2; 3; 4 ] in
+      D.map2 one_die one_die ~f:(fun a b -> a + b)
     in
     for _ = 1 to 100 do
       g := Game_state_dist.advance !g ~die

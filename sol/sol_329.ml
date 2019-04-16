@@ -5,13 +5,15 @@ module Is_prime = struct
   type t =
     [ `Prime
     | `Not_prime ]
-  [@@deriving equal, sexp]
+  [@@deriving compare, equal, quickcheck, sexp_of]
 
   let of_char_exn = function
     | 'P' -> `Prime
     | 'N' -> `Not_prime
     | c -> invalid_argf "Is_prime.of_char_exn: '%c'" c ()
   ;;
+
+  include (val Comparator.make ~compare ~sexp_of_t)
 end
 
 module M = struct
@@ -21,25 +23,36 @@ module M = struct
 
   let is_prime = lazy (Number_theory.prime_sieve 500)
 
-  let step (pos : int Dist.t) : (int * [`Prime | `Not_prime]) Dist.t =
-    let open Dist.Let_syntax in
-    let%bind x = pos in
-    let sound =
-      if (force is_prime).(x)
-      then Dist.uniform' [ `Prime; `Prime; `Not_prime ]
-      else Dist.uniform' [ `Prime; `Not_prime; `Not_prime ]
-    in
-    let pos =
-      match x with
-      | 1 -> return 2
-      | 500 -> return 499
-      | x -> Dist.uniform' [ x - 1; x + 1 ]
-    in
-    Dist.cartesian_product pos sound
+  let step (pos : (int, _) Dist.t) : (int * Is_prime.t, _) Dist.t =
+    Dist.bind'
+      (module struct
+        type t = int * Is_prime.t [@@deriving compare, quickcheck, sexp_of]
+
+        type comparator_witness =
+          ( Int.comparator_witness
+          , Is_prime.comparator_witness )
+            Tuple.T2.comparator_witness
+
+        let comparator = Tuple.T2.comparator Int.comparator Is_prime.comparator
+      end)
+      pos
+      ~f:(fun x ->
+        let sound =
+          if (force is_prime).(x)
+          then Dist.uniform' (module Is_prime) [ `Prime; `Prime; `Not_prime ]
+          else Dist.uniform' (module Is_prime) [ `Prime; `Not_prime; `Not_prime ]
+        in
+        let pos =
+          match x with
+          | 1 -> Dist.singleton (module Int) 2
+          | 500 -> Dist.singleton (module Int) 499
+          | x -> Dist.uniform' (module Int) [ x - 1; x + 1 ]
+        in
+        Dist.cartesian_product pos sound)
   ;;
 
   let main () =
-    let init = ref (Dist.uniform' (List.range 1 500 ~stop:`inclusive)) in
+    let init = ref (Dist.uniform' (module Int) (List.range 1 500 ~stop:`inclusive)) in
     let product = ref Bignum.one in
     let expected =
       "PPPPNNPPPNPPNPN" |> String.to_list |> List.map ~f:Is_prime.of_char_exn
@@ -51,7 +64,7 @@ module M = struct
         |> Dist.to_alist
         |> List.filter_map ~f:(fun ((pos, is_prime), p) ->
           if Is_prime.equal is_prime expected then Some (pos, p) else None)
-        |> Dist.of_alist_exn
+        |> Dist.of_alist_exn (module Int)
       in
       let total = Dist.total next in
       (product := Bignum.(!product * total));

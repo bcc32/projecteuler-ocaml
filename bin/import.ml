@@ -1,3 +1,4 @@
 open! Core
+include Cmdliner
 include Euler_solution_helpers
 include Int.Replace_polymorphic_compare

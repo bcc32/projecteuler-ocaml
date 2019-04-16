@@ -82,3 +82,9 @@ let command =
   List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))
   |> Command.group ~summary:"Benchmarking Euler"
 ;;
+
+let command =
+  Term.(
+    ( const (fun c -> Command.run c) $ const command
+    , info "bench" ~doc:"Benchmarking Euler" ))
+;;

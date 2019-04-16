@@ -21,6 +21,5 @@ module type Arg = sig
 end
 
 module type S = sig
-  val command : Command.t
-  val command_name : string
+  val command : unit Term.t * Term.info
 end

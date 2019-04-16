@@ -1,4 +1,4 @@
 open! Core
 open! Import
 
-val command : Command.t
+val command : unit Term.t * Term.info

@@ -1,28 +1,24 @@
 open! Core
 open! Import
 
-(* TODO: Add quickcheck *)
-let%expect_test "digits" =
-  let require_round_trip n digits =
-    require_equal
-      [%here]
-      (module Int)
-      n
-      (Number_theory.Int.of_digits (Sequence.of_list digits));
-    require_equal
-      [%here]
-      (module struct
-        type t = int list [@@deriving sexp]
-
-        let equal = [%compare.equal: int list]
-      end)
-      digits
-      (Number_theory.Int.to_digits n)
+let%test_unit "digits" =
+  let check_round_trip (n, digits) =
+    [%test_eq: int] n (Number_theory.Int.of_digits (Sequence.of_list digits));
+    [%test_eq: int list] digits (Number_theory.Int.to_digits n)
   in
-  let examples =
-    [ 0, [ 0 ]; 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]
+  let digits_through_string n =
+    n |> Int.to_string |> String.to_list |> List.map ~f:Char.get_digit_exn
   in
-  List.iter examples ~f:(fun (n, digits) -> require_round_trip n digits)
+  let gen =
+    let open Quickcheck.Let_syntax in
+    let%map_open n = small_positive_int in
+    n, digits_through_string n
+  in
+  Quickcheck.test
+    gen
+    ~examples:
+      [ 0, [ 0 ]; 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]
+    ~f:check_round_trip
 ;;
 
 let%expect_test "is_prime" =

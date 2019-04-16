@@ -23,20 +23,27 @@ let%test_unit "quadratic_formula" =
       | Zero -> 1
       | Pos -> 2
     in
-    let test_root =
-      [%test_pred: float] (fun x ->
-        let open Float.O in
-        let y = (a * (x ** 2.)) + (b * x) + c in
-        abs y < 1e-7)
+    let test_root here x =
+      let open Float.O in
+      let y = (a * (x ** 2.)) + (b * x) + c in
+      if abs y >= 1e-7
+      then
+        raise_s
+          [%message
+            "Expected y=f(x) to be approximately zero"
+              (x : float)
+              (y : float)
+              (here : Source_code_position.t)]
     in
     match Algebra.quadratic_formula a b c with
     | `None -> [%test_result: int] 0 ~expect
     | `One x ->
       [%test_result: int] 1 ~expect;
-      test_root x
+      test_root [%here] x
     | `Two (x0, x1) ->
       [%test_result: int] 2 ~expect;
-      [%test_pred: float * float] (fun (x, y) -> Float.(x < y)) (x0, x1);
-      test_root x0;
-      test_root x1)
+      if Float.O.(x0 >= x1)
+      then raise_s [%message "Expected root x0 < x1" (x0 : float) (x1 : float)];
+      test_root [%here] x0;
+      test_root [%here] x1)
 ;;

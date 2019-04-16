@@ -66,7 +66,7 @@ let%test_unit "run_length_encode" =
     [%test_result: int list]
       ~expect:l
       (List.bind enc ~f:(fun (elt, n) ->
-         [%test_pred: int] (fun n -> n > 0) n;
+         [%test_pred: int] Int.is_positive n;
          List.init n ~f:(fun _ -> elt)));
     (* no consecutive duplicates *)
     [%test_result: ((int * int) * (int * int)) option]

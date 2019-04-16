@@ -293,16 +293,23 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   (* TODO handle negative numbers? *)
-  (* TODO weird behavior for fold_digits 0 *)
-  let rec fold_digits ?(base = ten) n ~init ~f =
-    if n = zero then init else fold_digits ~base (n / base) ~init:(f init (n % base)) ~f
+  let fold_digits ?(base = ten) n ~init ~f =
+    let rec fold_digits_loop n ~base ~init ~f =
+      if n = zero
+      then init
+      else fold_digits_loop ~base (n / base) ~init:(f init (n % base)) ~f
+    in
+    if n = zero then f init zero else fold_digits_loop ~base n ~init ~f
   ;;
 
-  let rec iter_digits ?(base = ten) n ~f =
-    if n <> zero
-    then (
-      f (n % base);
-      iter_digits ~base (n / base) ~f)
+  let iter_digits ?(base = ten) n ~f =
+    let rec iter_digits_loop n ~base ~f =
+      if n <> zero
+      then (
+        f (n % base);
+        iter_digits_loop ~base (n / base) ~f)
+    in
+    if n = zero then f zero else iter_digits_loop ~base n ~f
   ;;
 
   let to_digits ?(base = ten) n = fold_digits ~base n ~init:[] ~f:(fun ac x -> x :: ac)

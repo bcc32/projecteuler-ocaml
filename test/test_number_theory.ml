@@ -22,14 +22,7 @@ let%expect_test "digits" =
   let examples =
     [ 0, [ 0 ]; 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]
   in
-  List.iter examples ~f:(fun (n, digits) -> require_round_trip n digits);
-  [%expect
-    {|
-    (* CR require-failed: test/test_number_theory.ml:13:6.
-       Do not 'X' this CR; instead make the required property true,
-       which will make the CR disappear.  For more information, see
-       [Expect_test_helpers_base.require]. *)
-    ("values are not equal" (0) ()) |}]
+  List.iter examples ~f:(fun (n, digits) -> require_round_trip n digits)
 ;;
 
 let%expect_test "is_prime" =

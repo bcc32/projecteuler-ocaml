@@ -7,6 +7,8 @@ let solution_commands =
     let module M = (val m : Solution.S) in
     (* FIXME Work around automatic prefix matching, since we don't want [euler
        60] to run [euler 601] if no solution to problem 60 is written. *)
+    (* TODO: Use cmdliner?  Would also take care of the EULER_DEBUG environment
+       variable. *)
     M.command_name, M.command)
 ;;
 

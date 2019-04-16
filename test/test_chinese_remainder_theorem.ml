@@ -14,14 +14,14 @@ let are_pairwise_coprime xs =
 
 let%test_unit "Chinese remainder theorem" =
   let gen =
-    let open Gen.Let_syntax in
-    let%bind moduli =
-      Bigint.gen_positive |> List.gen_non_empty |> Gen.filter ~f:are_pairwise_coprime
+    let open Quickcheck.Let_syntax in
+    let%bind_open moduli =
+      Bigint.gen_positive |> list_non_empty |> filter ~f:are_pairwise_coprime
     in
     List.map moduli ~f:(fun modulus ->
       let%map residue = Bigint.gen_incl Bigint.zero (Bigint.pred modulus) in
       residue, modulus)
-    |> Gen.all
+    |> Quickcheck.Generator.all
   in
   Q.test
     gen

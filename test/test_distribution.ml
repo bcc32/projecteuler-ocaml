@@ -72,7 +72,7 @@ let%test_unit "uniform" =
 
 let%test_unit "uniform'" =
   let gen =
-    let open Gen.Let_syntax in
+    let open Quickcheck.Let_syntax in
     let%map xs = List.gen_non_empty Int.quickcheck_generator in
     List.dedup_and_sort xs ~compare:Int.compare
   in

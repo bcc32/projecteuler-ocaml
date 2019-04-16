@@ -1,7 +1,4 @@
 open! Core
-module Gen = Quickcheck.Generator
-module Obs = Quickcheck.Observer
-module Shr = Quickcheck.Shrinker
 
 module Q = Quickcheck.Configure (struct
     include Quickcheck

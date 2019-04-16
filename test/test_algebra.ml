@@ -3,15 +3,15 @@ open! Import
 
 let%test_unit "quadratic_formula" =
   let gen =
-    let open Gen.Let_syntax in
+    let open Quickcheck.Let_syntax in
     let reasonable_ranges =
-      let%map () = return ()
+      let%map_open () = return ()
       and magnitude = Float.gen_incl (-5.) 5.
-      and sign = Gen.of_list [ -1.; 0.; 1. ] in
+      and sign = of_list [ -1.; 0.; 1. ] in
       Float.copysign (exp magnitude) sign
     in
-    let%map () = return ()
-    and a = reasonable_ranges |> Gen.filter ~f:(fun x -> Float.(x <> 0.))
+    let%map_open () = return ()
+    and a = reasonable_ranges |> filter ~f:(fun x -> Float.(x <> 0.))
     and b = reasonable_ranges
     and c = reasonable_ranges in
     a, b, c

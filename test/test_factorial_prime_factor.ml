@@ -2,8 +2,7 @@ open! Core
 open! Import
 
 let%test_unit "factorial_prime_factor" =
-  let gen = Gen.small_positive_int in
-  Q.test gen ~sexp_of:[%sexp_of: int] ~f:(fun n ->
+  Q.test Quickcheck.Generator.small_positive_int ~sexp_of:[%sexp_of: int] ~f:(fun n ->
     let expect =
       n
       |> Bigint.of_int

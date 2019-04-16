@@ -25,7 +25,7 @@ let%test_unit _ =
   let limit = 25 in
   let max_result = limit * limit in
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Quickcheck.Let_syntax in
     let%bind () = return ()
     and n = Int.gen_incl 1 limit
     and m = Int.gen_incl 1 limit in

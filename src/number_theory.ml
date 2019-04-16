@@ -543,7 +543,7 @@ end
 
 let%test_unit "addition_chain_pow vs. Int.pow" =
   let gen =
-    let open Quickcheck.Generator.Let_syntax in
+    let open Quickcheck.Let_syntax in
     let%map () = return ()
     and b = Core.Int.gen_incl 0 3
     and e = Core.Int.gen_incl 0 32 in

@@ -3,13 +3,13 @@
 set -euxo pipefail
 
 list_solutions() {
-    dune exec -p euler -- euler 2>&1 | awk '/Problem/ { print $1 }' | grep -v naive
+    dune exec -p euler -- euler list | grep -v naive
 }
 
 run_solution() {
     sol=$1
     echo "$sol"
-    dune exec -p euler --no-build -- euler "$sol" -time
+    dune exec -p euler --no-build -- euler "$sol" --time
 }
 export -f run_solution
 

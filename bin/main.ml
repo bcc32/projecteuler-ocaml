@@ -10,10 +10,21 @@ let solution_commands =
     M.command)
 ;;
 
+let list_solutions () =
+  List.iter solution_commands ~f:(fun (_, info) -> print_endline (Term.name info))
+;;
+
+let list_solutions_t =
+  Term.(const list_solutions $ const (), info "list" ~doc:"List solution commands")
+;;
+
 let main =
   Term.(
     ( ret (const (`Help (`Pager, None)))
     , info "euler" ~doc:"Run ProjectEuler solutions" ~version:"%%VERSION%%" ))
 ;;
 
-let () = Term.(exit @@ eval_choice main (Benchmark.command :: solution_commands))
+let () =
+  Term.(
+    exit @@ eval_choice main (Benchmark.command :: list_solutions_t :: solution_commands))
+;;

@@ -26,5 +26,6 @@ let main =
 
 let () =
   Term.(
-    exit @@ eval_choice main (Benchmark.command :: list_solutions_t :: solution_commands))
+    eval_choice main (Euler_benchmark.command :: list_solutions_t :: solution_commands)
+    |> exit)
 ;;

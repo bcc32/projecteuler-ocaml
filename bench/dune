@@ -1,0 +1,5 @@
+(library
+ (name euler_benchmark)
+ (libraries cmdliner core_bench euler)
+ (preprocess
+  (pps ppx_jane)))

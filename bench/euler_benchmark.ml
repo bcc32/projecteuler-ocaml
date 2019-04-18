@@ -84,7 +84,7 @@ let command =
 ;;
 
 let command =
-  Term.(
+  Cmdliner.Term.(
     ( const (fun c -> Command.run c) $ const command
     , info "bench" ~doc:"Benchmarking Euler" ))
 ;;

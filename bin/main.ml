@@ -20,7 +20,7 @@ let list_solutions_t =
 
 let main =
   Term.(
-    ( ret (const (`Help (`Pager, None)))
+    ( ret (const (`Help (`Auto, None)))
     , info "euler" ~doc:"Run ProjectEuler solutions" ~version:"%%VERSION%%" ))
 ;;
 

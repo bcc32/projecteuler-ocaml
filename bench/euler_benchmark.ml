@@ -70,6 +70,17 @@ let pow_group =
     ]
 ;;
 
+open Cmdliner
+
+(* TODO: List available benchmarks. *)
+let selected_groups =
+  Arg.(
+    value & pos_all string [] & info [] ~docv:"GROUP" ~doc:"Names of benchmarks to run")
+;;
+
+(* TODO: Write a library to create cmdliner bench commands, so that the below can be
+   configured? *)
+(* TODO: Instead of the above, get inline benchmarks working with dune. *)
 let command =
   let groups =
     [ "divisors", divisors_group
@@ -79,12 +90,13 @@ let command =
     ; "rle", run_length_encode_group
     ]
   in
-  List.map groups ~f:(Tuple2.map_snd ~f:(fun g -> Bench.make_command [ g ]))
-  |> Command.group ~summary:"Benchmarking Euler"
-;;
-
-let command =
-  Cmdliner.Term.(
-    ( const (fun c -> Command.run c) $ const command
-    , info "bench" ~doc:"Benchmarking Euler" ))
+  let bench selected_groups : unit Term.ret =
+    match selected_groups with
+    | [] -> `Help (`Auto, Some "bench")
+    | selected_groups ->
+      List.map selected_groups ~f:(List.Assoc.find_exn groups ~equal:String.equal)
+      |> Bench.bench;
+      `Ok ()
+  in
+  Term.(ret (const bench $ selected_groups), info "bench" ~doc:"Benchmarking Euler")
 ;;

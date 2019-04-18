@@ -1,8 +1,6 @@
 open! Core
 open! Import
-
-module type Arg = Solution_intf.Arg
-module type S = Solution_intf.S
+include Solution_intf
 
 let time_unit f () =
   let start = Time_ns.now () in
@@ -11,8 +9,17 @@ let time_unit f () =
     print_s [%sexp (Time_ns.diff finish start : Time_ns.Span.t)])
 ;;
 
+type t = ?print_debug:bool -> ?print_elapsed_time:bool -> unit -> unit
+
 module Make (M : Arg) : S = struct
-  let summary =
+  let name =
+    match M.problem with
+    | Number n -> Int.to_string n
+    | Tagged { number; tag; description = _ } -> sprintf "%d-%s" number tag
+    | Custom { name; description = _ } -> name
+  ;;
+
+  let description =
     match M.problem with
     | Number n -> sprintf "Problem %d" n
     | Tagged { number; tag = _; description } ->
@@ -20,18 +27,11 @@ module Make (M : Arg) : S = struct
     | Custom { name = _; description } -> description
   ;;
 
-  let command_name =
-    match M.problem with
-    | Number n -> Int.to_string n
-    | Tagged { number; tag; description = _ } -> sprintf "%d-%s" number tag
-    | Custom { name; description = _ } -> name
-  ;;
-
-  let main debug time =
+  let run ?(print_debug = false) ?(print_elapsed_time = false) () =
     (* FIXME: Don't set [debug] through an environment variable, make it a ref or a
        [Set_once]. *)
     (* re-exec self with [EULER_DEBUG] set *)
-    if debug && not Debug_printing.Export.debug
+    if print_debug && not Debug_printing.Export.debug
     then
       never_returns
         (Unix.exec
@@ -39,22 +39,6 @@ module Make (M : Arg) : S = struct
            ~prog:Sys.executable_name
            ~argv:(Array.to_list Sys.argv)
            ~env:(`Extend [ "EULER_DEBUG", "1" ]));
-    if time then time_unit M.main () else M.main ()
+    if print_elapsed_time then time_unit M.main () else M.main ()
   ;;
-
-  let debug_arg =
-    Arg.(
-      value
-      & flag
-      & info
-          ~env:(env_var "EULER_DEBUG")
-          [ "d"; "debug" ]
-          ~doc:"Enable debug/progress printing")
-  ;;
-
-  let time_arg =
-    Arg.(value & flag & info [ "t"; "time" ] ~doc:"Measure and print runtime")
-  ;;
-
-  let command = Term.(const main $ debug_arg $ time_arg, info command_name ~doc:summary)
 end

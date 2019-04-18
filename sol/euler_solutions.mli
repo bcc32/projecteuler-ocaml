@@ -1,4 +1,4 @@
 open! Core
 open! Import
 
-val all : (module Solution.S) list
+val all : (string, (module Solution.S)) List.Assoc.t

@@ -14,10 +14,10 @@ print <<HEADER;
 open! Core
 open! Import
 
-let all : (module Solution.S) list = [
+let all : (string, (module Solution.S)) List.Assoc.t = [
 HEADER
 
-say "  (module $_);" for sort @modules;
+say "  $_.name, (module $_);" for sort @modules;
 
 print <<FOOTER;
 ]

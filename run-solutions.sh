@@ -9,7 +9,7 @@ list_solutions() {
 run_solution() {
     sol=$1
     echo "$sol"
-    dune exec -p euler --no-build -- euler "$sol" --time
+    dune exec -p euler --no-build -- euler run "$sol" --time
 }
 export -f run_solution
 

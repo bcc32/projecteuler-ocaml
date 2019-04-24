@@ -72,7 +72,6 @@ let pow_group =
 
 open Cmdliner
 
-(* TODO: List available benchmarks. *)
 let selected_groups =
   Arg.(
     value & pos_all string [] & info [] ~docv:"GROUP" ~doc:"Names of benchmarks to run")
@@ -98,5 +97,16 @@ let command =
       |> Bench.bench;
       `Ok ()
   in
-  Term.(ret (const bench $ selected_groups), info "bench" ~doc:"Benchmarking Euler")
+  Term.(
+    ( ret (const bench $ selected_groups)
+    , info
+        "bench"
+        ~doc:"Benchmarking Euler"
+        ~man:
+          [ `S "Available Benchmarks"
+          ; `Blocks
+              (List.map groups ~f:(fun (name, group) ->
+                 let description = Bench.Test.name group in
+                 `I (sprintf "$(b,%s)" name, description)))
+          ] ))
 ;;

@@ -47,74 +47,50 @@ module State = struct
   let overall_prob_death t = t.curr.(0)
 end
 
-let example () =
-  let step =
-    let with_pa_pb f ps =
-      let module Array = Array.Permissioned in
-      let pa = ps.(0) in
-      let pb = ps.(1) in
-      f pa pb
-    in
-    fun i ->
-      match i with
-      | 0 ->
-        with_pa_pb (fun pa pb ->
-          let open Float.O in
-          (0.5 * (pa ** 2.)) + (0.5 * (pb ** 3.)))
-      | 1 ->
-        with_pa_pb (fun pa pb ->
-          let open Float.O in
-          (0.5 * pa * pb) + 0.5)
-      | _ -> assert false
+let find_fixed_point ~k ~m ~iterations =
+  let r : (int, read) Array.Permissioned.t =
+    let r = Array.create 0 ~len:(k * m) in
+    r.(0) <- 306;
+    for i = 1 to Array.length r - 1 do
+      let r' = r.(i - 1) in
+      r.(i) <- r' * r' mod 10_007
+    done;
+    Array.Permissioned.of_array_id r
   in
-  let s = State.create 2 in
-  State.iterate s ~n:100 ~step;
-  printf "%.8f\n" (State.overall_prob_death s)
+  let step i ps =
+    let module Array = Array.Permissioned in
+    let sum = ref 0. in
+    for j = 0 to m - 1 do
+      sum :=
+        !sum
+        +.
+        match r.((i * m) + j) mod 5 with
+        | 0 -> 1.
+        | 1 -> ps.(i) ** 2.
+        | 2 -> ps.(2 * i mod k)
+        | 3 -> ps.(((i * i) + 1) mod k) ** 3.
+        | 4 -> ps.(i) *. ps.((i + 1) mod k)
+        | _ -> assert false
+    done;
+    !sum /. float m
+  in
+  let state = State.create k in
+  State.iterate state ~n:iterations ~step;
+  State.overall_prob_death state
 ;;
 
 let%expect_test "basic example S(2,2)" =
-  example ();
+  printf "%.8f\n" (find_fixed_point ~k:2 ~m:2 ~iterations:100);
   [%expect {| 0.07243802 |}]
-;;
-
-let k = 500
-let m = 10
-
-let r : (int, read) Array.Permissioned.t =
-  let r = Array.create 0 ~len:(k * m) in
-  r.(0) <- 306;
-  for i = 1 to Array.length r - 1 do
-    let r' = r.(i - 1) in
-    r.(i) <- r' * r' mod 10_007
-  done;
-  Array.Permissioned.of_array_id r
-;;
-
-let step i ps =
-  let module Array = Array.Permissioned in
-  let sum = ref 0. in
-  for j = 0 to m - 1 do
-    sum :=
-      !sum
-      +.
-      match r.((i * m) + j) mod 5 with
-      | 0 -> 1.
-      | 1 -> ps.(i) ** 2.
-      | 2 -> ps.(2 * i mod k)
-      | 3 -> ps.(((i * i) + 1) mod k) ** 3.
-      | 4 -> ps.(i) *. ps.((i + 1) mod k)
-      | _ -> assert false
-  done;
-  !sum /. float m
 ;;
 
 module M = struct
   let problem = Number 666
 
   let main () =
-    let state = State.create k in
-    State.iterate state ~n:100 ~step;
-    printf "%.8f\n" (State.overall_prob_death state)
+    let k = 500 in
+    let m = 10 in
+    printf "%.8f\n" (find_fixed_point ~k ~m ~iterations:100)
   ;;
 
   (* 14.582934ms *)

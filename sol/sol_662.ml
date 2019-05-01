@@ -153,11 +153,16 @@ module Int_with_modulus = struct
 end
 
 let rec ways =
-  let cache =
-    Hashtbl.create
-      (module struct
-        type t = int * int [@@deriving compare, hash, sexp_of]
-      end)
+  let cache = Array.create (-1) ~len:((grid_length + 1) * (grid_length + 1)) in
+  let findi_or_add w h ~default =
+    let index = (grid_length * w) + h in
+    let cached = cache.(index) in
+    if cached = -1
+    then (
+      let x = default w h in
+      cache.(index) <- x;
+      x)
+    else cached
   in
   fun w h ->
     if w < 0 || h < 0
@@ -167,9 +172,8 @@ let rec ways =
     else if w > h
     then ways h w
     else
-      Hashtbl.findi_or_add cache (w, h) ~default:(fun (w, h) ->
-        if debug
-        then Debug.eprint_s [%message (Hashtbl.length cache : int) (w : int) (h : int)];
+      findi_or_add w h ~default:(fun w h ->
+        if debug then Debug.eprint_s [%message (w : int) (h : int)];
         List.sum
           (module Int_with_modulus)
           moves
@@ -195,7 +199,7 @@ module M = struct
   ;;
 
   (* 860873428
-     29m26.390284243s *)
+     4m16.056538322s *)
 end
 
 include Solution.Make (M)

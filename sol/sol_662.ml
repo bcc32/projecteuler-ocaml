@@ -2,21 +2,20 @@ open! Core
 open! Import
 
 let grid_length = 10_000
+let grid_diagonal = Float.iround_down_exn (sqrt 2. *. float grid_length)
 let modulus = 1_000_000_007
 
 let fibonacci =
   Number_theory.Int.fibonacci
   |> Fn.flip Sequence.drop 2
-  |> Sequence.take_while ~f:(fun x -> x <= 2 * grid_length)
+  |> Sequence.take_while ~f:(fun x -> x <= grid_diagonal)
   |> Sequence.to_list
 ;;
 
 let%expect_test "fibonacci" =
   print_s [%sexp (fibonacci : int list)];
   [%expect
-    {|
-      (1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946
-       17711) |}]
+    {| (1 2 3 5 8 13 21 34 55 89 144 233 377 610 987 1597 2584 4181 6765 10946) |}]
 ;;
 
 let moves =
@@ -27,7 +26,7 @@ let moves =
     in
     let triangles = ref [] in
     Geometry.iter_all_pythagorean_triples
-      ~with_hypotenuse_less_than:(2 * grid_length)
+      ~with_hypotenuse_less_than:grid_diagonal
       ~f:(fun a b c -> if is_fibonacci c then triangles := (a, b) :: !triangles);
     !triangles
   in

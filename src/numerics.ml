@@ -1,8 +1,6 @@
 open! Core
 open! Import
-
-module type Real = Numerics_intf.Real
-module type S = Numerics_intf.S
+include Numerics_intf
 
 module Make (Real : Real) : S with type real = Real.t = struct
   open Real

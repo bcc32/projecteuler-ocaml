@@ -1,7 +1,6 @@
 open! Core
 open! Import
-
-module type S = Number_theory_intf.S
+include Number_theory_intf
 
 let[@inline never] raise_negative_exponent e =
   raise_s [%message "negative exponent" (e : int)]

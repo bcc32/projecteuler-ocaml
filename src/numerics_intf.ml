@@ -55,3 +55,14 @@ module type S = sig
     -> init:real
     -> real
 end
+
+module type Numerics = sig
+  (** Numerical integration, root-finding, etc. *)
+
+  module type Real = Real
+  module type S = S
+
+  module Make (M : Real) : S with type real = M.t
+  module Float : S with type real = float
+  module Bignum : S with type real = Bignum.t
+end

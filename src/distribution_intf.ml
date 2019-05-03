@@ -77,3 +77,15 @@ module type S = sig
   val of_alist_exn : ('k, Prob.t) List.Assoc.t -> 'k t
   val to_alist : 'k t -> ('k, Prob.t) List.Assoc.t
 end
+
+module type Distribution = sig
+  (** A monadic representation of discrete probability distributions. *)
+
+  module type Prob = Prob
+  module type S = S
+
+  module Make (Prob : Prob) : S with module Prob = Prob
+  module Float : S with type Prob.t = float
+  module Percent : S with type Prob.t = Percent.t
+  module Bignum : S with type Prob.t = Bignum.t
+end

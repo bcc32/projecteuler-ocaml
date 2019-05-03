@@ -1,8 +1,6 @@
 open! Core
 open! Import
-
-module type Prob = Distribution_intf.Prob
-module type S = Distribution_intf.S
+include Distribution_intf
 
 module Make (Prob : Prob) : S with module Prob = Prob = struct
   module Prob = Prob

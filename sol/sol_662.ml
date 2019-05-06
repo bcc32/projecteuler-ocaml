@@ -135,20 +135,24 @@ let%expect_test "moves" =
 ;;
 
 let ways w h =
+  let w, h = if w < h then w, h else h, w in
   let cache = Array.create 0 ~len:((w + 1) * (h + 1)) in
   let index x y = ((h + 1) * x) + y in
   let get x y = cache.(index x y) in
   cache.(0) <- 1;
   for x = 0 to w do
-    for y = 0 to h do
+    for y = x to h do
       if x > 0 || y > 0
-      then
-        cache.(index x y)
-        <- List.sum
-             (module Int)
-             moves
-             ~f:(fun (dx, dy) -> if x >= dx && y >= dy then get (x - dx) (y - dy) else 0)
-           mod modulus
+      then (
+        let ways_x_y =
+          List.sum
+            (module Int)
+            moves
+            ~f:(fun (dx, dy) -> if x >= dx && y >= dy then get (x - dx) (y - dy) else 0)
+          mod modulus
+        in
+        cache.(index x y) <- ways_x_y;
+        if y <= w then cache.(index y x) <- ways_x_y)
     done
   done;
   get w h
@@ -173,7 +177,7 @@ module M = struct
   ;;
 
   (* 860873428
-     1m42.126623087s *)
+     50.213826006s *)
 end
 
 include Solution.Make (M)

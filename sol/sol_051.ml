@@ -44,26 +44,38 @@ end = struct
   ;;
 end
 
+module Prime_sieve = struct
+  type t =
+    { mutable upper_limit : int
+    ; mutable is_prime : bool array
+    }
+
+  let create () = { upper_limit = 1; is_prime = [| false; false |] }
+
+  let rec is_prime t n =
+    if n > t.upper_limit
+    then (
+      let old_size = t.upper_limit in
+      let new_size = old_size * 10 in
+      let new_sieve = Number_theory.prime_sieve new_size in
+      t.upper_limit <- new_size;
+      t.is_prime <- new_sieve;
+      is_prime t n)
+    else t.is_prime.(n)
+  ;;
+end
+
 module M = struct
   let problem = Number 51
   let threshold = 8
-  let prime_sieve = ref (1, [| false; false |])
-
-  let rec is_prime n =
-    if n > fst !prime_sieve
-    then (
-      let old_size = fst !prime_sieve in
-      prime_sieve := old_size * 10, Number_theory.prime_sieve (old_size * 10);
-      is_prime n)
-    else (snd !prime_sieve).(n)
-  ;;
 
   let main () =
+    let sieve = Prime_sieve.create () in
     Pattern.all
     |> Sequence.find_map ~f:(fun pattern ->
       if debug then Debug.eprint_s [%sexp (pattern : Pattern.t)];
       let instances = Pattern.instances pattern in
-      if List.count instances ~f:is_prime >= threshold
+      if List.count instances ~f:(Prime_sieve.is_prime sieve) >= threshold
       then Some (List.hd_exn instances)
       else None)
     |> uw

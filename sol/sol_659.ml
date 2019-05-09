@@ -28,17 +28,22 @@ let primes =
 ;;
 
 (* Find the largest prime that divides two consecutive elements of the sequence [1^2+m,
-   2^2+m, ...]. *)
+   2^2+m, ...].
+
+   Manual inspection reveals that the pattern appears to be the prime factors of [4m + 1].
+*)
 let find_largest_prime m =
-  primes
-  |> List.filter ~f:(fun p ->
-    let k = p / 2 in
-    ((k * k) + m) % p = 0)
-  |> [%sexp_of: int list]
-  |> print_s
+  let primes =
+    primes
+    |> List.filter ~f:(fun p ->
+      let k = p / 2 in
+      ((k * k) + m) % p = 0)
+  in
+  print_s [%message (m : int) (primes : int list)]
 ;;
 
 let main () =
+  find_largest_prime 3;
   for i = 1 to 20 do
     find_largest_prime (i * i)
   done

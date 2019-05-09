@@ -33,5 +33,6 @@ sol_587_int.ml
 sol_609.ml
 sol_613.ml
 sol_650.ml
+sol_659.ml
 sol_662.ml
 sol_blank.ml

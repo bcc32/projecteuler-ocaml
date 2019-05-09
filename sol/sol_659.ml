@@ -23,13 +23,6 @@ open! Import
 
    ∎ *)
 
-let primes =
-  Number_theory.Int.primes
-  |> Fn.flip Sequence.drop_eagerly 1
-  |> Fn.flip Sequence.take 10_000
-  |> Sequence.to_list
-;;
-
 (* Find the largest prime that divides two consecutive elements of the sequence
    [1^2+m, 2^2+m, ...].
 
@@ -51,20 +44,22 @@ let primes =
 
    ∎ *)
 let find_largest_prime m =
-  let primes =
-    primes
-    |> List.filter ~f:(fun p ->
-      let k = p / 2 in
-      ((k * k) + m) % p = 0)
-  in
-  print_s [%message (m : int) (primes : int list)]
+  Number_theory.Int.prime_factor ((4 * m) + 1) |> List.last_exn |> fst
 ;;
 
-let main () =
-  find_largest_prime 3;
-  for i = 1 to 20 do
-    find_largest_prime (i * i)
-  done
+let p k = find_largest_prime (k * k)
+let modulus = 1_000_000_000_000_000_000
+
+let sum_p ~max_k =
+  let sum = ref 0 in
+  for k = 1 to max_k do
+    if debug && k mod 10_000 = 0 then Debug.eprint_s [%message (k : int)];
+    sum := !sum + p k;
+    sum := !sum mod modulus
+  done;
+  !sum
 ;;
+
+let main () = sum_p ~max_k:10_000_000 |> printf "%d\n"
 
 include (val Solution.make ~problem:(Number 659) ~main)

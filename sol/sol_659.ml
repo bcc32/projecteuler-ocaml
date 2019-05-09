@@ -53,9 +53,12 @@ let modulus = 1_000_000_000_000_000_000
 let sum_p ~max_k =
   let sum = ref 0 in
   for k = 1 to max_k do
-    if debug && k mod 10_000 = 0 then Debug.eprint_s [%message (k : int)];
-    sum := !sum + p k;
-    sum := !sum mod modulus
+    if debug && k mod 10_000 = 0
+    then
+      Debug.eprint_s
+        [%message
+          (k : int) ~percent:(Percent.of_mult (float k /. float max_k) : Percent.t)];
+    sum := (!sum + p k) mod modulus
   done;
   !sum
 ;;

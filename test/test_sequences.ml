@@ -39,8 +39,10 @@ let%test_unit "permutations" =
     let elts = List.sort l ~compare in
     (* expected number of permutations *)
     let num_permutations =
-      List.fold l ~init:Int.Map.empty ~f:(fun ac x ->
-        Map.update ac x ~f:(Option.value_map ~default:1 ~f:(( + ) 1)))
+      List.fold
+        l
+        ~init:(Map.empty (module Int))
+        ~f:(fun ac x -> Map.update ac x ~f:(Option.value_map ~default:1 ~f:(( + ) 1)))
       |> Map.data
       |> Number_theory.multinomial
     in

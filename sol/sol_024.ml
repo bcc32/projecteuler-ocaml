@@ -17,7 +17,10 @@ module M = struct
         let x = Set.nth candidates nth_at_i |> Option.value_exn ~here:[%here] in
         x :: loop (i + 1) (index % permutations) (Set.remove candidates x))
     in
-    loop 0 index (Int.Set.of_increasing_iterator_unchecked ~len:elements ~f:Fn.id)
+    loop
+      0
+      index
+      (Set.of_increasing_iterator_unchecked (module Int) ~len:elements ~f:Fn.id)
     |> List.map ~f:Int.to_string
     |> String.concat
     |> printf "%s\n"

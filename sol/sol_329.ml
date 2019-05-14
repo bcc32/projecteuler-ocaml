@@ -2,15 +2,10 @@ open! Core
 open! Import
 
 module Is_prime = struct
-  module T = struct
-    type t =
-      [ `Prime
-      | `Not_prime ]
-    [@@deriving compare, sexp]
-  end
-
-  include T
-  include Comparable.Make (T)
+  type t =
+    [ `Prime
+    | `Not_prime ]
+  [@@deriving equal, sexp]
 
   let of_char_exn = function
     | 'P' -> `Prime

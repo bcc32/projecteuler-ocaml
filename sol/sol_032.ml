@@ -35,7 +35,7 @@ module M = struct
   let main () =
     pandigital ()
     |> Sequence.to_list
-    |> Int.Set.of_list
+    |> Set.of_list (module Int)
     |> Set.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;

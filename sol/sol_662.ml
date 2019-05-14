@@ -21,7 +21,7 @@ let%expect_test "fibonacci" =
 let moves =
   let hypotenuses =
     let is_fibonacci =
-      let set = Int.Set.of_list fibonacci in
+      let set = Set.of_list (module Int) fibonacci in
       Set.mem set
     in
     let triangles = ref [] in

@@ -10,7 +10,7 @@ module M = struct
   ;;
 
   let sum_proper_divisors =
-    let cache = Int.Table.create () in
+    let cache = Hashtbl.create (module Int) in
     fun n -> Hashtbl.findi_or_add cache n ~default:sum_proper_divisors
   ;;
 

@@ -16,7 +16,7 @@ module M = struct
   ;;
 
   let rec expectation_to_32 =
-    let cache = Int.Table.create () in
+    let cache = Hashtbl.create (module Int) in
     fun n ->
       if n = 32
       then 0.0

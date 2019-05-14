@@ -46,11 +46,11 @@ module Card : sig
     }
   [@@deriving compare, fields, hash, sexp]
 
+  (** compare by rank, then by suit *)
+  val compare : t -> t -> int
+
   (** 2C, QH, etc. *)
   include Stringable with type t := t
-
-  (** compare by rank, then by suit *)
-  include Comparable with type t := t
 end
 
 module Hand_classification : sig
@@ -69,7 +69,7 @@ module Hand_classification : sig
     | Royal_flush
   [@@deriving compare, sexp]
 
-  include Comparable with type t := t
+  include Comparable.S with type t := t
   include Invariant.S with type t := t
 end
 

@@ -44,7 +44,7 @@ let%test_unit _ =
 ;;
 
 let phi =
-  let cache = Int.Table.create () in
+  let cache = Hashtbl.create (module Int) in
   fun n -> Hashtbl.findi_or_add cache n ~default:Number_theory.Int.totient
 ;;
 

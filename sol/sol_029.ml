@@ -5,7 +5,7 @@ module M = struct
   let problem = Number 29
 
   let main () =
-    let powers = Bigint.Hash_set.create () in
+    let powers = Hash_set.create (module Bigint) () in
     for a = 2 to 100 do
       for b = 2 to 100 do
         let power = Bigint.pow (Bigint.of_int a) (Bigint.of_int b) in

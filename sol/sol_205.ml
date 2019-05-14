@@ -4,9 +4,9 @@ open! Import
 module M = struct
   let problem = Number 205
 
-  type dist = Percent.t Int.Map.t
+  type dist = Percent.t Map.M(Int).t
 
-  let empty_dist : dist = Int.Map.of_alist_exn [ 0, Percent.of_mult 1.0 ]
+  let empty_dist : dist = Map.of_alist_exn (module Int) [ 0, Percent.of_mult 1.0 ]
 
   let shift_n dist ~n : dist =
     let comparator = Map.comparator dist in
@@ -32,7 +32,7 @@ module M = struct
   let add_die dist die : dist =
     Sequence.range 1 die ~stop:`inclusive
     |> Sequence.map ~f:(fun n -> dist |> shift_n ~n |> scale_div_n ~n:die)
-    |> Sequence.fold ~init:Int.Map.empty ~f:(Map.merge ~f:merge_dist)
+    |> Sequence.fold ~init:(Map.empty (module Int)) ~f:(Map.merge ~f:merge_dist)
   ;;
 
   let dice_set ~faces ~len : dist =

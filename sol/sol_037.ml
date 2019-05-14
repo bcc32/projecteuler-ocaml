@@ -14,7 +14,7 @@ let search start ~step =
     | Some (hd, tl) ->
       step hd |> List.fold ~init:tl ~f:Fqueue.enqueue |> loop (Set.add result hd) ~step
   in
-  loop Int.Set.empty (Fqueue.of_list start) ~step
+  loop (Set.empty (module Int)) (Fqueue.of_list start) ~step
 ;;
 
 let is_left_truncatable n =
@@ -37,7 +37,7 @@ module M = struct
 
   let main () =
     search [ 2; 3; 5; 7 ] ~step:extend_right
-    |> Fn.flip Set.diff (Int.Set.of_list [ 2; 3; 5; 7 ])
+    |> Fn.flip Set.diff (Set.of_list (module Int) [ 2; 3; 5; 7 ])
     |> Set.filter ~f:is_left_truncatable
     |> Set.sum (module Int) ~f:Fn.id
     |> printf "%d\n"

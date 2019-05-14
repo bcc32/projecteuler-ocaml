@@ -22,7 +22,6 @@ module Rank = struct
 
   include T
   include Comparable.Make (T)
-  include Hashable.Make (T)
 
   let to_string = function
     | Two -> "2"
@@ -102,7 +101,6 @@ module Suit = struct
 
   include T
   include Comparable.Make (T)
-  include Hashable.Make (T)
 
   let to_string = function
     | Clubs -> "C"
@@ -121,15 +119,13 @@ module Suit = struct
 end
 
 module Card = struct
-  module T = struct
-    type t =
-      { rank : Rank.t
-      ; suit : Suit.t
-      }
-    [@@deriving compare, fields, hash, sexp]
-  end
+  type t =
+    { rank : Rank.t
+    ; suit : Suit.t
+    }
+  [@@deriving compare, fields, hash, sexp]
 
-  include T
+  include (val Comparator.make ~compare ~sexp_of_t)
 
   let to_string { rank; suit } = Rank.to_string rank ^ Suit.to_string suit
 
@@ -140,9 +136,6 @@ module Card = struct
     ; suit = Suit.of_string (String.sub string ~pos:1 ~len:1)
     }
   ;;
-
-  include Comparable.Make (T)
-  include Hashable.Make (T)
 end
 
 module Hand_classification = struct
@@ -206,7 +199,7 @@ module Hand = struct
     in
     (* sorted first by count descending, then by rank descending *)
     let rank_counts =
-      let counts = Rank.Table.create () in
+      let counts = Hashtbl.create (module Rank) in
       [ a; b; c; d; e ] |> List.iter ~f:(fun card -> Hashtbl.incr counts card.rank);
       Hashtbl.to_alist counts
       |> List.sort

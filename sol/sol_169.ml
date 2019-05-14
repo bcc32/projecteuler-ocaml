@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 let rec f =
-  let cache = Bigint.Table.create () in
+  let cache = Hashtbl.create (module Bigint) in
   fun n ->
     Hashtbl.findi_or_add cache n ~default:(fun n ->
       let open Bigint.O in

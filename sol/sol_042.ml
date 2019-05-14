@@ -11,7 +11,7 @@ module M = struct
   ;;
 
   let is_triangle_number =
-    let cache = Int.Table.create () in
+    let cache = Hashtbl.create (module Int) in
     fun t ->
       Hashtbl.findi_or_add cache t ~default:(fun t ->
         let n = Float.(sqrt (of_int t * 2.0) |> to_int) in

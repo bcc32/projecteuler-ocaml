@@ -20,29 +20,21 @@ module Potential_prime_pair : sig
     { a : int
     ; b : int
     }
+  [@@deriving compare, hash, sexp_of]
 
   val create : int -> int -> t
-
-  include Comparable with type t := t
-  include Hashable with type t := t
 end = struct
-  module T = struct
-    type t =
-      { a : int
-      ; b : int
-      }
-    [@@deriving compare, hash, sexp]
+  type t =
+    { a : int
+    ; b : int
+    }
+  [@@deriving compare, hash, sexp_of]
 
-    let create a b = if a < b then { a; b } else { a = b; b = a }
-  end
-
-  include T
-  include Comparable.Make (T)
-  include Hashable.Make (T)
+  let create a b = if a < b then { a; b } else { a = b; b = a }
 end
 
 let is_prime_pair =
-  let cache = Potential_prime_pair.Table.create () in
+  let cache = Hashtbl.create (module Potential_prime_pair) in
   fun a b ->
     let t = Potential_prime_pair.create a b in
     Hashtbl.findi_or_add cache t ~default:(fun { a; b } ->

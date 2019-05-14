@@ -27,7 +27,7 @@ module M = struct
     |> Sequence.take_while ~f:(fun x -> x < 1_000_000_000)
     |> Sequence.filter ~f:is_admissible
     |> Sequence.map ~f:pseudo_fortunate
-    |> Sequence.fold ~init:Int.Set.empty ~f:Set.add
+    |> Sequence.fold ~init:(Set.empty (module Int)) ~f:Set.add
     |> Set.sum (module Int) ~f:Fn.id
     |> printf "%d\n"
   ;;

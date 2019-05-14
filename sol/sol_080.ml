@@ -29,11 +29,11 @@ module M = struct
   ;;
 
   let main () =
-    let range = List.range 1 100 ~stop:`inclusive |> Int.Set.of_list in
+    let range = List.range 1 100 ~stop:`inclusive |> Set.of_list (module Int) in
     let squares =
       List.range 1 10 ~stop:`inclusive
       |> List.map ~f:(Fn.flip Int.pow 2)
-      |> Int.Set.of_list
+      |> Set.of_list (module Int)
     in
     let irrational_sqrts = Set.diff range squares in
     irrational_sqrts

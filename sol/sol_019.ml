@@ -13,6 +13,7 @@ module M = struct
     |> printf "%d\n"
   ;;
 
+  (* 167.972us *)
   let%expect_test "answer" =
     main ();
     [%expect {| 171 |}]

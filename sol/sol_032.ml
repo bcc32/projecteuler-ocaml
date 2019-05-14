@@ -26,9 +26,7 @@ let pandigital () =
     else (
       let c = a * b in
       let digits = merge c ~into:digits in
-      if [%compare.equal: int list] expected_digits digits
-      then return c
-      else Sequence.empty))
+      if [%equal: int list] expected_digits digits then return c else Sequence.empty))
 ;;
 
 module M = struct

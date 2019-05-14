@@ -9,7 +9,7 @@ module Necessary_digit = struct
     | Zero
     | One
     | Ten
-  [@@deriving compare]
+  [@@deriving compare, equal]
 end
 
 open Necessary_digit
@@ -18,7 +18,7 @@ module Element = struct
   type t =
     | Other
     | First_occurrence_of of Necessary_digit.t
-  [@@deriving compare]
+  [@@deriving compare, equal]
 end
 
 open Element
@@ -30,7 +30,7 @@ let patterns digits =
   in
   Sequences.permutations pattern ~compare:Element.compare
   |> Sequence.filter ~f:(fun perm ->
-    not ([%compare.equal: Element.t] (List.hd_exn perm) (First_occurrence_of Zero)))
+    not ([%equal: Element.t] (List.hd_exn perm) (First_occurrence_of Zero)))
 ;;
 
 let allowed_numbers digits =

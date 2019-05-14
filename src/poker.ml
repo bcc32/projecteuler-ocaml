@@ -194,7 +194,7 @@ module Hand = struct
 
   let classify ((a, b, c, d, e) as t : t) : Hand_classification.t =
     let is_straight =
-      let ( = ) = [%compare.equal: Rank.t option] in
+      let ( = ) = [%equal: Rank.t option] in
       Some b.rank = Rank.succ a.rank
       && Some c.rank = Rank.succ b.rank
       && Some d.rank = Rank.succ c.rank

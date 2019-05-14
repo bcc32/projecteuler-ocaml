@@ -19,10 +19,10 @@ let%test_unit "digits_of_string" =
 
 let%test_unit "is_palindrome" =
   let gen = [%quickcheck.generator: int list] in
-  Q.test_can_generate gen ~f:(fun l -> [%compare.equal: int list] l (List.rev l));
-  Q.test_can_generate gen ~f:(fun l -> not ([%compare.equal: int list] l (List.rev l)));
+  Q.test_can_generate gen ~f:(fun l -> [%equal: int list] l (List.rev l));
+  Q.test_can_generate gen ~f:(fun l -> not ([%equal: int list] l (List.rev l)));
   Q.test gen ~sexp_of:[%sexp_of: int list] ~f:(fun l ->
-    let expect = [%compare.equal: int list] l (List.rev l) in
+    let expect = [%equal: int list] l (List.rev l) in
     [%test_result: bool] (Sequences.is_palindrome (module Int) l) ~expect)
 ;;
 

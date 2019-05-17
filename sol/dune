@@ -1,8 +1,8 @@
 (library
  (name euler_solutions)
  (synopsis "A collection of OCaml solutions to ProjectEuler problems")
- (libraries bignum core core_kernel.total_map euler euler_data
-   euler_solution_helpers expect_test_helpers_kernel re)
+ (libraries bignum core core_kernel.hash_heap core_kernel.total_map euler
+   euler_data euler_solution_helpers expect_test_helpers_kernel re)
  (preprocess
   (pps ppx_jane))
  (inline_tests)

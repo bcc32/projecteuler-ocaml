@@ -14,9 +14,9 @@ module M = struct
     let expansions =
       let open Bignum.O in
       let init = of_int 1 + (1 // 2) in
-      Sequence.unfold ~init ~f:(fun s ->
+      Sequence.unfold_step ~init ~f:(fun s ->
         let next = of_int 1 + (of_int 1 / (of_int 1 + s)) in
-        Some (s, next))
+        Yield (s, next))
     in
     expansions
     |> Fn.flip Sequence.take 1000

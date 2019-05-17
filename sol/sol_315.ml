@@ -52,11 +52,17 @@ module M = struct
   ;;
 
   let digital_root_sequence n =
-    Sequence.unfold ~init:(Some n) ~f:(function
-      | None -> None
-      | Some s ->
-        let d = digital_root s in
-        if d = s then Some (s, None) else Some (s, Some d))
+    Sequence.Generator.run
+      (let open Sequence.Generator.Let_syntax in
+       let rec loop s =
+         let d = digital_root s in
+         if d = s
+         then Sequence.Generator.yield s
+         else (
+           let%bind () = Sequence.Generator.yield s in
+           loop d)
+       in
+       loop n)
   ;;
 
   let sam_cost sequence =

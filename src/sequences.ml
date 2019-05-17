@@ -53,13 +53,13 @@ let prev_permutation_inplace a ~compare =
 let permutations list ~compare =
   let init = List.sort list ~compare in
   let next_permutations =
-    Sequence.unfold ~init ~f:(fun list ->
+    Sequence.unfold_step ~init ~f:(fun list ->
       let a = Array.of_list list in
       if next_permutation_inplace a ~compare
       then (
         let next = Array.to_list a in
-        Some (next, next))
-      else None)
+        Yield (next, next))
+      else Done)
   in
   Sequence.shift_right next_permutations init
 ;;

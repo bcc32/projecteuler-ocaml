@@ -265,9 +265,9 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let primes =
-    Sequence.unfold ~init:two ~f:(fun p ->
+    Sequence.unfold_step ~init:two ~f:(fun p ->
       let next = next_prime p in
-      Some (p, next))
+      Yield (p, next))
   ;;
 
   let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
@@ -415,7 +415,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let fibonacci =
-    Sequence.unfold ~init:(zero, one) ~f:(fun (a, b) -> Some (a, (b, a + b)))
+    Sequence.unfold_step ~init:(zero, one) ~f:(fun (a, b) -> Yield (a, (b, a + b)))
   ;;
 
   (* https://www.nayuki.io/page/fast-fibonacci-algorithms *)
@@ -434,7 +434,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let natural_numbers ?(init = zero) () =
-    Sequence.unfold ~init ~f:(fun n -> Some (n, n + one))
+    Sequence.unfold_step ~init ~f:(fun n -> Yield (n, n + one))
   ;;
 
   let addition_chain_pow = addition_chain_pow_gen ~one ~mul:( * )

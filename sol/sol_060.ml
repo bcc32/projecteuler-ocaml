@@ -5,6 +5,9 @@ let limit = 100_000_000
 
 (* log10(limit) *)
 let limit_digits = 8
+
+let%test "limit_digits" = Int.pow 10 limit_digits = limit
+
 let is_prime = lazy (Number_theory.prime_sieve limit)
 
 let primes : (int, immutable) Array.Permissioned.t Lazy.t =
@@ -52,6 +55,8 @@ let is_prime_pair =
       && is_prime.(d))
 ;;
 
+(* TODO: Add this to Number_theory.Int.  Could implement
+   [Number_theory.Int.As_digits : Indexed_container.S] *)
 let count_digits = Number_theory.Int.fold_digits ~init:0 ~f:(fun ac _ -> ac + 1)
 
 let add_one prime_pair_set ~target_cardinality =

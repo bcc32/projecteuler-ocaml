@@ -11,17 +11,15 @@ module M = struct
       let ub = Int.pow 10 (n / 2) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
-        let d = Number_theory.Int.to_digits n in
-        d @ List.rev d |> Sequence.of_list |> Number_theory.Int.of_digits))
+        let d = Number_theory.Int.As_base10.(to_list n) in
+        d @ List.rev d |> Number_theory.Int.As_base10.(of_list)))
     else (
       let lb = Int.pow 10 (n / 2) in
       let ub = Int.pow 10 ((n / 2) + 1) in
       Sequence.range lb ub
       |> Sequence.map ~f:(fun n ->
-        let d = Number_theory.Int.to_digits n in
-        d @ List.tl_exn (List.rev d)
-        |> Sequence.of_list
-        |> Number_theory.Int.of_digits))
+        let d = Number_theory.Int.As_base10.(to_list n) in
+        d @ List.tl_exn (List.rev d) |> Number_theory.Int.As_base10.(of_list)))
   ;;
 
   let palindromes =

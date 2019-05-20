@@ -21,7 +21,7 @@ let pandigital_multiples () =
       then max := Int.max !max (reify k n)
       else (
         try
-          Number_theory.Int.iter_digits (k * n) ~f:(fun d ->
+          Number_theory.Int.As_base10.iter (k * n) ~f:(fun d ->
             if d = 0 || digits_used.(d)
             then raise Exit
             else (

@@ -34,8 +34,12 @@ module Masked_number : sig
 end = struct
   type t = int [@@deriving compare, hash]
 
+  module Base11 = Number_theory.Int.As_digits (struct
+      let base = 11
+    end)
+
   let sexp_of_t t =
-    Number_theory.Int.to_digits t ~base:11
+    Base11.to_list t
     |> List.rev_map ~f:(function
       | 10 -> "?"
       | n -> Int.to_string n)
@@ -65,7 +69,7 @@ end = struct
 
   let fill t =
     let fill_with_digit t digit =
-      Number_theory.Int.fold_digits t ~base:11 ~init:0 ~f:(fun acc d ->
+      Base11.Right_to_left.fold t ~init:0 ~f:(fun acc d ->
         match d with
         | 10 -> (10 * acc) + digit
         | n -> (10 * acc) + n)

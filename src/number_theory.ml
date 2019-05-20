@@ -292,35 +292,125 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   (* TODO handle negative numbers? *)
-  let fold_digits ?(base = ten) n ~init ~f =
-    let rec fold_digits_loop n ~base ~init ~f =
-      if n = zero
-      then init
-      else fold_digits_loop ~base (n / base) ~init:(f init (n % base)) ~f
-    in
-    if n = zero then f init zero else fold_digits_loop ~base n ~init ~f
-  ;;
 
-  let iter_digits ?(base = ten) n ~f =
-    let rec iter_digits_loop n ~base ~f =
-      if n <> zero
-      then (
-        f (n % base);
-        iter_digits_loop ~base (n / base) ~f)
-    in
-    if n = zero then f zero else iter_digits_loop ~base n ~f
-  ;;
+  module As_digits (M : sig
+      val base : integer
+    end) =
+  struct
+    open M
 
-  let to_digits ?(base = ten) n = fold_digits ~base n ~init:[] ~f:(fun ac x -> x :: ac)
+    module Right_to_left = struct
+      type nonrec integer = integer
 
-  let of_digits ?(base = ten) ds =
-    Sequence.fold ds ~init:zero ~f:(fun acc n -> (base * acc) + n)
-  ;;
+      let base = base
+      let of_list_rev ds = List.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
+      let of_sequence ds = ds |> Sequence.to_list_rev |> of_list_rev
+      let of_list ds = ds |> List.rev |> of_list_rev
 
-  let sum_digits ?(base = ten) n =
-    let rec iter n acc = if n = zero then acc else iter (n / base) ((n % base) + acc) in
-    iter n zero
-  ;;
+      let fold t ~init ~f =
+        let rec fold_digits_loop n ~init ~f =
+          if n = zero
+          then init
+          else fold_digits_loop (n / base) ~init:(f init (n % base)) ~f
+        in
+        if t = zero then f init zero else fold_digits_loop t ~init ~f
+      ;;
+
+      let iter t ~f =
+        let rec iter_digits_loop n ~f =
+          if n <> zero
+          then (
+            f (n % base);
+            iter_digits_loop (n / base) ~f)
+        in
+        if t = zero then f zero else iter_digits_loop t ~f
+      ;;
+
+      let length t =
+        let rec length_digits_loop n ~acc =
+          if n = zero then acc else length_digits_loop (n / base) ~acc:Int.O.(acc + 1)
+        in
+        if t = zero then 1 else length_digits_loop t ~acc:0
+      ;;
+
+      module C = Container.Make0 (struct
+          module Elt = struct
+            type t = integer
+
+            let equal = Integer.equal
+          end
+
+          type nonrec t = integer
+
+          let fold = fold
+          let iter = `Custom iter
+          let length = `Custom length
+        end)
+
+      let mem = C.mem
+      let is_empty = C.is_empty
+      let fold_result = C.fold_result
+      let fold_until = C.fold_until
+      let exists = C.exists
+      let for_all = C.for_all
+      let count = C.count
+      let sum = C.sum
+      let find = C.find
+      let find_map = C.find_map
+      let to_list = C.to_list
+      let to_array = C.to_array
+      let min_elt = C.min_elt
+      let max_elt = C.max_elt
+      let to_sequence = to_list >> Sequence.of_list
+    end
+
+    module Left_to_right = struct
+      type nonrec integer = integer
+
+      let base = base
+      let of_sequence ds = Sequence.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
+      let of_list ds = List.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
+      let to_list t = Right_to_left.fold t ~init:[] ~f:(fun acc d -> d :: acc)
+      let fold t ~init ~f = to_list t |> List.fold ~init ~f
+      let iter t ~f = to_list t |> List.iter ~f
+      let length = Right_to_left.length
+
+      module C = Container.Make0 (struct
+          module Elt = struct
+            type t = integer
+
+            let equal = Integer.equal
+          end
+
+          type nonrec t = integer
+
+          let fold = fold
+          let iter = `Custom iter
+          let length = `Custom length
+        end)
+
+      let mem = C.mem
+      let is_empty = C.is_empty
+      let fold_result = C.fold_result
+      let fold_until = C.fold_until
+      let exists = C.exists
+      let for_all = C.for_all
+      let count = C.count
+      let sum = C.sum
+      let find = C.find
+      let find_map = C.find_map
+      let to_array = C.to_array
+      let min_elt = C.min_elt
+      let max_elt = C.max_elt
+      let to_sequence = to_list >> Sequence.of_list
+    end
+
+    include Left_to_right
+  end
+
+  module As_base10 = As_digits (struct
+      let base = ten
+    end)
 
   let rec gcd a b = if b = zero then a else gcd b (a % b)
   let lcm a b = a / gcd a b * b

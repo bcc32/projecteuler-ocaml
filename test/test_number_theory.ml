@@ -3,8 +3,8 @@ open! Import
 
 let%test_unit "digits" =
   let check_round_trip (n, digits) =
-    [%test_eq: int] n (Number_theory.Int.of_digits (Sequence.of_list digits));
-    [%test_eq: int list] digits (Number_theory.Int.to_digits n)
+    [%test_result: int] ~expect:n (Number_theory.Int.As_base10.of_list digits);
+    [%test_result: int list] ~expect:digits (Number_theory.Int.As_base10.to_list n)
   in
   let digits_through_string n =
     n |> Int.to_string |> String.to_list |> List.map ~f:Char.get_digit_exn

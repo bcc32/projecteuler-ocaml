@@ -1,6 +1,31 @@
 open! Core
 open! Import
 
+module type As_digits_one_direction = sig
+  type integer
+
+  val base : integer
+  val of_list : integer list -> integer
+  val of_sequence : integer Sequence.t -> integer
+  val to_sequence : integer -> integer Sequence.t
+
+  include Container.S0 with type t := integer with type elt := integer
+end
+
+(** [As_digits] provides a view of an integer as a sequence of digits. *)
+module type As_digits = sig
+  type integer
+
+  (** Most significant digit to least significant digit. *)
+  module Left_to_right : As_digits_one_direction with type integer := integer
+
+  (** Least significant digit to most significant digit. *)
+  module Right_to_left : As_digits_one_direction with type integer := integer
+
+  (** Equivalent to Left_to_right. *)
+  include As_digits_one_direction with type integer := integer
+end
+
 module type S = sig
   type integer
 
@@ -17,20 +42,11 @@ module type S = sig
 
   (** {1 Digits} *)
 
-  (** [fold_digits ?base n ~init ~f] folds over the digits of [n] from least significant
-      to most significant. *)
-  val fold_digits : ?base:integer -> integer -> init:'a -> f:('a -> integer -> 'a) -> 'a
+  module As_digits (M : sig
+      val base : integer
+    end) : As_digits with type integer = integer
 
-  (** least significant to most significant *)
-  val iter_digits : ?base:integer -> integer -> f:(integer -> unit) -> unit
-
-  (** left-to-right *)
-  val to_digits : ?base:integer -> integer -> integer list
-
-  (** left-to-right *)
-  val of_digits : ?base:integer -> integer Sequence.t -> integer
-
-  val sum_digits : ?base:integer -> integer -> integer
+  module As_base10 : As_digits with type integer = integer
 
   (** {1 Combinatorics} *)
 

@@ -3,11 +3,11 @@ open! Import
 
 module M = struct
   let problem = Number 52
-  let count_digits = Number_theory.Int.fold_digits ~init:0 ~f:(fun ac _ -> ac + 1)
+  let count_digits = Number_theory.Int.As_base10.fold ~init:0 ~f:(fun ac _ -> ac + 1)
 
   let same_digits n =
     let sort_digits n =
-      Number_theory.Int.to_digits n |> List.sort ~compare:Int.compare
+      Number_theory.Int.As_base10.to_list n |> List.sort ~compare:Int.compare
     in
     let n_digits = sort_digits n in
     count_digits (n * 6) = List.length n_digits

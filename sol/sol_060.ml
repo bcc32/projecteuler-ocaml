@@ -43,9 +43,9 @@ let is_prime_pair =
     Hashtbl.findi_or_add cache t ~default:(fun { a; b } ->
       let concat a b =
         Sequence.append
-          (Sequence.of_list (Number_theory.Int.to_digits a))
-          (Sequence.of_list (Number_theory.Int.to_digits b))
-        |> Number_theory.Int.of_digits
+          (Number_theory.Int.As_base10.to_sequence a)
+          (Number_theory.Int.As_base10.to_sequence b)
+        |> Number_theory.Int.As_base10.of_sequence
       in
       let c, d = concat a b, concat b a in
       let is_prime = force is_prime in
@@ -55,9 +55,7 @@ let is_prime_pair =
       && is_prime.(d))
 ;;
 
-(* TODO: Add this to Number_theory.Int.  Could implement
-   [Number_theory.Int.As_digits : Indexed_container.S] *)
-let count_digits = Number_theory.Int.fold_digits ~init:0 ~f:(fun ac _ -> ac + 1)
+let count_digits = Number_theory.Int.As_base10.fold ~init:0 ~f:(fun ac _ -> ac + 1)
 
 let add_one prime_pair_set ~target_cardinality =
   let hd = List.hd_exn prime_pair_set in

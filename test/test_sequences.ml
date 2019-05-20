@@ -11,10 +11,7 @@ let%test_unit "digits_of_string" =
     let expect = Int.of_string s in
     [%test_result: int]
       ~expect
-      (s
-       |> Sequences.digits_of_string
-       |> Sequence.of_list
-       |> Number_theory.Int.of_digits))
+      (s |> Sequences.digits_of_string |> Number_theory.Int.As_base10.of_list))
 ;;
 
 let%test_unit "is_palindrome" =

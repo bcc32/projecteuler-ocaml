@@ -8,7 +8,9 @@ module Digit_set : sig
 end = struct
   type t = int list [@@deriving compare, hash, sexp_of]
 
-  let of_int int = Number_theory.Int.to_digits int |> List.sort ~compare:Int.compare
+  let of_int int =
+    Number_theory.Int.As_base10.to_list int |> List.sort ~compare:Int.compare
+  ;;
 end
 
 let find min_permutations =

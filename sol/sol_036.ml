@@ -43,12 +43,15 @@ let%expect_test _ =
 module M = struct
   let problem = Number 36
 
+  module Base2 = Number_theory.Int.As_digits (struct
+      let base = 2
+    end)
+
   let main () =
     let sum = ref 0 in
     for digits = 1 to 6 do
       iter_base10_palindromes digits ~f:(fun n ->
-        if Sequences.is_palindrome (module Int) (Number_theory.Int.to_digits ~base:2 n)
-        then sum := !sum + n)
+        if Sequences.is_palindrome (module Int) (Base2.to_list n) then sum := !sum + n)
     done;
     printf "%d\n" !sum
   ;;

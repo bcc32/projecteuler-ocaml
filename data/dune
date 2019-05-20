@@ -19,6 +19,13 @@
  (action
   (diff dune.inc dune.inc.gen)))
 
+(alias
+ (name runtest)
+ (deps
+  (glob_files *.sh))
+ (action
+  (run shellcheck %{deps})))
+
 (library
  (name euler_data)
  (libraries core delimited_parsing re)

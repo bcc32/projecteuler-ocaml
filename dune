@@ -1,1 +1,7 @@
 (data_only_dirs pkg)
+
+(alias
+ (name runtest)
+ (deps run-solutions.sh)
+ (action
+  (run shellcheck %{deps})))

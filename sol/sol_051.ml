@@ -1,49 +1,92 @@
 open! Core
 open! Import
 
-let all_same n mask =
-  let rec loop n prev mask =
-    if n = 0
-    then true
-    else (
-      let digit = n mod 10 in
-      if mask land 1 <> 0
-      then (prev = -1 || prev = digit) && loop (n / 10) digit (mask lsr 1)
-      else loop (n / 10) prev (mask lsr 1))
-  in
-  loop n (-1) mask
+module Mask : sig
+  (** A bitmask over digits.  [1] means that digit's position can be filled by
+      another digit. *)
+  type t = private int
+
+  val of_bits : int -> t
+  val iter_all : digits:int -> f:(t -> unit) -> unit
+end = struct
+  type t = int
+
+  let of_bits = Fn.id
+
+  let iter_all ~digits ~f =
+    for t = 0 to (1 lsl digits) - 1 do
+      f t
+    done
+  ;;
+end
+
+module Masked_number : sig
+  (** Masked numbers are ints in base-11 where digit A represents a masked
+      digit. *)
+  type t = private int [@@deriving compare, hash, sexp_of]
+
+  (** [of_int n ~mask] checks to make sure that all the would-be masked digits
+      in [n] are the same, and if so, returns the masked [n]. *)
+  val of_int : int -> mask:Mask.t -> t option
+
+  val iter_all : int -> digits:int -> f:(t -> unit) -> unit
+  val fill : t -> int list
+end = struct
+  type t = int [@@deriving compare, hash]
+
+  let sexp_of_t t =
+    Number_theory.Int.to_digits t ~base:11
+    |> List.rev_map ~f:(function
+      | 10 -> "?"
+      | n -> Int.to_string n)
+    |> String.concat
+    |> Sexp.Atom
+  ;;
+
+  let of_int n ~mask =
+    let rec loop n ~mask ~acc ~prev_digit =
+      if n = 0
+      then Some acc
+      else (
+        let digit = n mod 10 in
+        if mask land 1 <> 0
+        then
+          if prev_digit <> -1 && prev_digit <> digit
+          then None
+          else loop (n / 10) ~mask:(mask lsr 1) ~acc:((11 * acc) + 10) ~prev_digit:digit
+        else loop (n / 10) ~mask:(mask lsr 1) ~acc:((11 * acc) + digit) ~prev_digit)
+    in
+    loop n ~mask:(mask : Mask.t :> int) ~acc:0 ~prev_digit:(-1)
+  ;;
+
+  let iter_all n ~digits ~f =
+    Mask.iter_all ~digits ~f:(fun mask -> Option.iter (of_int n ~mask) ~f)
+  ;;
+
+  let fill t =
+    let fill_with_digit t digit =
+      Number_theory.Int.fold_digits t ~base:11 ~init:0 ~f:(fun acc d ->
+        match d with
+        | 10 -> (10 * acc) + digit
+        | n -> (10 * acc) + n)
+    in
+    List.init 10 ~f:(fill_with_digit t)
+  ;;
+end
+
+let%expect_test "Masked_number.of_int" =
+  Masked_number.of_int 121313 ~mask:(Mask.of_bits 0b000101)
+  |> [%sexp_of: Masked_number.t option]
+  |> print_s;
+  [%expect {| (121?1?) |}];
+  Masked_number.of_int 121313 ~mask:(Mask.of_bits 0b011010)
+  |> [%sexp_of: Masked_number.t option]
+  |> print_s;
+  [%expect {| () |}]
 ;;
 
-(* TODO make mask a type *)
-(* masked numbers are ints in base-11 where digit A represents a masked digit *)
-let sexp_of_mask mask =
-  Number_theory.Int.to_digits mask ~base:11
-  |> List.rev_map ~f:(function
-    | 10 -> "?"
-    | n -> Int.to_string n)
-  |> String.concat
-  |> Sexp.Atom
-;;
-
-let apply_mask n mask =
-  let rec loop n mask acc =
-    if n = 0
-    then acc
-    else (
-      let digit = if mask land 1 <> 0 then 10 else n mod 10 in
-      loop (n / 10) (mask lsr 1) ((11 * acc) + digit))
-  in
-  loop n mask 0
-;;
-
-let iter_masked n ~digits ~f =
-  for mask = 0 to (1 lsl digits) - 1 do
-    if all_same n mask then f (apply_mask n mask)
-  done
-;;
-
-let%expect_test "iter_masked" =
-  iter_masked 121313 ~digits:6 ~f:(printf !"%{sexp: mask}\n");
+let%expect_test "Masked_number.iter_all" =
+  Masked_number.iter_all 121313 ~digits:6 ~f:(printf !"%{sexp: Masked_number.t}\n");
   [%expect
     {|
     121313
@@ -60,28 +103,19 @@ let%expect_test "iter_masked" =
     ?2?3?3 |}]
 ;;
 
-let fill_mask mask =
-  let fill mask digit =
-    Number_theory.Int.fold_digits mask ~base:11 ~init:0 ~f:(fun acc d ->
-      match d with
-      | 10 -> (10 * acc) + digit
-      | n -> (10 * acc) + n)
-  in
-  List.init 10 ~f:(fill mask)
-;;
-
 module M = struct
   let problem = Number 51
   let threshold = 8
 
   let main () =
     let rec loop digits =
-      let mask_counts = Int.Table.create () in
+      let mask_counts = Hashtbl.create (module Masked_number) in
       let is_prime = Number_theory.prime_sieve (Int.pow 10 digits) in
       for p = Int.pow 10 (digits - 1) to Int.pow 10 digits - 1 do
         if is_prime.(p)
         then
-          iter_masked p ~digits ~f:(fun masked_int -> Hashtbl.incr mask_counts masked_int)
+          Masked_number.iter_all p ~digits ~f:(fun masked_int ->
+            Hashtbl.incr mask_counts masked_int)
       done;
       match
         with_return_option (fun { return } ->
@@ -89,16 +123,18 @@ module M = struct
             if count >= threshold
             then (
               let primes =
-                fill_mask mask |> List.filter ~f:(fun n -> is_prime.(n))
+                Masked_number.fill mask |> List.filter ~f:(fun n -> is_prime.(n))
               in
               if debug
               then (
-                Debug.eprint_s [%sexp (mask : mask)];
+                Debug.eprint_s [%sexp (mask : Masked_number.t)];
                 Debug.eprint_s [%sexp (primes : int list)]);
-              primes |> List.min_elt ~compare:Int.compare |> uw |> return)))
+              return primes)))
       with
       | None -> loop (digits + 1)
-      | Some lowest -> printf "%d\n" lowest
+      | Some primes ->
+        let lowest = List.min_elt primes ~compare:Int.compare |> Option.value_exn in
+        printf "%d\n" lowest
     in
     loop 1
   ;;

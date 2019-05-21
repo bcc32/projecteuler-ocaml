@@ -8,25 +8,28 @@ module M = struct
   let grid = lazy (Problem_011.data |> Parse.space_separated_grid ~conv:Int.of_string)
 
   let horizontal_products grid =
-    Array.to_sequence grid
-    |> Sequence.map ~f:(fun row ->
-      Sequence.range ~stop:`inclusive 0 (size - product_size)
-      |> Sequence.map ~f:(fun i ->
-        Sequence.range i (i + product_size)
-        |> Sequence.map ~f:(fun i -> row.(i))
-        |> Sequence.fold ~init:1 ~f:( * )))
-    |> Sequence.concat
+    let open Sequence.Let_syntax in
+    let%bind row = Array.to_sequence grid in
+    let%map i = Sequence.range ~stop:`inclusive 0 (size - product_size) in
+    Sequence.fold
+      ~init:1
+      ~f:( * )
+      (let%map j = Sequence.range i (i + product_size) in
+       row.(j))
   ;;
 
   let vertical_products grid = horizontal_products (Array.transpose_exn grid)
 
   let lr_diagonal_products grid =
+    let open Sequence.Let_syntax in
     let indices = Sequence.range ~stop:`inclusive 0 (size - product_size) in
-    Sequence.cartesian_product indices indices
-    |> Sequence.map ~f:(fun (i, j) ->
-      Sequence.range 0 product_size
-      |> Sequence.map ~f:(fun x -> grid.(i + x).(j + x))
-      |> Sequence.fold ~init:1 ~f:( * ))
+    let%bind i = indices in
+    let%map j = indices in
+    Sequence.fold
+      ~init:1
+      ~f:( * )
+      (let%map x = Sequence.range 0 product_size in
+       grid.(i + x).(j + x))
   ;;
 
   let rl_diagonal_products grid =

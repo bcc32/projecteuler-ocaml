@@ -4,73 +4,71 @@ open! Import
 let run_all_unit_tests = false
 
 (* TODO: Add this to euler_lib.  *)
-module Int_detecting_overflow = struct
-  let ( + ) a b =
-    if b > 0 && a > Int.max_value - b
-    then raise_s [%message "addition would overflow" (a : int) (b : int)];
-    if b < 0 && a < Int.min_value - b
-    then raise_s [%message "addition would underflow" (a : int) (b : int)];
-    a + b
-  ;;
+(*
+   {[
+     module Int_detecting_overflow = struct
+       let ( + ) a b =
+         if b > 0 && a > Int.max_value - b
+         then raise_s [%message "addition would overflow" (a : int) (b : int)];
+         if b < 0 && a < Int.min_value - b
+         then raise_s [%message "addition would underflow" (a : int) (b : int)];
+         a + b
+       ;;
 
-  let ( - ) a b =
-    if b < 0 && a > Int.max_value + b
-    then raise_s [%message "subtraction would overflow" (a : int) (b : int)];
-    if b > 0 && a < Int.min_value + b
-    then raise_s [%message "subtraction would underflow" (a : int) (b : int)];
-    a - b
-  ;;
+       let ( - ) a b =
+         if b < 0 && a > Int.max_value + b
+         then raise_s [%message "subtraction would overflow" (a : int) (b : int)];
+         if b > 0 && a < Int.min_value + b
+         then raise_s [%message "subtraction would underflow" (a : int) (b : int)];
+         a - b
+       ;;
 
-  let _ = ( - )
+       let ( * ) a b =
+         if a = -1 && b = Int.min_value
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b = -1 && a = Int.min_value
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b <> 0 && a > Int.max_value / b
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b <> 0 && a < Int.min_value / b
+         then raise_s [%message "multiplication would underflow" (a : int) (b : int)];
+         a * b
+       ;;
+     end
 
-  let ( * ) a b =
-    if a = -1 && b = Int.min_value
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b = -1 && a = Int.min_value
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b <> 0 && a > Int.max_value / b
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b <> 0 && a < Int.min_value / b
-    then raise_s [%message "multiplication would underflow" (a : int) (b : int)];
-    a * b
-  ;;
-end
+     open Int_detecting_overflow
 
-open Int_detecting_overflow
+     module Strict_integer_division = struct
+       let ( / ) a b =
+         if a % b <> 0 then raise_s [%message "division would truncate" (a : int) (b : int)];
+         a / b
+       ;;
+     end
+   ]}
+*)
 
-module Strict_integer_division = struct
-  let ( / ) a b =
-    if a % b <> 0 then raise_s [%message "division would truncate" (a : int) (b : int)];
-    a / b
-  ;;
+module Bigint_with_modulus = struct
+  include Bigint
 
-  let _ = ( / )
-end
-
-module Int_with_modulus = struct
-  type t = int
-
-  let modulus = 1_000_000_000
-  let zero = 0
-  let ( + ) a b = (a + b) mod modulus
+  let modulus = of_int 1_000_000_000
+  let ( + ) a b = (a + b) % modulus
   let ( - ) a b = (a - b) % modulus
-  let _ = ( - )
-  let ( * ) a b = a * b mod modulus
+  let ( * ) a b = a * b % modulus
 end
 
 let sIGMA2_naive n =
-  let open Int_with_modulus in
-  let sum = ref 0 in
+  let open Bigint_with_modulus in
+  let sum = ref zero in
   for i = 1 to n do
-    let num_multiples = n / i in
-    sum := !sum + (i * i * num_multiples)
+    let num_multiples = of_int n / of_int i in
+    sum := !sum + (of_int i * of_int i * num_multiples)
   done;
   !sum
 ;;
 
 let%expect_test "small n examples" =
   for n = 1 to 6 do
-    print_s [%sexp (sIGMA2_naive n : int)]
+    print_s [%sexp (sIGMA2_naive n : Bigint.t)]
   done;
   [%expect {|
     1
@@ -144,25 +142,21 @@ let%test_unit "divisor_frontier_ranges covers all numbers in [1,n]" =
 
 (** lo^2 + (lo+1)^2 + ... + hi^2 *)
 let sum_of_range_of_squares ~lo ~hi =
-  (* FIXME: It seems to be tricky to get a formula that works correctly with
-     int. *)
-  let big = Bigint.of_int in
-  let open Bigint.O in
-  let sum_of_n_squares ~n =
-    (* Formula modified to avoid overflow. *)
-    n * (n + big 1) * ((big 2 * n) + big 1) / big 6
+  let sum_of_n_squares n =
+    (* NOTE: We don't open Bigint_with_modulus here because that could break the
+       clean integer division in the formula. *)
+    let open Bigint in
+    let n = of_int n in
+    n * (n + of_int 1) * ((of_int 2 * n) + of_int 1) / of_int 6
   in
-  (sum_of_n_squares ~n:(big hi) - sum_of_n_squares ~n:(big lo - big 1))
-  % big Int_with_modulus.modulus
-  |> Bigint.to_int_exn
+  Bigint_with_modulus.( - ) (sum_of_n_squares hi) (sum_of_n_squares (lo - 1))
 ;;
 
 let%test_unit "sum_of_range_of_squares" =
-  let open Int_with_modulus in
   let gen =
     let open Quickcheck.Let_syntax in
-    let%bind lo = Int.gen_incl 1 1_000_000 in
-    let%map hi = Int.gen_incl lo (10 * lo) in
+    let%bind lo = Int.gen_incl 1 1_000_000_000_000 in
+    let%map hi = Int.gen_incl lo (lo + 1_000) in
     lo, hi
   in
   if run_all_unit_tests
@@ -170,23 +164,38 @@ let%test_unit "sum_of_range_of_squares" =
     Quickcheck.test
       gen
       ~sexp_of:[%sexp_of: int * int]
-      ~examples:[ 1, 100_000_000; 100_000_000, 100_000_000 ]
+      ~shrinker:[%quickcheck.shrinker: int * int]
+      ~examples:
+        [ 1, 100_000_000
+        ; 100_000_000, 100_000_000
+        ; 999_999_999, 1_000_000_000
+        ; 100_000_000_000, 100_000_000_000
+        ; 673_883_346_566, 673_883_346_566
+        ; 673_883_346_566, 673_883_347_202
+        ]
       ~trials:100
       ~f:(fun (lo, hi) ->
-        [%test_result: int]
+        [%test_result: Bigint.t]
           ~expect:
             (Sequence.range lo hi ~stop:`inclusive
-             |> Sequence.sum (module Int_with_modulus) ~f:(fun x -> x * x))
+             |> Sequence.sum
+                  (module Bigint_with_modulus)
+                  ~f:(fun x ->
+                    let open Bigint_with_modulus in
+                    let x = of_int x % modulus in
+                    x * x))
           (sum_of_range_of_squares ~lo ~hi))
 ;;
 
 let sIGMA2_by_ranges n =
   divisor_frontier_ranges n
   |> Sequence.sum
-       (module Int_with_modulus)
+       (module Bigint_with_modulus)
        ~f:(fun (k, d1, d2) ->
-         let open Int_with_modulus in
-         (if k < d1 then d2 * k * k else 0) + (k * sum_of_range_of_squares ~lo:d1 ~hi:d2))
+         let bi = Bigint.of_int in
+         Bigint.( + )
+           (if k < d1 then Bigint_with_modulus.O.(bi d2 * bi k * bi k) else Bigint.zero)
+           Bigint.O.(bi k * sum_of_range_of_squares ~lo:d1 ~hi:d2))
 ;;
 
 let%test_unit "coherence" =
@@ -197,12 +206,12 @@ let%test_unit "coherence" =
       ~sexp_of:[%sexp_of: int]
       ~examples:[ 1; 10; 100; 1_000; 10_000; 100_000 ]
       ~trials:100
-      ~f:(fun n -> [%test_result: int] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
+      ~f:(fun n -> [%test_result: Bigint.t] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
 ;;
 
 let%expect_test "small n SIGMA2 by ranges" =
   for n = 1 to 6 do
-    print_s [%sexp (sIGMA2_by_ranges n : int)]
+    print_s [%sexp (sIGMA2_by_ranges n : Bigint.t)]
   done;
   [%expect {|
     1
@@ -216,10 +225,13 @@ let%expect_test "small n SIGMA2 by ranges" =
 module M = struct
   let problem = Number 401
   let limit = 1_000_000_000_000_000
-  let main () = sIGMA2_by_ranges limit |> printf "%d\n"
+
+  let main () =
+    Bigint_with_modulus.(sIGMA2_by_ranges limit % modulus) |> printf !"%{Bigint}\n"
+  ;;
 
   (* 281632621
-     18.92s *)
+     19.17s *)
 end
 
 include Solution.Make (M)

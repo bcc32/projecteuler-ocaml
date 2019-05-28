@@ -4,58 +4,57 @@ open! Import
 let run_all_unit_tests = false
 
 (* TODO: Add this to euler_lib.  *)
-module Int_detecting_overflow = struct
-  let ( + ) a b =
-    if b > 0 && a > Int.max_value - b
-    then raise_s [%message "addition would overflow" (a : int) (b : int)];
-    if b < 0 && a < Int.min_value - b
-    then raise_s [%message "addition would underflow" (a : int) (b : int)];
-    a + b
-  ;;
+(*
+   {[
+     module Int_detecting_overflow = struct
+       let ( + ) a b =
+         if b > 0 && a > Int.max_value - b
+         then raise_s [%message "addition would overflow" (a : int) (b : int)];
+         if b < 0 && a < Int.min_value - b
+         then raise_s [%message "addition would underflow" (a : int) (b : int)];
+         a + b
+       ;;
 
-  let ( - ) a b =
-    if b < 0 && a > Int.max_value + b
-    then raise_s [%message "subtraction would overflow" (a : int) (b : int)];
-    if b > 0 && a < Int.min_value + b
-    then raise_s [%message "subtraction would underflow" (a : int) (b : int)];
-    a - b
-  ;;
+       let ( - ) a b =
+         if b < 0 && a > Int.max_value + b
+         then raise_s [%message "subtraction would overflow" (a : int) (b : int)];
+         if b > 0 && a < Int.min_value + b
+         then raise_s [%message "subtraction would underflow" (a : int) (b : int)];
+         a - b
+       ;;
 
-  let _ = ( - )
+       let ( * ) a b =
+         if a = -1 && b = Int.min_value
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b = -1 && a = Int.min_value
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b <> 0 && a > Int.max_value / b
+         then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
+         if b <> 0 && a < Int.min_value / b
+         then raise_s [%message "multiplication would underflow" (a : int) (b : int)];
+         a * b
+       ;;
+     end
 
-  let ( * ) a b =
-    if a = -1 && b = Int.min_value
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b = -1 && a = Int.min_value
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b <> 0 && a > Int.max_value / b
-    then raise_s [%message "multiplication would overflow" (a : int) (b : int)];
-    if b <> 0 && a < Int.min_value / b
-    then raise_s [%message "multiplication would underflow" (a : int) (b : int)];
-    a * b
-  ;;
-end
+     open Int_detecting_overflow
 
-open Int_detecting_overflow
-
-module Strict_integer_division = struct
-  let ( / ) a b =
-    if a % b <> 0 then raise_s [%message "division would truncate" (a : int) (b : int)];
-    a / b
-  ;;
-
-  let _ = ( / )
-end
+     module Strict_integer_division = struct
+       let ( / ) a b =
+         if a % b <> 0 then raise_s [%message "division would truncate" (a : int) (b : int)];
+         a / b
+       ;;
+     end
+   ]}
+*)
 
 module Int_with_modulus = struct
   type t = int
 
   let modulus = 1_000_000_000
   let zero = 0
-  let ( + ) a b = (a + b) mod modulus
+  let ( + ) a b = (a + b) % modulus
   let ( - ) a b = (a - b) % modulus
-  let _ = ( - )
-  let ( * ) a b = a * b mod modulus
+  let ( * ) a b = a * b % modulus
 end
 
 let sIGMA2_naive n =
@@ -144,25 +143,31 @@ let%test_unit "divisor_frontier_ranges covers all numbers in [1,n]" =
 
 (** lo^2 + (lo+1)^2 + ... + hi^2 *)
 let sum_of_range_of_squares ~lo ~hi =
-  (* FIXME: It seems to be tricky to get a formula that works correctly with
-     int. *)
-  let big = Bigint.of_int in
-  let open Bigint.O in
-  let sum_of_n_squares ~n =
-    (* Formula modified to avoid overflow. *)
-    n * (n + big 1) * ((big 2 * n) + big 1) / big 6
+  let divide_one_exn factors ~by =
+    let rec loop i =
+      if i >= Array.length factors
+      then
+        raise_s
+          [%message "didn't find a factor to divide" (factors : int array) (by : int)];
+      if factors.(i) % by = 0 then factors.(i) <- factors.(i) / by else loop (i + 1)
+    in
+    loop 0
   in
-  (sum_of_n_squares ~n:(big hi) - sum_of_n_squares ~n:(big lo - big 1))
-  % big Int_with_modulus.modulus
-  |> Bigint.to_int_exn
+  let sum_of_n_squares n =
+    let factors = [| n; n + 1; (2 * n) + 1 |] in
+    divide_one_exn factors ~by:2;
+    divide_one_exn factors ~by:3;
+    Array.map_inplace factors ~f:(fun x -> x % Int_with_modulus.modulus);
+    Array.fold factors ~init:1 ~f:Int_with_modulus.( * )
+  in
+  Int_with_modulus.( - ) (sum_of_n_squares hi) (sum_of_n_squares (lo - 1))
 ;;
 
 let%test_unit "sum_of_range_of_squares" =
-  let open Int_with_modulus in
   let gen =
     let open Quickcheck.Let_syntax in
-    let%bind lo = Int.gen_incl 1 1_000_000 in
-    let%map hi = Int.gen_incl lo (10 * lo) in
+    let%bind lo = Int.gen_incl 1 1_000_000_000_000 in
+    let%map hi = Int.gen_incl lo (lo + 1_000) in
     lo, hi
   in
   if run_all_unit_tests
@@ -170,13 +175,26 @@ let%test_unit "sum_of_range_of_squares" =
     Quickcheck.test
       gen
       ~sexp_of:[%sexp_of: int * int]
-      ~examples:[ 1, 100_000_000; 100_000_000, 100_000_000 ]
+      ~shrinker:[%quickcheck.shrinker: int * int]
+      ~examples:
+        [ 1, 100_000_000
+        ; 100_000_000, 100_000_000
+        ; 999_999_999, 1_000_000_000
+        ; 100_000_000_000, 100_000_000_000
+        ; 673_883_346_566, 673_883_346_566
+        ; 673_883_346_566, 673_883_347_202
+        ]
       ~trials:100
       ~f:(fun (lo, hi) ->
         [%test_result: int]
           ~expect:
             (Sequence.range lo hi ~stop:`inclusive
-             |> Sequence.sum (module Int_with_modulus) ~f:(fun x -> x * x))
+             |> Sequence.sum
+                  (module Int_with_modulus)
+                  ~f:(fun x ->
+                    let open Int_with_modulus in
+                    let x = x % modulus in
+                    x * x))
           (sum_of_range_of_squares ~lo ~hi))
 ;;
 

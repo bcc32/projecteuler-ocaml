@@ -1,6 +1,8 @@
 open! Core
 open! Import
 
+let run_all_unit_tests = false
+
 (* TODO: Add this to euler_lib.  *)
 module Int_detecting_overflow = struct
   let ( + ) a b =
@@ -163,12 +165,19 @@ let%test_unit "sum_of_range_of_squares" =
     let%map hi = Int.gen_incl lo (10 * lo) in
     lo, hi
   in
-  Quickcheck.test gen ~sexp_of:[%sexp_of: int * int] ~trials:100 ~f:(fun (lo, hi) ->
-    [%test_result: int]
-      ~expect:
-        (Sequence.range lo hi ~stop:`inclusive
-         |> Sequence.sum (module Int_with_modulus) ~f:(fun x -> x * x))
-      (sum_of_range_of_squares ~lo ~hi))
+  if run_all_unit_tests
+  then
+    Quickcheck.test
+      gen
+      ~sexp_of:[%sexp_of: int * int]
+      ~examples:[ 1, 100_000_000; 100_000_000, 100_000_000 ]
+      ~trials:100
+      ~f:(fun (lo, hi) ->
+        [%test_result: int]
+          ~expect:
+            (Sequence.range lo hi ~stop:`inclusive
+             |> Sequence.sum (module Int_with_modulus) ~f:(fun x -> x * x))
+          (sum_of_range_of_squares ~lo ~hi))
 ;;
 
 let sIGMA2_by_ranges n =
@@ -181,12 +190,14 @@ let sIGMA2_by_ranges n =
 ;;
 
 let%test_unit "coherence" =
-  Quickcheck.test
-    (Int.gen_incl 1 1_000_000)
-    ~sexp_of:[%sexp_of: int]
-    ~examples:[ 1; 10; 100; 1_000; 10_000; 100_000 ]
-    ~trials:100
-    ~f:(fun n -> [%test_result: int] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
+  if run_all_unit_tests
+  then
+    Quickcheck.test
+      (Int.gen_incl 1 1_000_000)
+      ~sexp_of:[%sexp_of: int]
+      ~examples:[ 1; 10; 100; 1_000; 10_000; 100_000 ]
+      ~trials:100
+      ~f:(fun n -> [%test_result: int] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
 ;;
 
 let%expect_test "small n SIGMA2 by ranges" =

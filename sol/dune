@@ -18,3 +18,18 @@
   (with-stdout-to
    %{targets}
    (run %{script}))))
+
+(rule
+ (targets solutions_without_answer_expect_tests.txt.gen)
+ (deps
+  (glob_files sol*.ml))
+ (action
+  (with-stdout-to
+   %{targets}
+   (run grep -L "\\<expect_test\\>.*\\<answer\\>" --exclude=*.pp.ml %{deps}))))
+
+(alias
+ (name runtest)
+ (action
+  (diff solutions_without_answer_expect_tests.txt
+    solutions_without_answer_expect_tests.txt.gen)))

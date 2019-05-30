@@ -67,6 +67,7 @@ module Make (Prob : Prob) : S with module Prob = Prob = struct
   let find_exn = Map.find_exn
   let of_map = Fn.id
   let to_map = Fn.id
+  let of_alist = Map.of_alist_reduce ~f:Prob.( + )
   let of_alist_exn = Map.of_alist_exn
   let to_alist = Map.to_alist
   let return = singleton

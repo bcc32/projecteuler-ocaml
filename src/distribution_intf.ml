@@ -212,6 +212,12 @@ module type S = sig
 
   val of_map : ('k, Prob.t, 'c) Map.t -> ('k, 'c) t
   val to_map : ('k, 'c) t -> ('k, Prob.t, 'c) Map.t
+
+  (** [of_alist alist] allows duplicate keys in [alist], adding their
+      probabilities. *)
+  val of_alist : ('k, 'c) key -> ('k, Prob.t) List.Assoc.t -> ('k, 'c) t
+
+  (** [of_alist_exn alist] raises there are any duplicate keys in [alist]. *)
   val of_alist_exn : ('k, 'c) key -> ('k, Prob.t) List.Assoc.t -> ('k, 'c) t
 
   val to_alist

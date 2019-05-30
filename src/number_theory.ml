@@ -542,6 +542,8 @@ let[@inline always] int_next_probable_prime n =
   | _ -> assert false
 ;;
 
+(* TODO: Add an Expert/For_testing version that doesn't allocate the array.  It
+   should have a [~len] argument. *)
 let prime_sieve limit =
   let len = limit + 1 in
   let primes = Array.create ~len true in

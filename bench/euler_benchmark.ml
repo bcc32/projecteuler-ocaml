@@ -45,8 +45,9 @@ let sqrt_group =
 ;;
 
 let primes_group =
-  Bench.Test.create ~name:"prime_sieve(10^6)" (fun () ->
-    Number_theory.prime_sieve 1_000_000)
+  Bench.Test.create_with_initialization ~name:"prime_sieve(10^6)" (fun `init ->
+    Gc.disable_compaction ~allocation_policy:`Don't_change ();
+    fun () -> Number_theory.prime_sieve 1_000_000)
 ;;
 
 let pow_group =

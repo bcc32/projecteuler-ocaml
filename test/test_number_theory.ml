@@ -1,26 +1,6 @@
 open! Core
 open! Import
 
-let%test_unit "digits" =
-  let check_round_trip (n, digits) =
-    [%test_result: int] ~expect:n (Number_theory.Int.As_base10.of_list digits);
-    [%test_result: int list] ~expect:digits (Number_theory.Int.As_base10.to_list n)
-  in
-  let digits_through_string n =
-    n |> Int.to_string |> String.to_list |> List.map ~f:Char.get_digit_exn
-  in
-  let gen =
-    let open Quickcheck.Let_syntax in
-    let%map_open n = small_positive_int in
-    n, digits_through_string n
-  in
-  Q.test
-    gen
-    ~examples:
-      [ 0, [ 0 ]; 1, [ 1 ]; 10, [ 1; 0 ]; 123, [ 1; 2; 3 ]; 54312, [ 5; 4; 3; 1; 2 ] ]
-    ~f:check_round_trip
-;;
-
 let%expect_test "is_prime" =
   let show a b =
     Number_theory.Int.range a b

@@ -134,6 +134,8 @@ end
 module type Number_theory = sig
   (** Prime numbers, integer and modular arithmetic, factorizations, etc. *)
 
+  module type As_digits = As_digits
+  module type As_digits_one_direction = As_digits_one_direction
   module type S = S
 
   module Make (Int : Int_intf.S_unbounded) : S with type integer = Int.t

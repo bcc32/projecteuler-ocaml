@@ -14,25 +14,25 @@ let count_subset_pair_unions ~n ~k = Number_theory.Int.binomial n (2 * k)
 
 exception Not_dominating
 
+type which_set =
+  | Left
+  | Right
+[@@deriving compare, sexp_of]
+
 (* Count the number of permutations of k copies each of (L, R) where L is
    "dominated" by R. *)
 let count_non_dominating_set_pairs ~k =
-  let seq = List.init k ~f:(fun _ -> `Left) @ List.init k ~f:(fun _ -> `Right) in
-  Sequences.permutations
-    seq
-    ~compare:
-      (Comparable.lift Int.compare ~f:(function
-         | `Left -> 0
-         | `Right -> 1))
-  |> Sequence.take_while ~f:(fun perm -> Poly.( = ) (List.hd_exn perm) `Left)
+  let seq = List.init k ~f:(fun _ -> Left) @ List.init k ~f:(fun _ -> Right) in
+  Sequences.permutations seq ~compare:[%compare: which_set]
+  |> Sequence.take_while ~f:(fun perm -> Poly.( = ) (List.hd_exn perm) Left)
   |> Sequence.count ~f:(fun perm ->
     let non_dominating =
       try
         let rec loop perm left_minus_right_in_prefix =
           match perm with
           | [] -> false
-          | `Left :: tl -> loop tl (left_minus_right_in_prefix + 1)
-          | `Right :: tl ->
+          | Left :: tl -> loop tl (left_minus_right_in_prefix + 1)
+          | Right :: tl ->
             let left_minus_right_in_prefix = left_minus_right_in_prefix - 1 in
             if left_minus_right_in_prefix < 0 then raise Not_dominating;
             loop tl left_minus_right_in_prefix
@@ -42,7 +42,7 @@ let count_non_dominating_set_pairs ~k =
       | Not_dominating -> true
     in
     if debug && non_dominating
-    then Debug.eprint_s [%message "dominating" (perm : [`Left | `Right] list)];
+    then Debug.eprint_s [%message "dominating" (perm : which_set list)];
     non_dominating)
 ;;
 

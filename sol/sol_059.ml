@@ -31,7 +31,7 @@ let best_key_char ~key_index ~ciphertext =
         if i mod key_length = key_index && is_english_char (c lxor x)
         then ac + 1
         else ac) ))
-  |> List.max_elt ~compare:(Comparable.lift Int.compare ~f:snd)
+  |> List.max_elt ~compare:[%compare: _ * int]
   |> uw
   |> fst
 ;;

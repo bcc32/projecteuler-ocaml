@@ -24,7 +24,7 @@ module M = struct
   let main () =
     Sequence.range 1 1000
     |> Sequence.map ~f:(fun n -> n, cycle_length n)
-    |> Sequence.max_elt ~compare:(Comparable.lift Int.compare ~f:snd)
+    |> Sequence.max_elt ~compare:[%compare: _ * int]
     |> uw
     |> fst
     |> printf "%d\n"

@@ -10,3 +10,6 @@ printing.
 #+BEGIN_SRC ocaml
   let () = unimplemented [%here]
 #+END_SRC
+* TODO Add support for inline benchmarking
+E.g., using ~ppx_bench~.  This might require build system support.
+* TODO Benchmark solutions under flambda

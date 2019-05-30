@@ -629,15 +629,3 @@ module Bigint = struct
     addition_chain_pow_gen b e ~one:Bigint.one ~mul:Bigint.( * )
   ;;
 end
-
-let%test_unit "addition_chain_pow vs. Int.pow" =
-  let gen =
-    let open Quickcheck.Let_syntax in
-    let%map () = return ()
-    and b = Core.Int.gen_incl 0 3
-    and e = Core.Int.gen_incl 0 32 in
-    b, e
-  in
-  Quickcheck.test gen ~sexp_of:[%sexp_of: int * int] ~f:(fun (b, e) ->
-    [%test_result: int] (Int.addition_chain_pow b e) ~expect:(Core.Int.pow b e))
-;;

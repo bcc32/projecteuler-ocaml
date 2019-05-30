@@ -80,3 +80,17 @@ let%test_unit "isqrt_int" =
     (* would overflow *)
     | exception _ -> ())
 ;;
+
+let%test_unit "addition_chain_pow vs. Int.pow" =
+  let gen =
+    let open Quickcheck.Let_syntax in
+    let%map () = return ()
+    and b = Int.gen_incl 0 3
+    and e = Int.gen_incl 0 32 in
+    b, e
+  in
+  Quickcheck.test gen ~sexp_of:[%sexp_of: int * int] ~f:(fun (b, e) ->
+    [%test_result: int]
+      (Number_theory.Int.addition_chain_pow b e)
+      ~expect:(Int.pow b e))
+;;

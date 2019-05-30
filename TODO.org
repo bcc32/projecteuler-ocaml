@@ -6,3 +6,7 @@ Alternatively, figure out how to [[https://github.com/ocaml/dune/issues/1516][ma
 * TODO ~Solution_intf.Arg.main~ should return a string
 Might be easier to automate things if it returns a string instead of
 printing.
+* TODO Add ~unimplemented~ function
+#+BEGIN_SRC ocaml
+  let () = unimplemented [%here]
+#+END_SRC

@@ -54,8 +54,11 @@ module M = struct
     plaintext |> String.sum (module Int) ~f:Char.to_int |> printf "%d\n"
   ;;
 
-  (* 107359
-     7.376ms *)
+  (* 7.376ms *)
+  let%expect_test "answer" =
+    main ();
+    [%expect {| 107359 |}]
+  ;;
 end
 
 include Solution.Make (M)

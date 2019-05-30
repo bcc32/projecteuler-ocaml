@@ -1,6 +1,9 @@
 open! Core
 open! Import
 
+(* TODO: Shadow Debug module so that functions automatically check
+   [debug] flag.  *)
+
 module Export = struct
   let debug =
     match Sys.getenv "EULER_DEBUG" with

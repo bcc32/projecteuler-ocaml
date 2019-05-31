@@ -10,8 +10,13 @@ open! Import
    can construct such a square lamina with [a - b = x] and [a + b = t / x]. *)
 
 let count_square_laminae t =
-  Number_theory.Int.divisors t
-  |> List.count ~f:(fun x -> x % 2 = 0 && x * x < t && ((t / x) - x) % 2 = 0)
+  if t % 2 <> 0
+  then 0
+  else
+    Number_theory.Int.divisors (t / 2)
+    |> List.count ~f:(fun x ->
+      let x = x * 2 in
+      x * x < t && ((t / x) - x) % 2 = 0)
 ;;
 
 let%expect_test "examples" =
@@ -66,7 +71,7 @@ module M = struct
   ;;
 
   (* 209566
-     2.210400457 *)
+     1.019205915s *)
 end
 
 include Solution.Make (M)

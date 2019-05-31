@@ -6,6 +6,7 @@ module type As_digits_one_direction = sig
 
   val base : integer
   val of_list : integer list -> integer
+  val of_array : integer array -> integer
   val of_sequence : integer Sequence.t -> integer
   val to_sequence : integer -> integer Sequence.t
 

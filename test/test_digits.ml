@@ -81,8 +81,9 @@ module Test_container
 
   let to_list = to_list
   let to_sequence = to_sequence
+  let to_array = to_array
 
-  let%test_unit "to_list/to_sequence" =
+  let%test_unit "to_list/to_sequence/to_array" =
     Quickcheck.test
       [%quickcheck.generator: T.t]
       ~sexp_of:[%sexp_of: T.t]
@@ -90,19 +91,22 @@ module Test_container
         [%test_result: int list] ~expect:digits (to_list int);
         [%test_result: int Sequence.t]
           ~expect:(Sequence.of_list digits)
-          (to_sequence int))
+          (to_sequence int);
+        [%test_result: int array] ~expect:(Array.of_list digits) (to_array int))
   ;;
 
   let of_list = of_list
   let of_sequence = of_sequence
+  let of_array = of_array
 
-  let%test_unit "of_list/of_sequence" =
+  let%test_unit "of_list/of_sequence/of_array" =
     Quickcheck.test
       [%quickcheck.generator: T.t]
       ~sexp_of:[%sexp_of: T.t]
       ~f:(fun (int, digits) ->
         [%test_result: int] ~expect:int (of_list digits);
-        [%test_result: int] ~expect:int (of_sequence (Sequence.of_list digits)))
+        [%test_result: int] ~expect:int (of_sequence (Sequence.of_list digits));
+        [%test_result: int] ~expect:int (of_array (Array.of_list digits)))
   ;;
 
   (* Don't bother testing functions that are produced by the functor.  They are

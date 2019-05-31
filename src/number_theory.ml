@@ -310,6 +310,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       let of_list_rev ds = List.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
       let of_sequence ds = ds |> Sequence.to_list_rev |> of_list_rev
       let of_list ds = ds |> List.rev |> of_list_rev
+      let of_array ds = ds |> Array.to_list |> List.rev |> of_list_rev
 
       let fold t ~init ~f =
         let rec fold_digits_loop n ~init ~f =
@@ -374,6 +375,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       let base = base
       let of_sequence ds = Sequence.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
       let of_list ds = List.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
+      let of_array ds = Array.fold ds ~init:zero ~f:(fun acc d -> (base * acc) + d)
       let to_list t = Right_to_left.fold t ~init:[] ~f:(fun acc d -> d :: acc)
       let fold t ~init ~f = to_list t |> List.fold ~init ~f
       let iter t ~f = to_list t |> List.iter ~f

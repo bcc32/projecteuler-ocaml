@@ -209,7 +209,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
     | _ -> assert false
   ;;
 
-  let isqrt n =
+  let isqrt =
     let rec loop n =
       if n < two
       then n
@@ -218,7 +218,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
         let large = small + one in
         if large * large > n then small else large)
     in
-    if n < zero then raise_s [%message "isqrt" (n : integer)] else loop n
+    fun n -> if n < zero then raise_s [%message "isqrt" (n : integer)] else loop n
   ;;
 
   let is_perfect_square n =
@@ -226,16 +226,20 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
     sqrt * sqrt = n
   ;;
 
-  let rec is_prime n =
-    if n <= one
-    then false
-    else (
-      prepare_prime_cache ~upto:(one + isqrt n);
-      with_return (fun { return } ->
-        Queue.iter prime_cache ~f:(fun d ->
-          if d * d > n then return true;
-          if n % d = zero then return false);
-        true))
+  let rec is_prime =
+    let rec loop i n =
+      if Int.( >= ) i (Queue.length prime_cache)
+      then true
+      else (
+        let d = Queue.get prime_cache i in
+        if d * d > n then true else if n % d = zero then false else loop (Int.succ i) n)
+    in
+    fun n ->
+      if n <= one
+      then false
+      else (
+        prepare_prime_cache ~upto:(one + isqrt n);
+        loop 0 n)
 
   and extend_prime_cache () =
     let rec loop candidate =

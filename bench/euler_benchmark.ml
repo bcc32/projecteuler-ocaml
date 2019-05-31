@@ -50,6 +50,12 @@ let primes_group =
     fun () -> Number_theory.prime_sieve 1_000_000)
 ;;
 
+let is_primes_group =
+  Bench.Test.create_indexed ~name:"is_prime" ~args:[ 10; 100; 1_000; 10_000 ] (fun n ->
+    ignore (Number_theory.Int.is_prime n : bool);
+    stage (fun () -> Number_theory.Int.is_prime n))
+;;
+
 let pow_group =
   let bench_exponents f ~name =
     Bench.Test.create_indexed
@@ -87,6 +93,7 @@ let command =
     ; "sqrt", sqrt_group
     ; "pow", pow_group
     ; "primes", primes_group
+    ; "is-prime", is_primes_group
     ; "rle", run_length_encode_group
     ]
   in

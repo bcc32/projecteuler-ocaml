@@ -91,23 +91,21 @@ let rec find_prime_pair_sets orig_length length =
     prev |> Sequence.concat_map ~f:(add_one ~target_cardinality:orig_length))
 ;;
 
-module M = struct
-  let problem = Number 60
-  let length = 5
+let problem = Number 60
+let length = 5
 
-  let main () =
-    ignore (debug_timing ~task:"sieving" force primes : (int, _) Array.Permissioned.t);
-    find_prime_pair_sets length length
-    |> Sequence.map ~f:(fun x ->
-      if debug then Debug.eprint_s [%sexp (x : int list)];
-      List.sum (module Int) x ~f:Fn.id)
-    |> Sequence.min_elt ~compare:Int.compare
-    |> uw
-    |> printf "%d\n"
-  ;;
+let main () =
+  ignore (debug_timing ~task:"sieving" force primes : (int, _) Array.Permissioned.t);
+  find_prime_pair_sets length length
+  |> Sequence.map ~f:(fun x ->
+    if debug then Debug.eprint_s [%sexp (x : int list)];
+    List.sum (module Int) x ~f:Fn.id)
+  |> Sequence.min_elt ~compare:Int.compare
+  |> uw
+  |> printf "%d\n"
+;;
 
-  (* 26033
-     19.5716s *)
-end
+(* 26033
+   19.5716s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

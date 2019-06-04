@@ -68,17 +68,14 @@ let find () =
     assert false)
 ;;
 
-module M = struct
-  let problem = Number 61
+let problem = Number 61
 
-  let main () =
-    let numbers = find () in
-    if debug then Debug.eprint_s [%sexp (numbers : int list)];
-    numbers |> List.sum (module Int) ~f:Fn.id |> printf "%d\n"
-  ;;
+let main () =
+  let numbers = find () in
+  if debug then Debug.eprint_s [%sexp (numbers : int list)];
+  numbers |> List.sum (module Int) ~f:Fn.id |> printf "%d\n"
+;;
 
-  (* 28684
-     2.025ms *)
-end
-
-include Solution.Make (M)
+(* 28684
+   2.025ms *)
+include (val Solution.make ~problem ~main)

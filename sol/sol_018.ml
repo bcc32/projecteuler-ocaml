@@ -22,19 +22,17 @@ let max_sum_exn triangle =
   |> Option.value_exn
 ;;
 
-module M = struct
-  let problem = Number 18
+let problem = Number 18
 
-  let main () =
-    let triangle = Parse.space_separated_grid Problem_018.data ~conv:Int.of_string in
-    max_sum_exn triangle |> printf "%d\n"
-  ;;
+let main () =
+  let triangle = Parse.space_separated_grid Problem_018.data ~conv:Int.of_string in
+  max_sum_exn triangle |> printf "%d\n"
+;;
 
-  (* 0.061ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 1074 |}]
-  ;;
-end
+(* 0.061ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 1074 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

@@ -36,29 +36,27 @@ let best_key_char ~key_index ~ciphertext =
   |> fst
 ;;
 
-module M = struct
-  let problem = Number 59
+let problem = Number 59
 
-  let main () =
-    let ciphertext =
-      Problem_059.data
-      |> Parse.csv_line ~f:Int.of_string
-      |> List.map ~f:Char.of_int_exn
-      |> Bytes.of_char_list
-    in
-    let a = best_key_char ~ciphertext ~key_index:0 in
-    let b = best_key_char ~ciphertext ~key_index:1 in
-    let c = best_key_char ~ciphertext ~key_index:2 in
-    let plaintext = decrypt ciphertext ~key:(String.of_char_list [ a; b; c ]) in
-    if debug then Debug.eprint_s [%sexp (plaintext : string)];
-    plaintext |> String.sum (module Int) ~f:Char.to_int |> printf "%d\n"
-  ;;
+let main () =
+  let ciphertext =
+    Problem_059.data
+    |> Parse.csv_line ~f:Int.of_string
+    |> List.map ~f:Char.of_int_exn
+    |> Bytes.of_char_list
+  in
+  let a = best_key_char ~ciphertext ~key_index:0 in
+  let b = best_key_char ~ciphertext ~key_index:1 in
+  let c = best_key_char ~ciphertext ~key_index:2 in
+  let plaintext = decrypt ciphertext ~key:(String.of_char_list [ a; b; c ]) in
+  if debug then Debug.eprint_s [%sexp (plaintext : string)];
+  plaintext |> String.sum (module Int) ~f:Char.to_int |> printf "%d\n"
+;;
 
-  (* 7.376ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 107359 |}]
-  ;;
-end
+(* 7.376ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 107359 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

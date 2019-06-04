@@ -28,13 +28,10 @@ let find min_permutations =
   loop 1
 ;;
 
-module M = struct
-  let problem = Number 62
-  let min_permutations = 5
-  let main () = find min_permutations |> printf "%d\n"
+let problem = Number 62
+let min_permutations = 5
+let main () = find min_permutations |> printf "%d\n"
 
-  (* 127035954683
-     29.618ms *)
-end
-
-include Solution.Make (M)
+(* 127035954683
+   29.618ms *)
+include (val Solution.make ~problem ~main)

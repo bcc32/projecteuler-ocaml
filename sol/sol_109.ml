@@ -82,12 +82,10 @@ let%expect_test _ =
   [%expect {| 11 |}]
 ;;
 
-module M = struct
-  let problem = Number 109
-  let main () = count_checkouts ~f:(fun x -> x < 100) |> printf "%d\n"
+let problem = Number 109
+let main () = count_checkouts ~f:(fun x -> x < 100) |> printf "%d\n"
 
-  (* 38182
-     1.895ms *)
-end
+(* 38182
+   1.895ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

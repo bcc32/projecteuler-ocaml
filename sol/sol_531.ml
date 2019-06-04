@@ -49,22 +49,19 @@ let phi =
 ;;
 
 let f n m = g (phi n) n (phi m) m
+let problem = Number 531
 
-module M = struct
-  let problem = Number 531
+let main () =
+  let sum = ref 0 in
+  for n = 1_000_000 to 1_004_998 do
+    for m = n + 1 to 1_004_999 do
+      sum := !sum + f n m
+    done
+  done;
+  printf "%d\n" !sum
+;;
 
-  let main () =
-    let sum = ref 0 in
-    for n = 1_000_000 to 1_004_998 do
-      for m = n + 1 to 1_004_999 do
-        sum := !sum + f n m
-      done
-    done;
-    printf "%d\n" !sum
-  ;;
+(* 4515432351156203105
+   10s *)
 
-  (* 4515432351156203105
-     10s *)
-end
-
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

@@ -7,24 +7,22 @@ let champernowne's_constant =
   Number_theory.Int.As_base10.to_sequence nat
 ;;
 
-module M = struct
-  let problem = Number 40
-  let limit = 1_000_000
-  let indices = [ 1; 10; 100; 1_000; 10_000; 100_000; 1_000_000 ]
+let problem = Number 40
+let limit = 1_000_000
+let indices = [ 1; 10; 100; 1_000; 10_000; 100_000; 1_000_000 ]
 
-  let main () =
-    champernowne's_constant
-    |> Fn.flip Sequence.take limit
-    |> Sequence.foldi ~init:1 ~f:(fun i ac digit ->
-      if List.mem indices (i + 1) ~equal:Int.equal then ac * digit else ac)
-    |> printf "%d\n"
-  ;;
+let main () =
+  champernowne's_constant
+  |> Fn.flip Sequence.take limit
+  |> Sequence.foldi ~init:1 ~f:(fun i ac digit ->
+    if List.mem indices (i + 1) ~equal:Int.equal then ac * digit else ac)
+  |> printf "%d\n"
+;;
 
-  (* 97.183ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 210 |}]
-  ;;
-end
+(* 97.183ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 210 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

@@ -53,12 +53,10 @@ let%expect_test _ =
   [%expect {| 12523 |}]
 ;;
 
-module M = struct
-  let problem = Number 127
-  let main () = abc_hits 120_000 |> printf "%d\n"
+let problem = Number 127
+let main () = abc_hits 120_000 |> printf "%d\n"
 
-  (* 18407904
-     11.8236m *)
-end
+(* 18407904
+   11.8236m *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

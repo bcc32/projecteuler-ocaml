@@ -168,16 +168,14 @@ let%expect_test "F(10, 10)" =
   [%expect {| 215846462 |}]
 ;;
 
-module M = struct
-  let problem = Number 662
+let problem = Number 662
 
-  let main () =
-    let ans = ways grid_length grid_length in
-    print_s [%sexp (ans : int)]
-  ;;
+let main () =
+  let ans = ways grid_length grid_length in
+  print_s [%sexp (ans : int)]
+;;
 
-  (* 860873428
-     50.213826006s *)
-end
+(* 860873428
+   50.213826006s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

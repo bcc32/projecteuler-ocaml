@@ -222,16 +222,14 @@ let%expect_test "small n SIGMA2 by ranges" =
     113 |}]
 ;;
 
-module M = struct
-  let problem = Number 401
-  let limit = 1_000_000_000_000_000
+let problem = Number 401
+let limit = 1_000_000_000_000_000
 
-  let main () =
-    Bigint_with_modulus.(sIGMA2_by_ranges limit % modulus) |> printf !"%{Bigint}\n"
-  ;;
+let main () =
+  Bigint_with_modulus.(sIGMA2_by_ranges limit % modulus) |> printf !"%{Bigint}\n"
+;;
 
-  (* 281632621
-     19.17s *)
-end
+(* 281632621
+   19.17s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

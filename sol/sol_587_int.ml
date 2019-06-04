@@ -1,33 +1,31 @@
 open! Core
 open! Import
 
-module M = struct
-  let problem = Tagged { number = 587; tag = "int"; description = "integration" }
+let problem = Tagged { number = 587; tag = "int"; description = "integration" }
 
-  (* fix the circle radius to be 1 *)
-  let l_section_area = Float.(1. - (pi / 4.))
-  let area_threshold = Percent.apply (Percent.of_bp_int 10) l_section_area
+(* fix the circle radius to be 1 *)
+let l_section_area = Float.(1. - (pi / 4.))
+let area_threshold = Percent.apply (Percent.of_bp_int 10) l_section_area
 
-  let height n x =
-    let open Float.O in
-    let y_line = x / float n in
-    (* (x - 1)^2 + (y - 1)^2 = 1 *)
-    let y_circle = 1. - sqrt (1. - ((x - 1.) ** 2.)) in
-    Float.min y_line y_circle
-  ;;
+let height n x =
+  let open Float.O in
+  let y_line = x / float n in
+  (* (x - 1)^2 + (y - 1)^2 = 1 *)
+  let y_circle = 1. - sqrt (1. - ((x - 1.) ** 2.)) in
+  Float.min y_line y_circle
+;;
 
-  let concave_triangle_area n =
-    Numerics.Float.integrate () ~f:(height n) ~lo:0. ~hi:1. ~intervals:1000
-  ;;
+let concave_triangle_area n =
+  Numerics.Float.integrate () ~f:(height n) ~lo:0. ~hi:1. ~intervals:1000
+;;
 
-  let main () =
-    Number_theory.Int.natural_numbers () ~init:1
-    |> Sequence.find_exn ~f:(fun n -> Float.(concave_triangle_area n < area_threshold))
-    |> printf "%d\n"
-  ;;
+let main () =
+  Number_theory.Int.natural_numbers () ~init:1
+  |> Sequence.find_exn ~f:(fun n -> Float.(concave_triangle_area n < area_threshold))
+  |> printf "%d\n"
+;;
 
-  (* 2240
-     354ms *)
-end
+(* 2240
+   354ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

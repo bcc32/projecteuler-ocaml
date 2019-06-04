@@ -171,15 +171,10 @@ let%test_unit _ =
     (Number.of_bigint Bigint.(pow (of_int 10) (of_int 25)))
 ;;
 
-module M = struct
-  let problem =
-    Tagged { number = 169; tag = "naive"; description = "slow, naive counting" }
-  ;;
+let problem = Tagged { number = 169; tag = "naive"; description = "slow, naive counting" }
+let main () = Number.n_initial |> Number.count_candidates |> printf "%d\n"
 
-  let main () = Number.n_initial |> Number.count_candidates |> printf "%d\n"
+(* 178653872807
+   2.09186h *)
 
-  (* 178653872807
-     2.09186h *)
-end
-
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

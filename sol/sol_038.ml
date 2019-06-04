@@ -36,15 +36,13 @@ let pandigital_multiples () =
   !max
 ;;
 
-module M = struct
-  let problem = Number 38
-  let main () = pandigital_multiples () |> printf "%d\n"
+let problem = Number 38
+let main () = pandigital_multiples () |> printf "%d\n"
 
-  (* 1.815ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 932718654 |}]
-  ;;
-end
+(* 1.815ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 932718654 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

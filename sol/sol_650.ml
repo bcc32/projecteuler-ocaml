@@ -111,12 +111,10 @@ let s n =
   |> Sequence.sum (module Int_maybe_modulo) ~f:sum_of_divisors_of_product_of_binomials
 ;;
 
-module M = struct
-  let problem = Number 650
-  let main () = s 20_000 |> printf "%d\n"
+let problem = Number 650
+let main () = s 20_000 |> printf "%d\n"
 
-  (* 538319652
-     12h50m34.23025941s *)
-end
+(* 538319652
+   12h50m34.23025941s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

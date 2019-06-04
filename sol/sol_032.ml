@@ -29,22 +29,20 @@ let pandigital () =
       if [%equal: int list] expected_digits digits then return c else Sequence.empty))
 ;;
 
-module M = struct
-  let problem = Number 32
+let problem = Number 32
 
-  let main () =
-    pandigital ()
-    |> Sequence.to_list
-    |> Set.of_list (module Int)
-    |> Set.sum (module Int) ~f:Fn.id
-    |> printf "%d\n"
-  ;;
+let main () =
+  pandigital ()
+  |> Sequence.to_list
+  |> Set.of_list (module Int)
+  |> Set.sum (module Int) ~f:Fn.id
+  |> printf "%d\n"
+;;
 
-  (* 200ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 45228 |}]
-  ;;
-end
+(* 200ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 45228 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

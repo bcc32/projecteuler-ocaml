@@ -84,20 +84,18 @@ let%expect_test "basic example S(2,2)" =
   [%expect {| 0.07243802 |}]
 ;;
 
-module M = struct
-  let problem = Number 666
+let problem = Number 666
 
-  let main () =
-    let k = 500 in
-    let m = 10 in
-    printf "%.8f\n" (find_fixed_point ~k ~m ~iterations:100)
-  ;;
+let main () =
+  let k = 500 in
+  let m = 10 in
+  printf "%.8f\n" (find_fixed_point ~k ~m ~iterations:100)
+;;
 
-  (* 14.582934ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 0.48023168 |}]
-  ;;
-end
+(* 14.582934ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 0.48023168 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

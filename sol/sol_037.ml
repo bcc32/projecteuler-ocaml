@@ -32,22 +32,20 @@ let is_left_truncatable n =
   loop n
 ;;
 
-module M = struct
-  let problem = Number 37
+let problem = Number 37
 
-  let main () =
-    search [ 2; 3; 5; 7 ] ~step:extend_right
-    |> Fn.flip Set.diff (Set.of_list (module Int) [ 2; 3; 5; 7 ])
-    |> Set.filter ~f:is_left_truncatable
-    |> Set.sum (module Int) ~f:Fn.id
-    |> printf "%d\n"
-  ;;
+let main () =
+  search [ 2; 3; 5; 7 ] ~step:extend_right
+  |> Fn.flip Set.diff (Set.of_list (module Int) [ 2; 3; 5; 7 ])
+  |> Set.filter ~f:is_left_truncatable
+  |> Set.sum (module Int) ~f:Fn.id
+  |> printf "%d\n"
+;;
 
-  (* 9.74066ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 748317 |}]
-  ;;
-end
+(* 9.74066ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 748317 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

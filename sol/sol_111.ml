@@ -38,23 +38,21 @@ let primes_with_runs ~main_digit ~num_digits =
     assert false)
 ;;
 
-module M = struct
-  let problem = Number 111
-  let num_digits = 10
+let problem = Number 111
+let num_digits = 10
 
-  let main () =
-    let sum = ref 0 in
-    for main_digit = 0 to 9 do
-      sum := !sum + (primes_with_runs ~main_digit ~num_digits : int)
-    done;
-    printf "%d\n" !sum
-  ;;
+let main () =
+  let sum = ref 0 in
+  for main_digit = 0 to 9 do
+    sum := !sum + (primes_with_runs ~main_digit ~num_digits : int)
+  done;
+  printf "%d\n" !sum
+;;
 
-  (* 66.153ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 612407567715 |}]
-  ;;
-end
+(* 66.153ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 612407567715 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

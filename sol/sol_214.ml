@@ -15,20 +15,18 @@ let totient_chain_length limit =
   stage totient_chain_length
 ;;
 
-module M = struct
-  let problem = Number 214
-  let limit = 40_000_000
+let problem = Number 214
+let limit = 40_000_000
 
-  let main () =
-    let totient_chain_length = unstage (totient_chain_length limit) in
-    debug_timing ~task:"sieving" Number_theory.prime_sieve limit
-    |> Array.foldi ~init:0 ~f:(fun i acc is_prime ->
-      if is_prime && totient_chain_length i = 25 then acc + i else acc)
-    |> printf "%d\n"
-  ;;
+let main () =
+  let totient_chain_length = unstage (totient_chain_length limit) in
+  debug_timing ~task:"sieving" Number_theory.prime_sieve limit
+  |> Array.foldi ~init:0 ~f:(fun i acc is_prime ->
+    if is_prime && totient_chain_length i = 25 then acc + i else acc)
+  |> printf "%d\n"
+;;
 
-  (* 1677366278943
-     46.0785s *)
-end
+(* 1677366278943
+   46.0785s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

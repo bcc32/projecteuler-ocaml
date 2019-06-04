@@ -38,15 +38,13 @@ let sum_pandigital () =
   !sum
 ;;
 
-module M = struct
-  let problem = Number 43
-  let main () = sum_pandigital () |> printf "%d\n"
+let problem = Number 43
+let main () = sum_pandigital () |> printf "%d\n"
 
-  (* 2.789ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 16695334890 |}]
-  ;;
-end
+(* 2.789ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 16695334890 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

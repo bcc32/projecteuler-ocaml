@@ -40,27 +40,25 @@ let%expect_test _ =
      585 686 787 888 989 191 292 393 494 595 696 797 898 999) |}]
 ;;
 
-module M = struct
-  let problem = Number 36
+let problem = Number 36
 
-  module Base2 = Number_theory.Int.As_digits (struct
-      let base = 2
-    end)
+module Base2 = Number_theory.Int.As_digits (struct
+    let base = 2
+  end)
 
-  let main () =
-    let sum = ref 0 in
-    for digits = 1 to 6 do
-      iter_base10_palindromes digits ~f:(fun n ->
-        if Sequences.is_palindrome (module Int) (Base2.to_list n) then sum := !sum + n)
-    done;
-    printf "%d\n" !sum
-  ;;
+let main () =
+  let sum = ref 0 in
+  for digits = 1 to 6 do
+    iter_base10_palindromes digits ~f:(fun n ->
+      if Sequences.is_palindrome (module Int) (Base2.to_list n) then sum := !sum + n)
+  done;
+  printf "%d\n" !sum
+;;
 
-  (* 2.167ms *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 872187 |}]
-  ;;
-end
+(* 2.167ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 872187 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

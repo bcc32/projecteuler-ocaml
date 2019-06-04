@@ -45,18 +45,16 @@ let allowed_numbers digits =
          |> fst)
 ;;
 
-module M = struct
-  let problem = Number 162
+let problem = Number 162
 
-  let main () =
-    let limit = 16 in
-    Sequence.range 3 limit ~stop:`inclusive
-    |> Sequence.sum (module Int) ~f:allowed_numbers
-    |> printf "%X\n"
-  ;;
+let main () =
+  let limit = 16 in
+  Sequence.range 3 limit ~stop:`inclusive
+  |> Sequence.sum (module Int) ~f:allowed_numbers
+  |> printf "%X\n"
+;;
 
-  (* 3D58725572C62302
-     6.268ms *)
-end
+(* 3D58725572C62302
+   6.268ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

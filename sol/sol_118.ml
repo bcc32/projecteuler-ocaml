@@ -37,19 +37,17 @@ let iter_allprime_subsets set ~f =
   loop set 0 []
 ;;
 
-module M = struct
-  let problem = Number 118
+let problem = Number 118
 
-  let main () =
-    let count = ref 0 in
-    iter_allprime_subsets [ 1; 2; 3; 4; 5; 6; 7; 8; 9 ] ~f:(fun subsets ->
-      if debug then Debug.eprint_s [%sexp (subsets : int list list)];
-      incr count);
-    printf "%d\n" !count
-  ;;
+let main () =
+  let count = ref 0 in
+  iter_allprime_subsets [ 1; 2; 3; 4; 5; 6; 7; 8; 9 ] ~f:(fun subsets ->
+    if debug then Debug.eprint_s [%sexp (subsets : int list list)];
+    incr count);
+  printf "%d\n" !count
+;;
 
-  (* 44680
-     4.0339s *)
-end
+(* 44680
+   4.0339s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

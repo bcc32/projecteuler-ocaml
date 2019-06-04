@@ -107,44 +107,42 @@ let%expect_test "Masked_number.iter_all" =
     ?2?3?3 |}]
 ;;
 
-module M = struct
-  let problem = Number 51
-  let threshold = 8
+let problem = Number 51
+let threshold = 8
 
-  let main () =
-    let rec loop digits =
-      let mask_counts = Hashtbl.create (module Masked_number) in
-      let is_prime = Number_theory.prime_sieve (Int.pow 10 digits) in
-      for p = Int.pow 10 (digits - 1) to Int.pow 10 digits - 1 do
-        if is_prime.(p)
-        then
-          Masked_number.iter_all p ~digits ~f:(fun masked_int ->
-            Hashtbl.incr mask_counts masked_int)
-      done;
-      match
-        with_return_option (fun { return } ->
-          Hashtbl.iteri mask_counts ~f:(fun ~key:mask ~data:count ->
-            if count >= threshold
+let main () =
+  let rec loop digits =
+    let mask_counts = Hashtbl.create (module Masked_number) in
+    let is_prime = Number_theory.prime_sieve (Int.pow 10 digits) in
+    for p = Int.pow 10 (digits - 1) to Int.pow 10 digits - 1 do
+      if is_prime.(p)
+      then
+        Masked_number.iter_all p ~digits ~f:(fun masked_int ->
+          Hashtbl.incr mask_counts masked_int)
+    done;
+    match
+      with_return_option (fun { return } ->
+        Hashtbl.iteri mask_counts ~f:(fun ~key:mask ~data:count ->
+          if count >= threshold
+          then (
+            let primes =
+              Masked_number.fill mask |> List.filter ~f:(fun n -> is_prime.(n))
+            in
+            if debug
             then (
-              let primes =
-                Masked_number.fill mask |> List.filter ~f:(fun n -> is_prime.(n))
-              in
-              if debug
-              then (
-                Debug.eprint_s [%sexp (mask : Masked_number.t)];
-                Debug.eprint_s [%sexp (primes : int list)]);
-              return primes)))
-      with
-      | None -> loop (digits + 1)
-      | Some primes ->
-        let lowest = List.min_elt primes ~compare:Int.compare |> Option.value_exn in
-        printf "%d\n" lowest
-    in
-    loop 1
-  ;;
+              Debug.eprint_s [%sexp (mask : Masked_number.t)];
+              Debug.eprint_s [%sexp (primes : int list)]);
+            return primes)))
+    with
+    | None -> loop (digits + 1)
+    | Some primes ->
+      let lowest = List.min_elt primes ~compare:Int.compare |> Option.value_exn in
+      printf "%d\n" lowest
+  in
+  loop 1
+;;
 
-  (* 121313
-     720.07ms *)
-end
+(* 121313
+   720.07ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

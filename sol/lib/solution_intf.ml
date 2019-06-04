@@ -44,5 +44,5 @@ module type Solution = sig
 
   type t = ?print_debug:bool -> ?print_elapsed_time:bool -> unit -> unit
 
-  module Make (M : Arg) : S
+  val make : problem:Solution_id.t -> main:(unit -> unit) -> (module S)
 end

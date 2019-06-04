@@ -26,19 +26,17 @@ let%test_unit "P(s, N)" =
   [%test_result: int64] ~expect:14286L (p 6 1_000_000L)
 ;;
 
-module M = struct
-  let problem = Number 601
+let problem = Number 601
 
-  let main () =
-    let sum = ref 0L in
-    for i = 1 to 31 do
-      sum := Int64.( + ) !sum (p i (Int64.( lsl ) 1L (2 * i)))
-    done;
-    printf "%Ld\n" !sum
-  ;;
+let main () =
+  let sum = ref 0L in
+  for i = 1 to 31 do
+    sum := Int64.( + ) !sum (p i (Int64.( lsl ) 1L (2 * i)))
+  done;
+  printf "%Ld\n" !sum
+;;
 
-  (* 1617243
-     0.047ms *)
-end
+(* 1617243
+   0.047ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

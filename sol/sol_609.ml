@@ -52,38 +52,36 @@ let%expect_test "P(100)" =
   [%expect {| 31038676032 |}]
 ;;
 
-module M = struct
-  let problem = Number 609
-  let limit = 100_000_000
+let problem = Number 609
+let limit = 100_000_000
 
-  module Int_with_modulus = struct
-    let modulus = 1_000_000_007
-    let ( * ) a b = a * b mod modulus
-  end
-
-  let main () =
-    let is_prime =
-      debug_timing ~here:[%here] ~task:"sieving" Number_theory.prime_sieve limit
-    in
-    let prime_pi =
-      let cumulative_prime_count =
-        debug_timing
-          ~here:[%here]
-          ~task:"cumulative prime count"
-          (fun is_prime ->
-             Array.folding_map is_prime ~init:0 ~f:(fun num_primes is_prime ->
-               let num_primes = if is_prime then num_primes + 1 else num_primes in
-               num_primes, num_primes))
-          is_prime
-      in
-      fun n -> cumulative_prime_count.(n)
-    in
-    big_p limit Int_with_modulus.( * ) ~is_prime:(Array.get is_prime) ~prime_pi
-    |> printf "%d\n"
-  ;;
-
-  (* 172023848
-     1m24.610572005s *)
+module Int_with_modulus = struct
+  let modulus = 1_000_000_007
+  let ( * ) a b = a * b mod modulus
 end
 
-include Solution.Make (M)
+let main () =
+  let is_prime =
+    debug_timing ~here:[%here] ~task:"sieving" Number_theory.prime_sieve limit
+  in
+  let prime_pi =
+    let cumulative_prime_count =
+      debug_timing
+        ~here:[%here]
+        ~task:"cumulative prime count"
+        (fun is_prime ->
+           Array.folding_map is_prime ~init:0 ~f:(fun num_primes is_prime ->
+             let num_primes = if is_prime then num_primes + 1 else num_primes in
+             num_primes, num_primes))
+        is_prime
+    in
+    fun n -> cumulative_prime_count.(n)
+  in
+  big_p limit Int_with_modulus.( * ) ~is_prime:(Array.get is_prime) ~prime_pi
+  |> printf "%d\n"
+;;
+
+(* 172023848
+   1m24.610572005s *)
+
+include (val Solution.make ~problem ~main)

@@ -11,34 +11,37 @@ let time_unit f () =
 
 type t = ?print_debug:bool -> ?print_elapsed_time:bool -> unit -> unit
 
-module Make (M : Arg) : S = struct
-  let name =
-    match M.problem with
-    | Number n -> Int.to_string n
-    | Tagged { number; tag; description = _ } -> sprintf "%d-%s" number tag
-    | Custom { name; description = _ } -> name
-  ;;
+let make ~(problem : Solution_id.t) ~main =
+  ( module struct
+    let name =
+      match problem with
+      | Number n -> Int.to_string n
+      | Tagged { number; tag; description = _ } -> sprintf "%d-%s" number tag
+      | Custom { name; description = _ } -> name
+    ;;
 
-  let description =
-    match M.problem with
-    | Number n -> sprintf "Problem %d" n
-    | Tagged { number; tag = _; description } ->
-      sprintf "Problem %d (%s)" number description
-    | Custom { name = _; description } -> description
-  ;;
+    let description =
+      match problem with
+      | Number n -> sprintf "Problem %d" n
+      | Tagged { number; tag = _; description } ->
+        sprintf "Problem %d (%s)" number description
+      | Custom { name = _; description } -> description
+    ;;
 
-  let run ?(print_debug = false) ?(print_elapsed_time = false) () =
-    (* FIXME: Don't set [debug] through an environment variable, make it a ref or a
-       [Set_once]. *)
-    (* re-exec self with [EULER_DEBUG] set *)
-    if print_debug && not Debug_printing.Export.debug
-    then
-      never_returns
-        (Unix.exec
-           ()
-           ~prog:Sys.executable_name
-           ~argv:(Array.to_list Sys.argv)
-           ~env:(`Extend [ "EULER_DEBUG", "1" ]));
-    if print_elapsed_time then time_unit M.main () else M.main ()
-  ;;
-end
+    let run ?(print_debug = false) ?(print_elapsed_time = false) () =
+      (* FIXME: Don't set [debug] through an environment variable, make it a ref or a
+         [Set_once]. *)
+      (* re-exec self with [EULER_DEBUG] set *)
+      if print_debug && not Debug_printing.Export.debug
+      then
+        never_returns
+          (Unix.exec
+             ()
+             ~prog:Sys.executable_name
+             ~argv:(Array.to_list Sys.argv)
+             ~env:(`Extend [ "EULER_DEBUG", "1" ]));
+      if print_elapsed_time then time_unit main () else main ()
+    ;;
+  end
+  : S )
+;;

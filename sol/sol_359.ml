@@ -237,24 +237,22 @@ let%expect_test "examples" =
     ((f 99) (r 100) ("p_simple_by_leonid f r" 19454)) |}]
 ;;
 
-module M = struct
-  let problem = Number 359
+let problem = Number 359
 
-  let main () =
-    Number_theory.Int.divisors large_number
-    |> List.sum
-         (module Int_with_modulus)
-         ~f:(fun f ->
-           let r = large_number / f in
-           p_simple_by_leonid f r)
-    |> printf "%d\n"
-  ;;
+let main () =
+  Number_theory.Int.divisors large_number
+  |> List.sum
+       (module Int_with_modulus)
+       ~f:(fun f ->
+         let r = large_number / f in
+         p_simple_by_leonid f r)
+  |> printf "%d\n"
+;;
 
-  (* 34.07us *)
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 40632119 |}]
-  ;;
-end
+(* 34.07us *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 40632119 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

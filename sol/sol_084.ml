@@ -325,24 +325,22 @@ end = struct
   let sexp_of_square_dist t = [%sexp (t.square : D.M(Square).t)]
 end
 
-module M = struct
-  let problem = Number 84
+let problem = Number 84
 
-  let main () =
-    let g = ref Game_state_dist.init in
-    let die =
-      let one_die = D.uniform' (module Int) [ 1; 2; 3; 4 ] in
-      D.map2 one_die one_die ~f:(fun a b -> a + b)
-    in
-    for _ = 1 to 100 do
-      g := Game_state_dist.advance !g ~die
-    done;
-    if debug then Debug.eprint_s (Game_state_dist.sexp_of_square_dist !g);
-    printf !"%{Game_state_dist#modal}\n" !g
-  ;;
+let main () =
+  let g = ref Game_state_dist.init in
+  let die =
+    let one_die = D.uniform' (module Int) [ 1; 2; 3; 4 ] in
+    D.map2 one_die one_die ~f:(fun a b -> a + b)
+  in
+  for _ = 1 to 100 do
+    g := Game_state_dist.advance !g ~die
+  done;
+  if debug then Debug.eprint_s (Game_state_dist.sexp_of_square_dist !g);
+  printf !"%{Game_state_dist#modal}\n" !g
+;;
 
-  (* 101524
-     18.507ms *)
-end
+(* 101524
+   18.507ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

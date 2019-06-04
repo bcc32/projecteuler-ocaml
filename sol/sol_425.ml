@@ -103,13 +103,11 @@ let%expect_test "examples" =
   [%expect {| 78728 |}]
 ;;
 
-module M = struct
-  let problem = Number 425
-  let limit = 10_000_000
-  let main () = sum_primes_not_2's_relatives limit |> printf "%d\n"
+let problem = Number 425
+let limit = 10_000_000
+let main () = sum_primes_not_2's_relatives limit |> printf "%d\n"
 
-  (* 46479497324
-     8.729529377s *)
-end
+(* 46479497324
+   8.729529377s *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

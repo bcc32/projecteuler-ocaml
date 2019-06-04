@@ -51,18 +51,16 @@ let%expect_test _ =
     (17 51 85 255) |}]
 ;;
 
-module M = struct
-  let problem = Number 622
-  let target = 60
+let problem = Number 622
+let target = 60
 
-  let main () =
-    moduli_for_which_multiplicative_order_of_2_is ~target
-    |> List.sum (module Int) ~f:succ
-    |> printf "%d\n"
-  ;;
+let main () =
+  moduli_for_which_multiplicative_order_of_2_is ~target
+  |> List.sum (module Int) ~f:succ
+  |> printf "%d\n"
+;;
 
-  (* 3010983666182123972
-     6.762ms *)
-end
+(* 3010983666182123972
+   6.762ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

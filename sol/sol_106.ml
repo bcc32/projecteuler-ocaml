@@ -60,12 +60,10 @@ let count_subset_pairs_to_be_tested ~n =
          a * b)
 ;;
 
-module M = struct
-  let problem = Number 106
-  let main () = count_subset_pairs_to_be_tested ~n:12 |> printf "%d\n"
+let problem = Number 106
+let main () = count_subset_pairs_to_be_tested ~n:12 |> printf "%d\n"
 
-  (* 21384
-     0.456ms *)
-end
+(* 21384
+   0.456ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

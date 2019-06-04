@@ -45,33 +45,31 @@ let%test_unit "vs naive" =
       [%test_result: int] ~expect:(count_square_laminae_naive t) (count_square_laminae t))
 ;;
 
-module M = struct
-  let problem = Number 174
+let problem = Number 174
 
-  let main () =
-    let tiles_by_type = Hashtbl.create (module Int) in
-    debug_timing
-      ~here:[%here]
-      (fun () ->
-         for t = 1 to 1_000_000 do
-           if debug && t % 10_000 = 0 then Debug.eprintf "%d" t;
-           Hashtbl.add_multi tiles_by_type ~key:(count_square_laminae t) ~data:t
-         done)
-      ();
-    if debug then Debug.eprint "done iterating";
-    [%test_result: int]
-      ~expect:832
-      (Hashtbl.find_multi tiles_by_type 15 |> List.length)
-      ~message:"Expected N(15) = 832";
-    let sum = ref 0 in
-    for n = 1 to 10 do
-      sum := !sum + (Hashtbl.find_multi tiles_by_type n |> List.length)
-    done;
-    printf "%d\n" !sum
-  ;;
+let main () =
+  let tiles_by_type = Hashtbl.create (module Int) in
+  debug_timing
+    ~here:[%here]
+    (fun () ->
+       for t = 1 to 1_000_000 do
+         if debug && t % 10_000 = 0 then Debug.eprintf "%d" t;
+         Hashtbl.add_multi tiles_by_type ~key:(count_square_laminae t) ~data:t
+       done)
+    ();
+  if debug then Debug.eprint "done iterating";
+  [%test_result: int]
+    ~expect:832
+    (Hashtbl.find_multi tiles_by_type 15 |> List.length)
+    ~message:"Expected N(15) = 832";
+  let sum = ref 0 in
+  for n = 1 to 10 do
+    sum := !sum + (Hashtbl.find_multi tiles_by_type n |> List.length)
+  done;
+  printf "%d\n" !sum
+;;
 
-  (* 209566
-     489.617085ms *)
-end
+(* 209566
+   489.617085ms *)
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

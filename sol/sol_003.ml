@@ -1,14 +1,12 @@
 open! Core
 open! Import
 
-module M = struct
-  let problem = Number 3
-  let main () = Number_theory.Int.factor 600851475143 |> List.last_exn |> printf "%d\n"
+let problem = Number 3
+let main () = Number_theory.Int.factor 600851475143 |> List.last_exn |> printf "%d\n"
 
-  let%expect_test "answer" =
-    main ();
-    [%expect {| 6857 |}]
-  ;;
-end
+let%expect_test "answer" =
+  main ();
+  [%expect {| 6857 |}]
+;;
 
-include Solution.Make (M)
+include (val Solution.make ~problem ~main)

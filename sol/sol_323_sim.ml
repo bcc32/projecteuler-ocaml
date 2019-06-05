@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Tagged { number = 323; tag = "sim"; description = "Monte Carlo method" }
-
 let simulate_one bits =
   let end_ = Int.shift_left 1 bits in
   let mask = end_ - 1 in
@@ -44,4 +42,7 @@ let main () =
 (* 6.3551679500
    39s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make
+               ~problem:
+                 (Tagged { number = 323; tag = "sim"; description = "Monte Carlo method" })
+               ~main)

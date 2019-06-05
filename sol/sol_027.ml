@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 27
-
 type answer =
   { mutable a : int
   ; mutable b : int
@@ -44,4 +42,4 @@ let%expect_test "answer" =
   [%expect {| -59231 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 27) ~main)

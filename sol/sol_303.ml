@@ -47,9 +47,8 @@ let%expect_test "example" =
   [%expect {| 11363107 |}]
 ;;
 
-let problem = Number 303
 let main () = sum_of_fn_n 10_000 |> printf "%d\n"
 
 (* 1111981904675169
    19.817992214s *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 303) ~main)

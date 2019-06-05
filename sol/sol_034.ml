@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 34
-
 (* Derived by observing that 9! * n < 10^(n - 1) for all n > 7. *)
 let max_digits = 7
 
@@ -56,4 +54,4 @@ let%expect_test "answer" =
   [%expect {| 40730 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 34) ~main)

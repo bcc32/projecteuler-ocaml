@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 3
 let main () = Number_theory.Int.factor 600851475143 |> List.last_exn |> printf "%d\n"
 
 let%expect_test "answer" =
@@ -9,4 +8,4 @@ let%expect_test "answer" =
   [%expect {| 6857 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 3) ~main)

@@ -107,7 +107,6 @@ let%expect_test "Masked_number.iter_all" =
     ?2?3?3 |}]
 ;;
 
-let problem = Number 51
 let threshold = 8
 
 let main () =
@@ -145,4 +144,4 @@ let main () =
 (* 121313
    720.07ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 51) ~main)

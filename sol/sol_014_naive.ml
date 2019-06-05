@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Tagged { number = 14; tag = "naive"; description = "brute-force method" }
 let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
 let collatz_length n =
@@ -26,4 +25,8 @@ let main () =
   printf "%d\n" !argmax
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make
+               ~problem:
+                 (Tagged
+                    { number = 14; tag = "naive"; description = "brute-force method" })
+               ~main)

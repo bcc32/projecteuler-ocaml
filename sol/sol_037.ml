@@ -32,8 +32,6 @@ let is_left_truncatable n =
   loop n
 ;;
 
-let problem = Number 37
-
 let main () =
   search [ 2; 3; 5; 7 ] ~step:extend_right
   |> Fn.flip Set.diff (Set.of_list (module Int) [ 2; 3; 5; 7 ])
@@ -48,4 +46,4 @@ let%expect_test "answer" =
   [%expect {| 748317 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 37) ~main)

@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Tagged { number = 10; tag = "seq"; description = "using primes Sequence.t" }
-
 let main () =
   Number_theory.Int.primes
   |> Sequence.take_while ~f:(fun x -> x < 2_000_000)
@@ -10,4 +8,8 @@ let main () =
   |> printf "%d\n"
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make
+               ~problem:
+                 (Tagged
+                    { number = 10; tag = "seq"; description = "using primes Sequence.t" })
+               ~main)

@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 12
 let triangle n = n * (n + 1) / 2
 
 let main () =
@@ -17,4 +16,4 @@ let%expect_test "answer" =
   [%expect {| 76576500 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 12) ~main)

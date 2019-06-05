@@ -45,8 +45,6 @@ let allowed_numbers digits =
          |> fst)
 ;;
 
-let problem = Number 162
-
 let main () =
   let limit = 16 in
   Sequence.range 3 limit ~stop:`inclusive
@@ -57,4 +55,4 @@ let main () =
 (* 3D58725572C62302
    6.268ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 162) ~main)

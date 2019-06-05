@@ -60,10 +60,9 @@ let count_subset_pairs_to_be_tested ~n =
          a * b)
 ;;
 
-let problem = Number 106
 let main () = count_subset_pairs_to_be_tested ~n:12 |> printf "%d\n"
 
 (* 21384
    0.456ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 106) ~main)

@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 50
 let limit = 1_000_000
 
 let main () =
@@ -36,4 +35,4 @@ let%expect_test "answer" =
   [%expect {| 997651 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 50) ~main)

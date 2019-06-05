@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 14
 let limit = 1_000_000
 let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
@@ -31,4 +30,4 @@ let%expect_test "answer" =
   [%expect {| 837799 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 14) ~main)

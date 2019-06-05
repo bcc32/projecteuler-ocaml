@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 30
-
 (* Derived by observing that 9^5 * n < 10^(n - 1) for all n > 6. *)
 let max_digits = 6
 let limit = Int.pow 10 max_digits
@@ -36,4 +34,4 @@ let%expect_test "answer" =
   [%expect {| 443839 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 30) ~main)

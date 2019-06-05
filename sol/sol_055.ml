@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 55
-
 let is_palindrome n =
   let s = Bigint.to_string n in
   String.equal s (String.rev s)
@@ -30,4 +28,4 @@ let%expect_test "answer" =
   [%expect {| 249 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 55) ~main)

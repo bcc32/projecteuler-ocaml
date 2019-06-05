@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 48
-
 module Bigint = struct
   include Bigint
 
@@ -32,4 +30,4 @@ let%expect_test "answer" =
   [%expect {| 9110846700 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 48) ~main)

@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 429
-
 (* The unitary divisors of [n] are [p_1^a_1 * ... * p_k^a_k] where [p_1, ...,
    p_k] are any subset of the prime factors of [n].
 
@@ -37,4 +35,4 @@ let main () =
 (* 98792821
    9.3s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 429) ~main)

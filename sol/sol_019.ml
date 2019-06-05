@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 19
-
 let main () =
   let start = Date.of_string "1901-01-01" in
   let stop = Date.of_string "2000-12-31" in
@@ -18,4 +16,4 @@ let%expect_test "answer" =
   [%expect {| 171 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 19) ~main)

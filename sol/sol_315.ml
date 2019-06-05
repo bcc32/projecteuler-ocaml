@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 315
-
 let digit_segments =
   (* segments are numbered:
      top, top left, top right, middle, bottom left, bottom right, bottom *)
@@ -92,4 +90,4 @@ let main () =
 (* 13625242
    1s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 315) ~main)

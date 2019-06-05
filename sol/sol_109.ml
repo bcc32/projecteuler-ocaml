@@ -82,10 +82,9 @@ let%expect_test _ =
   [%expect {| 11 |}]
 ;;
 
-let problem = Number 109
 let main () = count_checkouts ~f:(fun x -> x < 100) |> printf "%d\n"
 
 (* 38182
    1.895ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 109) ~main)

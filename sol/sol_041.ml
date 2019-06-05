@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 41
-
 let main () =
   with_return (fun { return } ->
     for n = 9 downto 0 do
@@ -24,4 +22,4 @@ let%expect_test "answer" =
   [%expect {| 7652413 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 41) ~main)

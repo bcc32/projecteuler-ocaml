@@ -36,8 +36,6 @@ let best_key_char ~key_index ~ciphertext =
   |> fst
 ;;
 
-let problem = Number 59
-
 let main () =
   let ciphertext =
     Problem_059.data
@@ -59,4 +57,4 @@ let%expect_test "answer" =
   [%expect {| 107359 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 59) ~main)

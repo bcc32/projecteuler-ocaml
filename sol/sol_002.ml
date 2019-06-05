@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 2
-
 let fibs n =
   let rec iter a b acc = if b > n then acc else iter b (a + b) (b :: acc) in
   iter 0 1 [] |> List.rev
@@ -20,4 +18,4 @@ let%expect_test "answer" =
   [%expect {| 4613732 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 2) ~main)

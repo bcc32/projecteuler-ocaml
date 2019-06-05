@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 131
-
 (* We want to find primes [p] where there exists some positive integer, [n],
    such that [n^3 + n^2 p = m^3] for some integer [m]. The problem statement
    declares that such an [n] will be unique.
@@ -88,4 +86,4 @@ let main () =
 (* 173
    0.902ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 131) ~main)

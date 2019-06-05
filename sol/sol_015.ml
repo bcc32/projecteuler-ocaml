@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 15
-
 let main () =
   let n = Bigint.of_int 40 in
   let r = Bigint.of_int 20 in
@@ -14,4 +12,4 @@ let%expect_test "answer" =
   [%expect {| 137846528820 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 15) ~main)

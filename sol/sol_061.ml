@@ -68,8 +68,6 @@ let find () =
     assert false)
 ;;
 
-let problem = Number 61
-
 let main () =
   let numbers = find () in
   if debug then Debug.eprint_s [%sexp (numbers : int list)];
@@ -78,4 +76,4 @@ let main () =
 
 (* 28684
    2.025ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 61) ~main)

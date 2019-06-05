@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 105
-
 let main () =
   Problem_105.data
   |> String.split_lines
@@ -14,4 +12,4 @@ let main () =
 
 (* 73702
    5.02189s *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 105) ~main)

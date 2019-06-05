@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 6
 let hund = List.range ~stop:`inclusive 1 100
 let sum = List.sum (module Int) ~f:Fn.id
 let sqr x = x * x
@@ -12,4 +11,4 @@ let%expect_test "answer" =
   [%expect {| 25164150 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 6) ~main)

@@ -38,7 +38,6 @@ let sum_pandigital () =
   !sum
 ;;
 
-let problem = Number 43
 let main () = sum_pandigital () |> printf "%d\n"
 
 (* 2.789ms *)
@@ -47,4 +46,4 @@ let%expect_test "answer" =
   [%expect {| 16695334890 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 43) ~main)

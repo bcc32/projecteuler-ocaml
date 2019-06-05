@@ -91,7 +91,6 @@ let rec find_prime_pair_sets orig_length length =
     prev |> Sequence.concat_map ~f:(add_one ~target_cardinality:orig_length))
 ;;
 
-let problem = Number 60
 let length = 5
 
 let main () =
@@ -108,4 +107,4 @@ let main () =
 (* 26033
    19.5716s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 60) ~main)

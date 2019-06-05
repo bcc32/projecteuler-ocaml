@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 80
-
 let sqrt n =
   let open Bignum in
   Numerics.Bignum.newton's_method
@@ -44,4 +42,4 @@ let main () =
 (* 40886
    95.364ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 80) ~main)

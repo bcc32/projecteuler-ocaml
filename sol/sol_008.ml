@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 8
-
 let doit str =
   Sequence.range 0 (String.length str - 12)
   |> Sequence.map ~f:(fun i ->
@@ -21,4 +19,4 @@ let%expect_test "answer" =
   [%expect {| 23514624000 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 8) ~main)

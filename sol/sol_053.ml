@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 53
-
 let main () =
   let limit = Bigint.of_int 1_000_000 in
   Sequence.(
@@ -22,4 +20,4 @@ let%expect_test "answer" =
   [%expect {| 4075 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 53) ~main)

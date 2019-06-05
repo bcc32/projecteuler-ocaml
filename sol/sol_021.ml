@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 21
-
 let sum_proper_divisors n =
   let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in
   sd - n
@@ -31,4 +29,4 @@ let%expect_test "answer" =
   [%expect {| 31626 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 21) ~main)

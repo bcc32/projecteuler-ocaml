@@ -37,8 +37,6 @@ let iter_allprime_subsets set ~f =
   loop set 0 []
 ;;
 
-let problem = Number 118
-
 let main () =
   let count = ref 0 in
   iter_allprime_subsets [ 1; 2; 3; 4; 5; 6; 7; 8; 9 ] ~f:(fun subsets ->
@@ -50,4 +48,4 @@ let main () =
 (* 44680
    4.0339s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 118) ~main)

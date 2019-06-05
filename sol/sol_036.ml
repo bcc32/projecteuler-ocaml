@@ -40,8 +40,6 @@ let%expect_test _ =
      585 686 787 888 989 191 292 393 494 595 696 797 898 999) |}]
 ;;
 
-let problem = Number 36
-
 module Base2 = Number_theory.Int.As_digits (struct
     let base = 2
   end)
@@ -61,4 +59,4 @@ let%expect_test "answer" =
   [%expect {| 872187 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 36) ~main)

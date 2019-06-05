@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 407
 let limit = 10_000_000
 
 (* Modified solution inspired by umu:
@@ -45,4 +44,4 @@ let main () =
 (* 39782849136421
    42.3606s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 407) ~main)

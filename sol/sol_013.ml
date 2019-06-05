@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 13
 let prefix_length = 10
 
 let main () =
@@ -19,4 +18,4 @@ let%expect_test "answer" =
   [%expect {| 5537376230 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 13) ~main)

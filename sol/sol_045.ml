@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 45
 let prev = 40755
 
 let merge_keeping_only_dups xs ys =
@@ -29,4 +28,4 @@ let%expect_test "answer" =
   [%expect {| 1533776805 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 45) ~main)

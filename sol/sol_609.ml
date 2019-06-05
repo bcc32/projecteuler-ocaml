@@ -52,7 +52,6 @@ let%expect_test "P(100)" =
   [%expect {| 31038676032 |}]
 ;;
 
-let problem = Number 609
 let limit = 100_000_000
 
 module Int_with_modulus = struct
@@ -84,4 +83,4 @@ let main () =
 (* 172023848
    1m24.610572005s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 609) ~main)

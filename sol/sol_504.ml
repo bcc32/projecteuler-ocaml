@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 504
 let limit = 100
 
 (* TODO: Move this into Geometry. *)
@@ -49,4 +48,4 @@ let main () =
 (* 694687
    15s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 504) ~main)

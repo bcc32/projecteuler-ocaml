@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 11
 let size = 20
 let product_size = 4
 let grid = lazy (Problem_011.data |> Parse.space_separated_grid ~conv:Int.of_string)
@@ -57,4 +56,4 @@ let%expect_test "answer" =
   [%expect {| 70600674 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 11) ~main)

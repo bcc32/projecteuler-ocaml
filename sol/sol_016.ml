@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 16
-
 let sum_digits n base =
   let open Bigint in
   let rec iter n acc = if n = zero then acc else iter (n / base) ((n % base) + acc) in
@@ -22,4 +20,4 @@ let%expect_test "answer" =
   [%expect {| 1366 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 16) ~main)

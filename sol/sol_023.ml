@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 23
 let limit = 28123
 
 let is_abundant n =
@@ -46,4 +45,4 @@ let%expect_test "answer" =
   [%expect {| 4179871 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 23) ~main)

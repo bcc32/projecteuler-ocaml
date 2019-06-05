@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 22
-
 let names =
   lazy (Problem_022.data |> Parse.csv_line ~f:Fn.id |> List.sort ~compare:String.compare)
 ;;
@@ -23,4 +21,4 @@ let%expect_test "answer" =
   [%expect {| 871198282 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 22) ~main)

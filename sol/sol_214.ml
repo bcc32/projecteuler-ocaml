@@ -15,7 +15,6 @@ let totient_chain_length limit =
   stage totient_chain_length
 ;;
 
-let problem = Number 214
 let limit = 40_000_000
 
 let main () =
@@ -29,4 +28,4 @@ let main () =
 (* 1677366278943
    46.0785s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 214) ~main)

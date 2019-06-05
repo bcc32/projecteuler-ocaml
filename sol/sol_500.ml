@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 500
 let modulo = 500_500_507
 
 (* We know [PrimePi[7_400_000] >= 500_500] so this includes all first
@@ -27,4 +26,4 @@ let main () =
 (* 35407281
    500ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 500) ~main)

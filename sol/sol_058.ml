@@ -10,8 +10,6 @@ let interpolate y1 y2 y3 =
     + (y3 * (x - 1) * (x - 2) / ((3 - 1) * (3 - 2))))
 ;;
 
-let problem = Number 58
-
 let main () =
   let top_right = unstage (interpolate 3 13 31) in
   let top_left = unstage (interpolate 5 17 37) in
@@ -33,4 +31,4 @@ let main () =
 
 (* 26241
    337.116ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 58) ~main)

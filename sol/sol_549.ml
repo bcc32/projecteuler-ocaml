@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 549
-
 let limit =
   match Sys.getenv "LIMIT" with
   | Some x -> Int.of_string x
@@ -57,4 +55,4 @@ let main () = sieve limit |> printf "%d\n"
 (* 476001479068717
    9.4s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 549) ~main)

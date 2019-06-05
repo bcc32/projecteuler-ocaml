@@ -45,8 +45,6 @@ let%test_unit "vs naive" =
       [%test_result: int] ~expect:(count_square_laminae_naive t) (count_square_laminae t))
 ;;
 
-let problem = Number 174
-
 let main () =
   let tiles_by_type = Hashtbl.create (module Int) in
   debug_timing
@@ -72,4 +70,4 @@ let main () =
 (* 209566
    489.617085ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 174) ~main)

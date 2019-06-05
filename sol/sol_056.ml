@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 56
-
 let main () =
   let range = Number_theory.Bigint.range Bigint.one (Bigint.of_int 100) in
   Sequence.cartesian_product range range
@@ -15,4 +13,4 @@ let main () =
 
 (* 972
    134.391ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 56) ~main)

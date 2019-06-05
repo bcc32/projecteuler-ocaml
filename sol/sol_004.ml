@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 4
 let is_palindrome s = String.( = ) s (String.rev s)
 
 let main () =
@@ -20,4 +19,4 @@ let%expect_test "answer" =
   [%expect {| 906609 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 4) ~main)

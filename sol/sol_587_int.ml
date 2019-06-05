@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Tagged { number = 587; tag = "int"; description = "integration" }
-
 (* fix the circle radius to be 1 *)
 let l_section_area = Float.(1. - (pi / 4.))
 let area_threshold = Percent.apply (Percent.of_bp_int 10) l_section_area
@@ -28,4 +26,7 @@ let main () =
 (* 2240
    354ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make
+               ~problem:
+                 (Tagged { number = 587; tag = "int"; description = "integration" })
+               ~main)

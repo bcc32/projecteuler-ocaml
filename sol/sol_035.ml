@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 35
 let limit = 999_999
 let is_prime = lazy (Number_theory.prime_sieve limit)
 
@@ -46,4 +45,4 @@ let%expect_test "answer" =
   [%expect {| 55 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 35) ~main)

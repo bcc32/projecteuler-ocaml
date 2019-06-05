@@ -7,7 +7,6 @@ let champernowne's_constant =
   Number_theory.Int.As_base10.to_sequence nat
 ;;
 
-let problem = Number 40
 let limit = 1_000_000
 let indices = [ 1; 10; 100; 1_000; 10_000; 100_000; 1_000_000 ]
 
@@ -25,4 +24,4 @@ let%expect_test "answer" =
   [%expect {| 210 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 40) ~main)

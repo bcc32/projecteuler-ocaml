@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 142
 let squareq = Deque.create ()
 let i = ref 1
 
@@ -40,4 +39,4 @@ let main () =
 
 (* 1006193
    3.32094s *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 142) ~main)

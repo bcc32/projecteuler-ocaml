@@ -16,8 +16,6 @@ module Is_prime = struct
   include (val Comparator.make ~compare ~sexp_of_t)
 end
 
-let problem = Number 329
-
 module Dist = Distribution.Bignum
 
 let is_prime = lazy (Number_theory.prime_sieve 500)
@@ -76,4 +74,4 @@ let main () =
 (* 199740353/29386561536000
    80ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 329) ~main)

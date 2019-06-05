@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 207
-
 (*
    4^t = 2^t + k
    4^t - 2^t = k
@@ -25,4 +23,4 @@ let main () =
 (* 44043947822
    4.557ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 207) ~main)

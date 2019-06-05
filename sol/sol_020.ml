@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 20
-
 let main () =
   Bigint.of_int 100
   |> Number_theory.Bigint.factorial
@@ -15,4 +13,4 @@ let%expect_test "answer" =
   [%expect {| 648 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 20) ~main)

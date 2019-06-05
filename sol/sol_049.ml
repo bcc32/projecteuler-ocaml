@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 49
 let example_x = 1487
 
 let mem_binary haystack needle =
@@ -51,4 +50,4 @@ let%expect_test "answer" =
   [%expect {| 296962999629 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 49) ~main)

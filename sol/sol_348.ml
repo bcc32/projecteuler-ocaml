@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 348
-
 let palindromes_n_digits n =
   if n mod 2 = 0
   then (
@@ -52,4 +50,4 @@ let main () =
 (* 1004195061
    1.5s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 348) ~main)

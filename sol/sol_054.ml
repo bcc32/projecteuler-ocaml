@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 54
-
 let main () =
   Problem_054.data
   |> Parse.space_separated_grid ~conv:Poker.Card.of_string
@@ -24,4 +22,4 @@ let%expect_test "answer" =
   [%expect {| 376 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 54) ~main)

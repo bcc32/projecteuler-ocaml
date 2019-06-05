@@ -13,10 +13,9 @@ let rec f =
       else f (n asr 1))
 ;;
 
-let problem = Number 169
 let main () = f Bigint.(pow (of_int 10) (of_int 25)) |> printf !"%{Bigint}\n"
 
 (* 178653872807
    0.826ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 169) ~main)

@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 52
 let count_digits = Number_theory.Int.As_base10.fold ~init:0 ~f:(fun ac _ -> ac + 1)
 
 let same_digits n =
@@ -25,4 +24,4 @@ let main () =
 
 (* 142857
    138.157ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 52) ~main)

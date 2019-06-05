@@ -64,8 +64,6 @@ let%expect_test _ =
     ((n 4) ("optimum_special_set n ~ubound:30" (7 6 5 3))) |}]
 ;;
 
-let problem = Number 103
-
 let main () =
   optimum_special_set 7 ~ubound:45
   |> List.rev_map ~f:Int.to_string
@@ -76,4 +74,4 @@ let main () =
 (* 20313839404245
    4.60712m *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 103) ~main)

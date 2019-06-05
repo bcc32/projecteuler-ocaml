@@ -7,8 +7,6 @@ let is_pentagonal n =
   s * s = 1 + (24 * n) && s mod 6 = 5
 ;;
 
-let problem = Number 44
-
 let main () =
   with_return (fun { return } ->
     for k = 1 to 1_000_000 do
@@ -28,4 +26,4 @@ let%expect_test "answer" =
   [%expect {| 5482660 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 44) ~main)

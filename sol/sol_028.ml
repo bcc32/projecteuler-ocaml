@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 28
-
 let main () =
   let i = ref 1 in
   let di = ref 2 in
@@ -23,4 +21,4 @@ let%expect_test "answer" =
   [%expect {| 669171001 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 28) ~main)

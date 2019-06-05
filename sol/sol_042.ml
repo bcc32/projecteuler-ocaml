@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 42
 let words = lazy (Problem_042.data |> Parse.csv_line ~f:Fn.id)
 
 let word_value word =
@@ -30,4 +29,4 @@ let%expect_test "answer" =
   [%expect {| 162 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 42) ~main)

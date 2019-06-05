@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 1
-
 let threes_and_fives =
   List.range 1 1000
   |> List.filter ~f:(fun x -> x mod 3 = 0 || x mod 5 = 0)
@@ -16,4 +14,4 @@ let%expect_test "answer" =
   [%expect {| 233168 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 1) ~main)

@@ -38,7 +38,6 @@ let primes_with_runs ~main_digit ~num_digits =
     assert false)
 ;;
 
-let problem = Number 111
 let num_digits = 10
 
 let main () =
@@ -55,4 +54,4 @@ let%expect_test "answer" =
   [%expect {| 612407567715 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 111) ~main)

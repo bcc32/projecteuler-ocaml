@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 206
-
 let main () =
   let pattern = "1.2.3.4.5.6.7.8.9.0" in
   let pattern_re = Re.Perl.compile_pat pattern in
@@ -24,4 +22,4 @@ let main () =
 (* 1389019170
    16s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 206) ~main)

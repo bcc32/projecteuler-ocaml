@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 25
 let threshold = Bigint.(pow (of_int 10) (of_int 999))
 
 let main () =
@@ -17,4 +16,4 @@ let%expect_test "answer" =
   [%expect {| 4782 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 25) ~main)

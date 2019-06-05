@@ -84,8 +84,6 @@ let%expect_test "basic example S(2,2)" =
   [%expect {| 0.07243802 |}]
 ;;
 
-let problem = Number 666
-
 let main () =
   let k = 500 in
   let m = 10 in
@@ -98,4 +96,4 @@ let%expect_test "answer" =
   [%expect {| 0.48023168 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 666) ~main)

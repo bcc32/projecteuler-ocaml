@@ -53,10 +53,9 @@ let%expect_test _ =
   [%expect {| 12523 |}]
 ;;
 
-let problem = Number 127
 let main () = abc_hits 120_000 |> printf "%d\n"
 
 (* 18407904
    11.8236m *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 127) ~main)

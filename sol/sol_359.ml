@@ -237,8 +237,6 @@ let%expect_test "examples" =
     ((f 99) (r 100) ("p_simple_by_leonid f r" 19454)) |}]
 ;;
 
-let problem = Number 359
-
 let main () =
   Number_theory.Int.divisors large_number
   |> List.sum
@@ -255,4 +253,4 @@ let%expect_test "answer" =
   [%expect {| 40632119 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 359) ~main)

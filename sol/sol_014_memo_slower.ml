@@ -1,14 +1,6 @@
 open! Core
 open! Import
 
-let problem =
-  Tagged
-    { number = 14
-    ; tag = "memo"
-    ; description = "slower method using hashtbl-memoized collatz_length"
-    }
-;;
-
 let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
 let rec collatz_length =
@@ -30,4 +22,11 @@ let main () =
 
 (* 837799
    3.37354s *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make
+               ~problem:
+                 (Tagged
+                    { number = 14
+                    ; tag = "memo"
+                    ; description = "slower method using hashtbl-memoized collatz_length"
+                    })
+               ~main)

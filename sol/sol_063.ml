@@ -39,8 +39,6 @@ let count_digit_powers n =
   List.range 1 10 |> List.count ~f:(fun x -> number_of_digits_in_pow x n = n)
 ;;
 
-let problem = Number 63
-
 let main () =
   List.range 1 22 |> List.sum (module Int) ~f:count_digit_powers |> printf "%d\n"
 ;;
@@ -48,4 +46,4 @@ let main () =
 (* 49
    0.046ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 63) ~main)

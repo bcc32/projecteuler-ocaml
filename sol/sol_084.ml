@@ -325,8 +325,6 @@ end = struct
   let sexp_of_square_dist t = [%sexp (t.square : D.M(Square).t)]
 end
 
-let problem = Number 84
-
 let main () =
   let g = ref Game_state_dist.init in
   let die =
@@ -343,4 +341,4 @@ let main () =
 (* 101524
    18.507ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 84) ~main)

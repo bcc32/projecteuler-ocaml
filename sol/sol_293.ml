@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 293
 let is_prime = lazy (Number_theory.prime_sieve 100_000)
 
 let is_admissible n =
@@ -34,4 +33,4 @@ let main () =
 (* 2209
    2.3m *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 293) ~main)

@@ -22,8 +22,6 @@ let max_sum_exn triangle =
   |> Option.value_exn
 ;;
 
-let problem = Number 18
-
 let main () =
   let triangle = Parse.space_separated_grid Problem_018.data ~conv:Int.of_string in
   max_sum_exn triangle |> printf "%d\n"
@@ -35,4 +33,4 @@ let%expect_test "answer" =
   [%expect {| 1074 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 18) ~main)

@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 26
-
 let rec divide_through k n =
   Bigint.(if n % k = zero then divide_through k (n / k) else n)
 ;;
@@ -35,4 +33,4 @@ let%expect_test "answer" =
   [%expect {| 983 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 26) ~main)

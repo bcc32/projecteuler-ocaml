@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 323
 let word_size = 32
 
 (* probability of transitioning from [a] 1 bits to [b] 1 bits *)
@@ -35,4 +34,4 @@ let main () = printf "%.10f\n" @@ expectation_to_32 0
 (* 6.3551758451
    0.747ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 323) ~main)

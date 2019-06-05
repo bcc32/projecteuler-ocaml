@@ -49,7 +49,6 @@ let phi =
 ;;
 
 let f n m = g (phi n) n (phi m) m
-let problem = Number 531
 
 let main () =
   let sum = ref 0 in
@@ -64,4 +63,4 @@ let main () =
 (* 4515432351156203105
    10s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 531) ~main)

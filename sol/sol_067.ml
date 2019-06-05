@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 67
-
 let main () =
   Problem_067.data
   |> Parse.space_separated_grid ~conv:Int.of_string
@@ -12,4 +10,4 @@ let main () =
 
 (* 7273
    0.903ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 67) ~main)

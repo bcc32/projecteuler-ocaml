@@ -51,7 +51,6 @@ let%expect_test _ =
     (17 51 85 255) |}]
 ;;
 
-let problem = Number 622
 let target = 60
 
 let main () =
@@ -63,4 +62,4 @@ let main () =
 (* 3010983666182123972
    6.762ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 622) ~main)

@@ -1,7 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 166
 let[@inline always] is_in_range x = x >= 0 && x <= 9
 
 (*
@@ -60,4 +59,4 @@ let main () =
 (* 7130034
    12s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 166) ~main)

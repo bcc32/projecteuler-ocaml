@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 47
-
 let main () =
   let distinct_prime_factors =
     Number_theory.Int.natural_numbers ~init:2 ()
@@ -45,4 +43,4 @@ let%expect_test "answer" =
   [%expect {| 134043 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 47) ~main)

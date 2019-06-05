@@ -153,11 +153,10 @@ let%expect_test "first hundred rows" =
   [%expect {| 2361 |}]
 ;;
 
-let problem = Number 148
 let limit = 1_000_000_000
 let main () = sum_rows limit |> printf "%d\n"
 
 (* 2129970655314432
    14.6872s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 148) ~main)

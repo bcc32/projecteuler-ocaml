@@ -29,8 +29,6 @@ let pandigital () =
       if [%equal: int list] expected_digits digits then return c else Sequence.empty))
 ;;
 
-let problem = Number 32
-
 let main () =
   pandigital ()
   |> Sequence.to_list
@@ -45,4 +43,4 @@ let%expect_test "answer" =
   [%expect {| 45228 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 32) ~main)

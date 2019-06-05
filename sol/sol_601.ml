@@ -26,8 +26,6 @@ let%test_unit "P(s, N)" =
   [%test_result: int64] ~expect:14286L (p 6 1_000_000L)
 ;;
 
-let problem = Number 601
-
 let main () =
   let sum = ref 0L in
   for i = 1 to 31 do
@@ -39,4 +37,4 @@ let main () =
 (* 1617243
    0.047ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 601) ~main)

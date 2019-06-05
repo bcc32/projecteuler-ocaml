@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 17
-
 let how_many_letters n =
   if n > 1000 then ksprintf invalid_arg "n is too big: %d" n;
   if n < 1 then ksprintf invalid_arg "n is too small: %d" n;
@@ -70,4 +68,4 @@ let%expect_test "answer" =
   [%expect {| 21124 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 17) ~main)

@@ -28,10 +28,9 @@ let find min_permutations =
   loop 1
 ;;
 
-let problem = Number 62
 let min_permutations = 5
 let main () = find min_permutations |> printf "%d\n"
 
 (* 127035954683
    29.618ms *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 62) ~main)

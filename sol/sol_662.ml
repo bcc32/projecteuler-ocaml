@@ -168,8 +168,6 @@ let%expect_test "F(10, 10)" =
   [%expect {| 215846462 |}]
 ;;
 
-let problem = Number 662
-
 let main () =
   let ans = ways grid_length grid_length in
   print_s [%sexp (ans : int)]
@@ -178,4 +176,4 @@ let main () =
 (* 860873428
    50.213826006s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 662) ~main)

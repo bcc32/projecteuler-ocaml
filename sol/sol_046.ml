@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 46
-
 let cannot_be_written n =
   let upper_bound = Number_theory.Int.isqrt (n / 2) in
   not
@@ -24,4 +22,4 @@ let%expect_test "answer" =
   [%expect {| 5777 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 46) ~main)

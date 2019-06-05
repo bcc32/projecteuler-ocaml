@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 205
-
 type dist = Percent.t Map.M(Int).t
 
 let empty_dist : dist = Map.of_alist_exn (module Int) [ 0, Percent.of_mult 1.0 ]
@@ -58,4 +56,4 @@ let main () =
 (* 0.5731441
    0.168ms *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 205) ~main)

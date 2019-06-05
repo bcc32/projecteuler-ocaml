@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 57
-
 let is_more_num_digits r =
   let num = r |> Bignum.num_as_bigint |> Bigint.to_string |> String.length in
   let den = r |> Bignum.den_as_bigint |> Bigint.to_string |> String.length in
@@ -29,4 +27,4 @@ let%expect_test "answer" =
   [%expect {| 153 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 57) ~main)

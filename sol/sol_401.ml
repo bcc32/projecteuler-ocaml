@@ -222,7 +222,6 @@ let%expect_test "small n SIGMA2 by ranges" =
     113 |}]
 ;;
 
-let problem = Number 401
 let limit = 1_000_000_000_000_000
 
 let main () =
@@ -232,4 +231,4 @@ let main () =
 (* 281632621
    19.17s *)
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 401) ~main)

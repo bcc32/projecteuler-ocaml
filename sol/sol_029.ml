@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 29
-
 let main () =
   let powers = Hash_set.create (module Bigint) () in
   for a = 2 to 100 do
@@ -20,4 +18,4 @@ let%expect_test "answer" =
   [%expect {| 9183 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 29) ~main)

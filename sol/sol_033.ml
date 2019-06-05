@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let problem = Number 33
-
 let main () =
   let fractions =
     let open Sequence.Let_syntax in
@@ -37,4 +35,4 @@ let%expect_test "answer" =
   [%expect {| 100 |}]
 ;;
 
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 33) ~main)

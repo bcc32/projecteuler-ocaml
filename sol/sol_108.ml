@@ -3,8 +3,6 @@ open! Import
 
 (* TODO: After solving 110, see if the below can be made faster. *)
 
-let problem = Number 108
-
 let num_solutions n =
   if debug && n % 1000 = 0 then Debug.eprintf "%d" n;
   let count = ref 2 in
@@ -22,4 +20,4 @@ let main () =
 
 (* 180180
    3.5m *)
-include (val Solution.make ~problem ~main)
+include (val Solution.make ~problem:(Number 108) ~main)

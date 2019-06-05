@@ -109,6 +109,16 @@ module Test_container
         [%test_result: int] ~expect:int (of_array (Array.of_list digits)))
   ;;
 
+  let append = append
+
+  let%test_unit "append" =
+    Quickcheck.test
+      [%quickcheck.generator: T.t * T.t]
+      ~sexp_of:[%sexp_of: T.t * T.t]
+      ~f:(fun ((int1, digits1), (int2, digits2)) ->
+        [%test_result: int] ~expect:(of_list (digits1 @ digits2)) (append int1 int2))
+  ;;
+
   (* Don't bother testing functions that are produced by the functor.  They are
      probably correct. *)
 
@@ -154,4 +164,21 @@ let%test_module "left-to-right" =
 
 let%test_module "right-to-left" =
   (module Test_container (Number_theory.Int.As_base10.Right_to_left) (Test_right_to_left))
+;;
+
+let%test_module "non-directional" =
+  (module struct
+    (** Testing functions that aren't part of the As_digits_one_direction
+        signature. *)
+
+    let%test_unit "rev" =
+      Quickcheck.test
+        Quickcheck.Generator.small_positive_int
+        ~sexp_of:[%sexp_of: int]
+        ~f:(fun n ->
+          [%test_result: int]
+            ~expect:(n |> Int.to_string |> String.rev |> Int.of_string)
+            (Number_theory.Int.As_base10.rev n))
+    ;;
+  end)
 ;;

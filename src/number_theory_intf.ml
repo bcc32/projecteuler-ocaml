@@ -9,6 +9,7 @@ module type As_digits_one_direction = sig
   val of_array : integer array -> integer
   val of_sequence : integer Sequence.t -> integer
   val to_sequence : integer -> integer Sequence.t
+  val append : integer -> integer -> integer
 
   include Container.S0 with type t := integer with type elt := integer
 end
@@ -16,6 +17,11 @@ end
 (** [As_digits] provides a view of an integer as a sequence of digits. *)
 module type As_digits = sig
   type integer
+
+  (** [rev n] reverses the digits of [n].
+
+      Notably, this function doesn't round-trip, e.g., [10 -> 01 -> 1]. *)
+  val rev : integer -> integer
 
   (** Most significant digit to least significant digit. *)
   module Left_to_right : As_digits_one_direction with type integer := integer

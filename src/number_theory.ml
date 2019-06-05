@@ -303,6 +303,13 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   struct
     open M
 
+    let rev t =
+      let rec rev_digits_loop n acc =
+        if n = zero then acc else rev_digits_loop (n / base) ((base * acc) + (n % base))
+      in
+      rev_digits_loop t zero
+    ;;
+
     module Right_to_left = struct
       type nonrec integer = integer
 
@@ -369,6 +376,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
 
       (* TODO: Reimplement lazily. *)
       let to_sequence = to_list >> Sequence.of_list
+      let append a b = of_list (to_list a @ to_list b)
     end
 
     module Left_to_right = struct
@@ -413,6 +421,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
 
       (* TODO: Reimplement lazily. *)
       let to_sequence = to_list >> Sequence.of_list
+      let append a b = of_list (to_list a @ to_list b)
     end
 
     include Left_to_right

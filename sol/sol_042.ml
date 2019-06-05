@@ -1,8 +1,6 @@
 open! Core
 open! Import
 
-let words = lazy (Problem_042.data |> Parse.csv_line ~f:Fn.id)
-
 let word_value word =
   let letter_value letter = Char.to_int letter - Char.to_int 'A' + 1 in
   String.to_list word |> List.sum (module Int) ~f:letter_value
@@ -17,7 +15,8 @@ let is_triangle_number =
 ;;
 
 let main () =
-  force words
+  Problem_042.data
+  |> Parse.csv_line ~f:Fn.id
   |> List.map ~f:word_value
   |> List.count ~f:is_triangle_number
   |> printf "%d\n"

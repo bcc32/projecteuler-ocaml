@@ -9,10 +9,7 @@ let is_abundant n =
 ;;
 
 let abundant_numbers =
-  lazy
-    (Sequence.range 12 limit ~stop:`inclusive
-     |> Sequence.filter ~f:is_abundant
-     |> Sequence.to_list)
+  Sequence.range 12 limit ~stop:`inclusive |> Sequence.filter ~f:is_abundant
 ;;
 
 let main () =
@@ -30,7 +27,7 @@ let main () =
         can_sum.(x + y) <- true;
         iter outer ys)
   in
-  let abundant_numbers = force abundant_numbers in
+  let abundant_numbers = Sequence.to_list abundant_numbers in
   iter abundant_numbers abundant_numbers;
   let sum = ref 0 in
   for i = 0 to limit do

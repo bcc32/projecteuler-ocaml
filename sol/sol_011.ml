@@ -3,7 +3,6 @@ open! Import
 
 let size = 20
 let product_size = 4
-let grid = lazy (Problem_011.data |> Parse.space_separated_grid ~conv:Int.of_string)
 
 let horizontal_products grid =
   let open Sequence.Let_syntax in
@@ -37,7 +36,7 @@ let rl_diagonal_products grid =
 ;;
 
 let main () =
-  let grid = force grid in
+  let grid = Problem_011.data |> Parse.space_separated_grid ~conv:Int.of_string in
   [ horizontal_products grid
   ; vertical_products grid
   ; lr_diagonal_products grid

@@ -8,6 +8,10 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 7273
-   0.903ms *)
+(* 0.903ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 7273 |}]
+;;
+
 include (val Solution.make ~problem:(Number 67) ~main)

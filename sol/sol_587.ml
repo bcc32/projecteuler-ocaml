@@ -32,7 +32,10 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 2240
-   764us *)
+(* 764us *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 2240 |}]
+;;
 
 include (val Solution.make ~problem:(Number 587) ~main)

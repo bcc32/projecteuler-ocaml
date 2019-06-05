@@ -31,6 +31,10 @@ let find min_permutations =
 let min_permutations = 5
 let main () = find min_permutations |> printf "%d\n"
 
-(* 127035954683
-   29.618ms *)
+(* 29.618ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 127035954683 |}]
+;;
+
 include (val Solution.make ~problem:(Number 62) ~main)

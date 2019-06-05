@@ -20,7 +20,10 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 44043947822
-   4.557ms *)
+(* 4.557ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 44043947822 |}]
+;;
 
 include (val Solution.make ~problem:(Number 207) ~main)

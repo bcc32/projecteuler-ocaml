@@ -15,7 +15,10 @@ let rec f =
 
 let main () = f Bigint.(pow (of_int 10) (of_int 25)) |> printf !"%{Bigint}\n"
 
-(* 178653872807
-   0.826ms *)
+(* 0.826ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 178653872807 |}]
+;;
 
 include (val Solution.make ~problem:(Number 169) ~main)

@@ -62,7 +62,10 @@ let count_subset_pairs_to_be_tested ~n =
 
 let main () = count_subset_pairs_to_be_tested ~n:12 |> printf "%d\n"
 
-(* 21384
-   0.456ms *)
+(* 0.456ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 21384 |}]
+;;
 
 include (val Solution.make ~problem:(Number 106) ~main)

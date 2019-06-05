@@ -43,7 +43,10 @@ let main () =
   List.range 1 22 |> List.sum (module Int) ~f:count_digit_powers |> printf "%d\n"
 ;;
 
-(* 49
-   0.046ms *)
+(* 0.046ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 49 |}]
+;;
 
 include (val Solution.make ~problem:(Number 63) ~main)

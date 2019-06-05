@@ -11,6 +11,10 @@ let main () =
   |> printf !"%{Bigint}\n"
 ;;
 
-(* 972
-   134.391ms *)
+(* 134.391ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 972 |}]
+;;
+
 include (val Solution.make ~problem:(Number 56) ~main)

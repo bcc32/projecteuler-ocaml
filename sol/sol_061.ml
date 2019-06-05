@@ -74,6 +74,10 @@ let main () =
   numbers |> List.sum (module Int) ~f:Fn.id |> printf "%d\n"
 ;;
 
-(* 28684
-   2.025ms *)
+(* 2.025ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 28684 |}]
+;;
+
 include (val Solution.make ~problem:(Number 61) ~main)

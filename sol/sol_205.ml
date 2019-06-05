@@ -53,7 +53,10 @@ let main () =
   win_prob peter colin |> Percent.to_mult |> printf "%.07f\n"
 ;;
 
-(* 0.5731441
-   0.168ms *)
+(* 0.168ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 0.5731441 |}]
+;;
 
 include (val Solution.make ~problem:(Number 205) ~main)

@@ -83,7 +83,10 @@ let main () =
 
 (* This is about 4000x faster than the previous solution. *)
 
-(* 173
-   0.902ms *)
+(* 0.902ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 173 |}]
+;;
 
 include (val Solution.make ~problem:(Number 131) ~main)

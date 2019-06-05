@@ -71,7 +71,10 @@ let main () =
     (Bignum.den_as_bigint !product)
 ;;
 
-(* 199740353/29386561536000
-   80ms *)
+(* 80ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 199740353/29386561536000 |}]
+;;
 
 include (val Solution.make ~problem:(Number 329) ~main)

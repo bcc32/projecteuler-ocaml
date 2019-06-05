@@ -338,7 +338,10 @@ let main () =
   printf !"%{Game_state_dist#modal}\n" !g
 ;;
 
-(* 101524
-   18.507ms *)
+(* 18.507ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 101524 |}]
+;;
 
 include (val Solution.make ~problem:(Number 84) ~main)

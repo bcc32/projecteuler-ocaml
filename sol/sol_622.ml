@@ -59,7 +59,10 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 3010983666182123972
-   6.762ms *)
+(* 6.762ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 3010983666182123972 |}]
+;;
 
 include (val Solution.make ~problem:(Number 622) ~main)

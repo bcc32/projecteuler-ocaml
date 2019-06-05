@@ -34,7 +34,10 @@ let main () =
   printf "%Ld\n" !sum
 ;;
 
-(* 1617243
-   0.047ms *)
+(* 0.047ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 1617243 |}]
+;;
 
 include (val Solution.make ~problem:(Number 601) ~main)

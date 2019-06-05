@@ -31,7 +31,10 @@ let rec expectation_to_32 =
 
 let main () = printf "%.10f\n" @@ expectation_to_32 0
 
-(* 6.3551758451
-   0.747ms *)
+(* 0.747ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 6.3551758451 |}]
+;;
 
 include (val Solution.make ~problem:(Number 323) ~main)

@@ -39,7 +39,10 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 40886
-   95.364ms *)
+(* 95.364ms *)
+let%expect_test "answer" =
+  main ();
+  [%expect {| 40886 |}]
+;;
 
 include (val Solution.make ~problem:(Number 80) ~main)

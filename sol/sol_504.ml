@@ -5,6 +5,7 @@ module M = struct
   let problem = Number 504
   let limit = 100
 
+  (* TODO: Move this into Geometry. *)
   (* https://en.wikipedia.org/wiki/Pick%27s_theorem *)
 
   let lattice_points x y =

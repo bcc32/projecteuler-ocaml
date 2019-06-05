@@ -2,12 +2,13 @@ open! Core
 open! Import
 
 let g a n b m =
-  let open Number_theory.Int in
-  let x = gcd n m in
+  let x = Number_theory.Int.gcd n m in
   if a % x <> b % x
   then 0
   else (
-    let y, modulus = chinese_remainder_theorem [ a / x, n / x; b / x, m / x ] in
+    let y, modulus =
+      Number_theory.Int.chinese_remainder_theorem [ a / x, n / x; b / x, m / x ]
+    in
     (y % modulus * x) + (a % x))
 ;;
 

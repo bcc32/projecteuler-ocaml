@@ -8,6 +8,9 @@ let main () =
   |> printf "%d\n"
 ;;
 
+(* 142913828922
+   912.866719ms *)
+
 include (val Solution.make
                ~problem:
                  (Tagged

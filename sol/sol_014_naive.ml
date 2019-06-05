@@ -25,6 +25,9 @@ let main () =
   printf "%d\n" !argmax
 ;;
 
+(* 837799
+   484.910406ms *)
+
 include (val Solution.make
                ~problem:
                  (Tagged

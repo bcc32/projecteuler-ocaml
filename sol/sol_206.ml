@@ -14,8 +14,7 @@ let main () =
   let lb = sqrt_replace '0' ~dir:`Down |> Int.round_down ~to_multiple_of:10 in
   let ub = sqrt_replace '9' ~dir:`Up |> Int.round_up ~to_multiple_of:10 in
   Sequence.range lb ub ~stop:`inclusive ~stride:10
-  |> Sequence.find ~f:(fun n -> n * n |> Int.to_string |> Re.execp pattern_re)
-  |> Option.value_exn
+  |> Sequence.find_exn ~f:(fun n -> n * n |> Int.to_string |> Re.execp pattern_re)
   |> printf "%d\n"
 ;;
 

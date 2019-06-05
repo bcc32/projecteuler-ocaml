@@ -11,8 +11,7 @@ let cannot_be_written n =
 let main () =
   Sequence.unfold_step ~init:3 ~f:(fun s -> Yield (s, s + 2))
   |> Sequence.filter ~f:(Fn.non Number_theory.Int.is_prime)
-  |> Sequence.find ~f:cannot_be_written
-  |> Option.value_exn
+  |> Sequence.find_exn ~f:cannot_be_written
   |> printf "%d\n"
 ;;
 

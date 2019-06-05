@@ -17,8 +17,7 @@ let same_digits n =
 
 let main () =
   Number_theory.Int.natural_numbers ~init:1 ()
-  |> Sequence.find ~f:same_digits
-  |> Option.value_exn
+  |> Sequence.find_exn ~f:same_digits
   |> printf "%d\n"
 ;;
 

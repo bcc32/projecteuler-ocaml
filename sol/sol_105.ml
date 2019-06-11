@@ -4,9 +4,9 @@ open! Import
 let main () =
   Problem_105.data
   |> String.split_lines
-  |> List.map ~f:(String.split ~on:',' >> Array.of_list_map ~f:Int.of_string)
+  |> List.map ~f:(String.split ~on:',' >> Array.Permissioned.of_list_map ~f:Int.of_string)
   |> List.filter ~f:Sol_103.is_special
-  |> List.sum (module Int) ~f:(Array.sum (module Int) ~f:Fn.id)
+  |> List.sum (module Int) ~f:(Array.Permissioned.sum (module Int) ~f:Fn.id)
   |> printf "%d\n"
 ;;
 

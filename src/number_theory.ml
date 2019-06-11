@@ -215,7 +215,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       then n
       else (
         let small = loop (n asr 2) lsl 1 in
-        let large = small + one in
+        let large = Integer.succ small in
         if large * large > n then small else large)
     in
     fun n -> if n < zero then raise_s [%message "isqrt" (n : integer)] else loop n
@@ -238,7 +238,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       if n <= one
       then false
       else (
-        prepare_prime_cache ~upto:(one + isqrt n);
+        prepare_prime_cache ~upto:(Integer.succ (isqrt n));
         loop 0 n)
 
   and extend_prime_cache () =
@@ -466,18 +466,19 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
 
   let num_divisors n =
     prime_factor n
-    |> List.fold ~init:one ~f:(fun acc (_, a) -> acc * (Integer.of_int_exn a + one))
+    |> List.fold ~init:one ~f:(fun acc (_, a) ->
+      acc * Integer.succ (Integer.of_int_exn a))
   ;;
 
   let totient n =
     prime_factor n
     |> List.fold ~init:one ~f:(fun acc (p, a) ->
-      let pam1 = Integer.pow p (Integer.of_int_exn a - one) in
-      acc * pam1 * (p - one))
+      let pam1 = Integer.pow p (Integer.pred (Integer.of_int_exn a)) in
+      acc * pam1 * Integer.pred p)
   ;;
 
   let binomial n r =
-    let top = range ~stop:`inclusive (r + one) n in
+    let top = range ~stop:`inclusive (Integer.succ r) n in
     let bottom = range ~stop:`inclusive one (n - r) in
     Sequence.zip top bottom |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
   ;;
@@ -489,7 +490,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       then ac
       else if b % two = zero
       then loop (a * a % modulus) (b / two) ac
-      else loop a (b - one) (ac * a % modulus)
+      else loop a (Integer.pred b) (ac * a % modulus)
     in
     loop a b one
   ;;
@@ -534,7 +535,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let natural_numbers ?(init = zero) () =
-    Sequence.unfold_step ~init ~f:(fun n -> Yield (n, n + one))
+    Sequence.unfold_step ~init ~f:(fun n -> Yield (n, Integer.succ n))
   ;;
 
   let addition_chain_pow = addition_chain_pow_gen ~one ~mul:( * )

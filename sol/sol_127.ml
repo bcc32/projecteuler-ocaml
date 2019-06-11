@@ -16,7 +16,7 @@ let radical a b c =
   prime_factors_product a * prime_factors_product b * prime_factors_product c
 ;;
 
-let%expect_test _ =
+let%expect_test "radical" =
   print_s [%sexp (radical 8 9 7 : int)];
   [%expect {| 42 |}]
 ;;
@@ -44,7 +44,7 @@ let abc_hits ubound =
               radical a b c < c)))
 ;;
 
-let%expect_test _ =
+let%expect_test "example" =
   print_s [%sexp (abc_hits 1000 : int)];
   [%expect {| 12523 |}]
 ;;

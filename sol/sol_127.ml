@@ -3,7 +3,7 @@ open! Import
 
 let prime_factors =
   Memo.general ~hashable:Int.hashable (fun n ->
-    Number_theory.Int.factor n |> List.dedup_and_sort ~compare:Int.compare)
+    Number_theory.Int.prime_factor n |> List.map ~f:(fun (p, _) -> p))
 ;;
 
 let prime_factors_product =

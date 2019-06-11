@@ -2,17 +2,13 @@ open! Core
 open! Import
 
 let prime_factors =
-  let cache = Hashtbl.create (module Int) in
-  fun n ->
-    Hashtbl.findi_or_add cache n ~default:(fun n ->
-      Number_theory.Int.factor n |> List.dedup_and_sort ~compare:Int.compare)
+  Memo.general ~hashable:Int.hashable (fun n ->
+    Number_theory.Int.factor n |> List.dedup_and_sort ~compare:Int.compare)
 ;;
 
 let prime_factors_product =
-  let cache = Hashtbl.create (module Int) in
-  fun n ->
-    Hashtbl.findi_or_add cache n ~default:(fun n ->
-      prime_factors n |> List.fold ~init:1 ~f:( * ))
+  Memo.general ~hashable:Int.hashable (fun n ->
+    prime_factors n |> List.fold ~init:1 ~f:( * ))
 ;;
 
 (* precondition: a, b, c are pairwise coprime *)

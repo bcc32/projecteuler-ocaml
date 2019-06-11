@@ -1,28 +1,45 @@
 open! Core
 open! Import
 
-let rec power_set list =
-  match list with
-  | [] -> [ [] ]
-  | hd :: tl ->
-    power_set tl |> List.concat_map ~f:(fun subset -> [ subset; hd :: subset ])
-;;
+module Subset = struct
+  type 'a t =
+    { mask : int
+    ; elements : 'a array
+    }
+
+  let to_array { mask; elements } =
+    Array.filteri elements ~f:(fun i _ -> mask land (1 lsl i) <> 0)
+  ;;
+
+  let sexp_of_t sexp_of_a = to_array >> [%sexp_of: a array]
+
+  let power_set elements =
+    List.init (1 lsl Array.length elements) ~f:(fun mask -> { mask; elements })
+  ;;
+
+  let sum (type a) (module M : Container.Summable with type t = a) { mask; elements } ~f =
+    Array.foldi elements ~init:M.zero ~f:(fun i acc elt ->
+      if mask land (1 lsl i) <> 0 then M.( + ) acc (f elt) else acc)
+  ;;
+
+  let length t = Int.popcount t.mask
+end
 
 let%expect_test _ =
-  power_set [ 1; 2; 3 ] |> [%sexp_of: int list list] |> print_s;
+  Subset.power_set [| 1; 2; 3 |] |> [%sexp_of: int Subset.t list] |> print_s;
   [%expect {| (() (1) (2) (1 2) (3) (1 3) (2 3) (1 2 3)) |}]
 ;;
 
-let is_special list =
-  let subsets = power_set list |> List.tl_exn in
+let is_special elements =
+  let subsets = Subset.power_set elements |> List.tl_exn in
   let subsets = Array.of_list subsets in
-  let sum subset = List.sum (module Int) ~f:Fn.id subset in
+  let sum = Subset.sum (module Int) ~f:Fn.id in
   with_return (fun { return } ->
     for i = 0 to Array.length subsets - 1 do
       for j = i + 1 to Array.length subsets - 1 do
         let b, c = subsets.(i), subsets.(j) in
         let sb, sc = sum b, sum c in
-        let lb, lc = List.length b, List.length c in
+        let lb, lc = Subset.length b, Subset.length c in
         if not (sb <> sc && lb > lc ==> (sb > sc) && lc > lb ==> (sc > sb))
         then return false
       done
@@ -30,8 +47,8 @@ let is_special list =
     true)
 ;;
 
-let%test _ = is_special [ 2; 3; 4 ]
-let%test _ = not (is_special [ 2; 3; 5 ])
+let%test _ = is_special [| 2; 3; 4 |]
+let%test _ = not (is_special [| 2; 3; 5 |])
 
 let rec sets n ~ubound =
   if n = 0
@@ -45,7 +62,7 @@ let rec sets n ~ubound =
 let optimum_special_set n ~ubound =
   let compare_by_sum = Comparable.lift Int.compare ~f:(List.sum (module Int) ~f:Fn.id) in
   sets n ~ubound
-  |> Sequence.filter ~f:is_special
+  |> Sequence.filter ~f:(is_special << Array.of_list)
   |> Sequence.min_elt ~compare:compare_by_sum
   |> uw
 ;;

@@ -32,14 +32,15 @@ let%expect_test _ =
 
 let is_special elements =
   let subsets = Subset.power_set elements |> List.tl_exn in
-  let subsets =
-    Array.of_list_map subsets ~f:(fun s -> s, Subset.sum (module Int) s ~f:Fn.id)
+  let subset_sums_and_lengths =
+    Array.of_list_map subsets ~f:(fun s ->
+      Subset.sum (module Int) s ~f:Fn.id, Subset.length s)
   in
   with_return (fun { return } ->
-    for i = 0 to Array.length subsets - 1 do
-      for j = i + 1 to Array.length subsets - 1 do
-        let (b, sb), (c, sc) = subsets.(i), subsets.(j) in
-        let lb, lc = Subset.length b, Subset.length c in
+    for i = 0 to Array.length subset_sums_and_lengths - 1 do
+      for j = i + 1 to Array.length subset_sums_and_lengths - 1 do
+        let sb, lb = subset_sums_and_lengths.(i) in
+        let sc, lc = subset_sums_and_lengths.(j) in
         if not (sb <> sc && lb > lc ==> (sb > sc) && lc > lb ==> (sc > sb))
         then return false
       done

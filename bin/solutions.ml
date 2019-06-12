@@ -30,14 +30,16 @@ let time_arg = Arg.(value & flag & info [ "t"; "time" ] ~doc:"Measure and print 
 let name_arg = Arg.(required & pos 0 (some string) None & info [] ~docv:"NAME")
 
 let run_solution name debug time =
-  let module Sol =
-    (val List.Assoc.find_exn Euler_solutions.all name ~equal:String.equal)
-  in
-  Sol.run ~print_debug:debug ~print_elapsed_time:time ()
+  match List.Assoc.find Euler_solutions.all name ~equal:String.equal with
+  | None -> error_s [%message "No such solution found" (name : string)]
+  | Some (module Sol) ->
+    (match Sol.run ~print_debug:debug ~print_elapsed_time:time () with
+     | () -> Ok ()
+     | exception e -> error_s [%message "Solution raised" (name : string) ~_:(e : exn)])
 ;;
 
 let run_command =
   Term.(
-    ( const run_solution $ name_arg $ debug_arg $ time_arg
+    ( term_result (const run_solution $ name_arg $ debug_arg $ time_arg)
     , info "run" ~doc:"Run a solution (by name)" ))
 ;;

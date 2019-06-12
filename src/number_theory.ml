@@ -446,6 +446,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
 
   let factor n = prime_factor n |> Sequences.run_length_decode
 
+  (* TODO: Improve performance by removing [Sequence]. *)
   let divisors n =
     let mult_aux p a lst =
       let powers =
@@ -478,9 +479,12 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let binomial n r =
-    let top = range ~stop:`inclusive (Integer.succ r) n in
-    let bottom = range ~stop:`inclusive one (n - r) in
-    Sequence.zip top bottom |> Sequence.fold ~init:one ~f:(fun acc (t, b) -> acc * t / b)
+    let rec loop acc top bottom =
+      if top > n
+      then acc
+      else loop (acc * top / bottom) (Integer.succ top) (Integer.succ bottom)
+    in
+    loop one (Integer.succ r) one
   ;;
 
   let powmod a b ~modulus =

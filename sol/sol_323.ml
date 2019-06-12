@@ -21,8 +21,8 @@ let rec expectation_to_32 =
     else
       Hashtbl.findi_or_add cache n ~default:(fun n ->
         let e = ref 1. in
-        (* E[n] = 1 + P[n] E[n] + P[n + 1]E[n + 1] + ... + P[32]E[32] *)
-        (* E[n] = (P[n + 1]E[n + 1] + ... + P[32]E[32]) / (1 - P[n]) *)
+        (* - E[n] = 1 + P[n] E[n] + P[n + 1]E[n + 1] + ... + P[32]E[32]
+           - E[n] = (1 + P[n + 1]E[n + 1] + ... + P[32]E[32]) / (1 - P[n]) *)
         for i = n + 1 to 32 do
           e := !e +. (p_transition n i *. expectation_to_32 i)
         done;

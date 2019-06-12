@@ -1,23 +1,23 @@
 open! Core
 open! Import
 
-let simulate_one bits =
-  let end_ = Int.shift_left 1 bits in
+let simulate_one bits ~random_state =
+  let end_ = 1 lsl bits in
   let mask = end_ - 1 in
   let x = ref 0 in
   let count = ref 0 in
   while !x <> mask do
     incr count;
-    let y = Random.int end_ in
-    x := Int.bit_or !x y
+    let y = Random.State.int random_state end_ in
+    x := !x lor y
   done;
   !count
 ;;
 
-let simulate bits times =
+let simulate bits times ~random_state =
   let sample_counts = Array.create 0 ~len:40 in
   for _ = 1 to times do
-    let sample = simulate_one bits in
+    let sample = simulate_one bits ~random_state in
     sample_counts.(sample) <- sample_counts.(sample) + 1
   done;
   sample_counts
@@ -30,11 +30,11 @@ let expectation sample_counts total =
 ;;
 
 let main () =
-  Random.self_init ();
   let times = 100_000_000 in
   let bits = 32 in
-  let samples = simulate bits times in
-  printf !"%{sexp: int array}\n" samples;
+  let random_state = Random.State.make_self_init () in
+  let samples = simulate bits times ~random_state in
+  if debug then Debug.eprint_s [%sexp (samples : int array)];
   printf "%.10f\n" @@ expectation samples times
 ;;
 

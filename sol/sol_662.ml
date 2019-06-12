@@ -19,29 +19,30 @@ let%expect_test "fibonacci" =
 ;;
 
 let moves =
-  let hypotenuses =
-    let is_fibonacci =
-      let set = Set.of_list (module Int) fibonacci in
-      Set.mem set
-    in
-    let triangles = ref [] in
-    Geometry.iter_all_pythagorean_triples
-      ~with_hypotenuse_less_than:grid_diagonal
-      ~f:(fun a b c -> if is_fibonacci c then triangles := (a, b) :: !triangles);
-    !triangles
-  in
-  List.map fibonacci ~f:(fun n -> 0, n) @ hypotenuses
-  |> List.concat_map ~f:(fun (x, y) ->
-    (* We can guarantee that [x <> y] because [x = y] can't be the legs of a right
-       triangle. *)
-    assert (x <> y);
-    [ x, y; y, x ])
-  |> List.filter ~f:(fun (x, y) -> x <= grid_length && y <= grid_length)
-  |> List.sort ~compare:(Comparable.lift Int.compare ~f:(fun (x, y) -> x + y))
+  lazy
+    (let hypotenuses =
+       let is_fibonacci =
+         let set = Set.of_list (module Int) fibonacci in
+         Set.mem set
+       in
+       let triangles = ref [] in
+       Geometry.iter_all_pythagorean_triples
+         ~with_hypotenuse_less_than:grid_diagonal
+         ~f:(fun a b c -> if is_fibonacci c then triangles := (a, b) :: !triangles);
+       !triangles
+     in
+     List.map fibonacci ~f:(fun n -> 0, n) @ hypotenuses
+     |> List.concat_map ~f:(fun (x, y) ->
+       (* We can guarantee that [x <> y] because [x = y] can't be the legs of a right
+          triangle. *)
+       assert (x <> y);
+       [ x, y; y, x ])
+     |> List.filter ~f:(fun (x, y) -> x <= grid_length && y <= grid_length)
+     |> List.sort ~compare:(Comparable.lift Int.compare ~f:(fun (x, y) -> x + y)))
 ;;
 
 let%expect_test "moves" =
-  Expect_test_helpers_kernel.print_s [%sexp (moves : (int * int) list)];
+  Expect_test_helpers_kernel.print_s [%sexp (force moves : (int * int) list)];
   [%expect
     {|
     ((0    1)
@@ -147,7 +148,7 @@ let ways w h =
         let ways_x_y =
           List.sum
             (module Int)
-            moves
+            (force moves)
             ~f:(fun (dx, dy) -> if x >= dx && y >= dy then get (x - dx) (y - dy) else 0)
           mod modulus
         in

@@ -13,10 +13,11 @@ let lattice_points x y =
 
 let lattice_points =
   let cache =
-    Array.init (limit + 1) ~f:(fun x ->
-      Array.init (limit + 1) ~f:(fun y -> lattice_points x y))
+    lazy
+      (Array.init (limit + 1) ~f:(fun x ->
+         Array.init (limit + 1) ~f:(fun y -> lattice_points x y)))
   in
-  fun x y -> cache.(x).(y)
+  fun x y -> (force cache).(x).(y)
 ;;
 
 let main () =

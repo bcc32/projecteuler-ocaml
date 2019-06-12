@@ -5,9 +5,14 @@ let limit = 1_000_000
 let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
 let rec collatz_length =
-  let cache = Array.create (-1) ~len:(limit + 1) in
-  cache.(1) <- 1;
+  let cache =
+    lazy
+      (let cache = Array.create (-1) ~len:(limit + 1) in
+       cache.(1) <- 1;
+       cache)
+  in
   fun n ->
+    let cache = force cache in
     if n <= limit && cache.(n) <> -1
     then cache.(n)
     else (

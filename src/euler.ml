@@ -1,3 +1,6 @@
+(** This module replaces the [Memo] module from [Core_kernel]. *)
+module Memo = Memo
+
 open! Core
 open! Import
 module Algebra = Algebra

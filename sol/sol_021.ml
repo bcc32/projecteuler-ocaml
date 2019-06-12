@@ -1,14 +1,12 @@
 open! Core
 open! Import
 
-let sum_proper_divisors n =
-  let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in
-  sd - n
-;;
-
 let sum_proper_divisors =
-  let cache = Hashtbl.create (module Int) in
-  fun n -> Hashtbl.findi_or_add cache n ~default:sum_proper_divisors
+  Memo.simple
+    (module Int)
+    (fun n ->
+       let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in
+       sd - n)
 ;;
 
 let amicable n =

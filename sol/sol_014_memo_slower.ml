@@ -3,13 +3,13 @@ open! Import
 
 let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 
-let rec collatz_length =
-  let cache = Hashtbl.create (module Int) in
-  fun n ->
-    Hashtbl.findi_or_add cache n ~default:(fun n ->
-      match n with
-      | 1 -> 1
-      | n -> 1 + collatz_length (collatz n))
+let collatz_length =
+  Memo.recursive
+    (module Int)
+    (fun collatz_length n ->
+       match n with
+       | 1 -> 1
+       | n -> 1 + collatz_length (collatz n))
 ;;
 
 let main () =

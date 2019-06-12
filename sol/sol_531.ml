@@ -44,11 +44,7 @@ let%test_unit _ =
     [%test_result: int] (g a n b m) ~expect:lowest)
 ;;
 
-let phi =
-  let cache = Hashtbl.create (module Int) in
-  fun n -> Hashtbl.findi_or_add cache n ~default:Number_theory.Int.totient
-;;
-
+let phi = Memo.simple (module Int) Number_theory.Int.totient
 let f n m = g (phi n) n (phi m) m
 
 let main () =

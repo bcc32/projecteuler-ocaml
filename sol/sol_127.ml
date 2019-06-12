@@ -2,13 +2,13 @@ open! Core
 open! Import
 
 let prime_factors =
-  Memo.general ~hashable:Int.hashable (fun n ->
-    Number_theory.Int.prime_factor n |> List.map ~f:(fun (p, _) -> p))
+  Memo.simple
+    (module Int)
+    (fun n -> Number_theory.Int.prime_factor n |> List.map ~f:(fun (p, _) -> p))
 ;;
 
 let prime_factors_product =
-  Memo.general ~hashable:Int.hashable (fun n ->
-    prime_factors n |> List.fold ~init:1 ~f:( * ))
+  Memo.simple (module Int) (fun n -> prime_factors n |> List.fold ~init:1 ~f:( * ))
 ;;
 
 (* precondition: a, b, c are pairwise coprime *)

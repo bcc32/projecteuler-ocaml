@@ -20,27 +20,27 @@ let iter_triples ~limit ~f =
   done
 ;;
 
-let limit = 100
-
-let main () =
+let sum_triples ~limit ~print =
   let sum = ref 0 in
   iter_triples ~limit ~f:(fun a b c ->
-    printf "%d %d %d\n" a b c;
+    if print then printf "%d %d %d\n" a b c;
     sum := !sum + a + b + c);
-  printf "%d\n" !sum
+  !sum
 ;;
 
-let%expect_test _ =
-  main ();
+let%expect_test "example" =
+  sum_triples ~limit:100 ~print:true |> printf "%d\n";
   [%expect
     {|
-      2 5 11
-      2 11 47
-      5 11 23
-      5 17 53
-      7 23 71
-      11 23 47
-      374 |}]
+    2 5 11
+    2 11 47
+    5 11 23
+    5 17 53
+    7 23 71
+    11 23 47
+    374 |}]
 ;;
+
+let main () = sum_triples ~limit:100_000_000 ~print:false |> printf "%d\n"
 
 include (val Solution.make ~problem:(Number 518) ~main)

@@ -1,6 +1,7 @@
 open! Core
 open! Import
 
+(* Recurrence described by ed_r at https://projecteuler.net/thread=169#13152. *)
 let f =
   Memo.recursive
     (module Bigint)

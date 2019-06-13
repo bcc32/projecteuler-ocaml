@@ -41,13 +41,8 @@ let is_prime_pair =
   fun a b ->
     let t = Potential_prime_pair.create a b in
     Hashtbl.findi_or_add cache t ~default:(fun { a; b } ->
-      let concat a b =
-        Sequence.append
-          (Number_theory.Int.As_base10.to_sequence a)
-          (Number_theory.Int.As_base10.to_sequence b)
-        |> Number_theory.Int.As_base10.of_sequence
-      in
-      let c, d = concat a b, concat b a in
+      let append = Number_theory.Int.As_base10.append in
+      let c, d = append a b, append b a in
       let is_prime = force is_prime in
       c < Array.length is_prime
       && is_prime.(c)

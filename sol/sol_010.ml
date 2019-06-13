@@ -2,9 +2,13 @@ open! Core
 open! Import
 
 let main () =
-  Number_theory.prime_sieve 2_000_000
-  |> Array.foldi ~init:0 ~f:(fun n acc is_prime -> if is_prime then acc + n else acc)
-  |> printf "%d\n"
+  let limit = 2_000_000 in
+  let is_prime = Number_theory.prime_sieve limit in
+  let sum = ref 0 in
+  for i = 2 to limit do
+    if is_prime.(i) then sum := !sum + i
+  done;
+  printf "%d\n" !sum
 ;;
 
 let%expect_test "answer" =

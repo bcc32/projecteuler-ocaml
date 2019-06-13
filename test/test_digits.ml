@@ -11,7 +11,7 @@ let%test_unit "basic round tripping" =
   in
   let gen =
     let open Quickcheck.Let_syntax in
-    let%map_open n = small_positive_int in
+    let%map_open n = small_non_negative_int in
     n, digits_through_string n
   in
   Q.test
@@ -142,7 +142,7 @@ module Test_left_to_right = struct
 
   let quickcheck_generator =
     let open Quickcheck.Let_syntax in
-    let%map_open n = small_positive_int in
+    let%map_open n = small_non_negative_int in
     let digits = Int.to_string n |> String.to_list |> List.map ~f:Char.get_digit_exn in
     n, digits
   ;;
@@ -173,8 +173,9 @@ let%test_module "non-directional" =
 
     let%test_unit "rev" =
       Quickcheck.test
-        Quickcheck.Generator.small_positive_int
+        Quickcheck.Generator.small_non_negative_int
         ~sexp_of:[%sexp_of: int]
+        ~examples:[ 0; 1; 10; 12; 123 ]
         ~f:(fun n ->
           [%test_result: int]
             ~expect:(n |> Int.to_string |> String.rev |> Int.of_string)

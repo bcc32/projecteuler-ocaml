@@ -9,6 +9,7 @@ let main () =
   |> printf "%d\n"
 ;;
 
+(* 6us *)
 let%expect_test "answer" =
   main ();
   [%expect {| 4613732 |}]

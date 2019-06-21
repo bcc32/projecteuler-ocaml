@@ -2,4 +2,4 @@
  (name euler_benchmark)
  (libraries cmdliner core_bench euler)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane -annotated-ignores -check-doc-comments)))

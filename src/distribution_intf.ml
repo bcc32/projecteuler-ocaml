@@ -33,15 +33,15 @@ module type Monad2_with_explicit_key = sig
       are added together. *)
   val bind' : ('k2, 'c2) key -> ('k1, 'c1) t -> f:('k1 -> ('k2, 'c2) t) -> ('k2, 'c2) t
 
-  (* TODO: Implement map2':
-     {[
-       val map2'
-         :  ('k3, 'c3) key
-         -> ('k1, 'c1) t
-         -> ('k2, 'c2) t
-         -> f:('k1 -> 'k2 -> 'k3)
-         -> ('k3, 'c3) t
-     ]}
+  (*_ TODO: Implement map2':
+    {[
+      val map2'
+        :  ('k3, 'c3) key
+        -> ('k1, 'c1) t
+        -> ('k2, 'c2) t
+        -> f:('k1 -> 'k2 -> 'k3)
+        -> ('k3, 'c3) t
+    ]}
   *)
 end
 

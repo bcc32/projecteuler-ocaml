@@ -4,7 +4,7 @@
  (libraries bignum core core_kernel.hash_heap core_kernel.total_map euler
    euler_data euler_solution_helpers expect_test_helpers_kernel re)
  (preprocess
-  (pps ppx_jane))
+  (pps ppx_jane -annotated-ignores -check-doc-comments))
  (inline_tests)
  (modules
   (:standard \ template)))

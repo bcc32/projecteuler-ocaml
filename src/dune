@@ -5,4 +5,4 @@
  (libraries bignum core)
  (inline_tests)
  (preprocess
-  (pps ppx_jane)))
+  (pps ppx_jane -annotated-ignores -check-doc-comments)))

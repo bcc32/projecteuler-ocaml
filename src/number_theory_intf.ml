@@ -45,8 +45,8 @@ module type S = sig
     -> integer
     -> integer Sequence.t
 
-  (* FIXME Some of this doesn't really belong in "number theory", maybe separate
-     out the combinatorics, digits, arithmetic, etc. *)
+  (*_ FIXME Some of this doesn't really belong in "number theory", maybe separate
+    out the combinatorics, digits, arithmetic, etc. *)
 
   (** {1 Digits} *)
 
@@ -131,8 +131,8 @@ module type S = sig
 
   val is_perfect_square : integer -> bool
 
-  (* TODO This probably doesn't belong in the Number_theory module.  Consider moving it
-     into its own module, along with [isqrt] and [is_perfect_square]. *)
+  (*_ TODO This probably doesn't belong in the Number_theory module.  Consider moving it
+    into its own module, along with [isqrt] and [is_perfect_square]. *)
 
   (** {1 Optimized basic arithmetic} *)
 

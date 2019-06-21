@@ -32,6 +32,7 @@ module type Monad2_with_explicit_key = sig
       support mapping to a new distribution, [f x].  The resulting distributions
       are added together. *)
   val bind' : ('k2, 'c2) key -> ('k1, 'c1) t -> f:('k1 -> ('k2, 'c2) t) -> ('k2, 'c2) t
+
   (* TODO: Implement map2':
      {[
        val map2'
@@ -221,7 +222,7 @@ module type S = sig
   val of_alist_exn : ('k, 'c) key -> ('k, Prob.t) List.Assoc.t -> ('k, 'c) t
 
   val to_alist
-    :  ?key_order:[`Decreasing | `Increasing]
+    :  ?key_order:[ `Decreasing | `Increasing ]
     -> ('k, 'c) t
     -> ('k, Prob.t) List.Assoc.t
 
@@ -236,24 +237,15 @@ module type S = sig
   val compare_m__t : (module Map.Compare_m) -> ('k, 'c) t -> ('k, 'c) t -> int
 
   val quickcheck_generator_m__t
-    :  (module
-         Quickcheck_m
-         with type t = 'k
-          and type comparator_witness = 'c)
+    :  (module Quickcheck_m with type t = 'k and type comparator_witness = 'c)
     -> ('k, 'c) t Quickcheck.Generator.t
 
   val quickcheck_observer_m__t
-    :  (module
-         Quickcheck_m
-         with type t = 'k
-          and type comparator_witness = 'c)
+    :  (module Quickcheck_m with type t = 'k and type comparator_witness = 'c)
     -> ('k, 'c) t Quickcheck.Observer.t
 
   val quickcheck_shrinker_m__t
-    :  (module
-         Quickcheck_m
-         with type t = 'k
-          and type comparator_witness = 'c)
+    :  (module Quickcheck_m with type t = 'k and type comparator_witness = 'c)
     -> ('k, 'c) t Quickcheck.Shrinker.t
 end
 

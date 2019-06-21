@@ -249,8 +249,7 @@ end = struct
   (* We pretend CH and CC distributions are uncorrelated with square; should
      probably give the same result but (shrug). *)
   type t =
-    { square :
-        (Square.t, Square.comparator_witness) D.t
+    { square : (Square.t, Square.comparator_witness) D.t
     (* chance and community_chest are stored in order of the top of the stack to
        the bottom *)
     ; chance : (Chance_card.t, Chance_card.comparator_witness) D.t list
@@ -282,14 +281,12 @@ end = struct
     in
     let square =
       match%bind square with
-      | sq
-        when Square.is_chance sq ->
+      | sq when Square.is_chance sq ->
         D.map'
           (module Square)
           (List.hd_exn t.chance)
           ~f:(fun card -> Square.apply_chance sq card)
-      | sq
-        when Square.is_community_chest sq ->
+      | sq when Square.is_community_chest sq ->
         D.map'
           (module Square)
           (List.hd_exn t.community_chest)

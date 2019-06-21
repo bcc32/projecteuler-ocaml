@@ -44,5 +44,6 @@ let main () =
 
 include (val Solution.make
                ~problem:
-                 (Tagged { number = 323; tag = "sim"; description = "Monte Carlo method" })
+                 (Tagged
+                    { number = 323; tag = "sim"; description = "Monte Carlo method" })
                ~main)

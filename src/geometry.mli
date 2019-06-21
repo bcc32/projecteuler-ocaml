@@ -2,6 +2,7 @@
 
 open! Core
 open! Import
+
 (* TODO Add law of sines, cosines, etc. *)
 (* TODO Add formula for triangle area based on sides. *)
 (* TODO Add formula for polygon area based on lattice points. *)

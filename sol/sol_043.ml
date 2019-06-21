@@ -6,8 +6,8 @@ let is_div d1 d2 d3 p = ((100 * d1) + (10 * d2) + d3) mod p = 0
 let follows ~requirements digit digits =
   match requirements.(digit) with
   | None -> true
-  | Some modulus
-    when is_div digits.(digit - 2) digits.(digit - 1) digits.(digit) modulus -> true
+  | Some modulus when is_div digits.(digit - 2) digits.(digit - 1) digits.(digit) modulus
+    -> true
   | _ -> false
 ;;
 
@@ -17,7 +17,7 @@ let rec iter digit digits ~is_used ~requirements ~f =
   else
     for d = 0 to 9 do
       digits.(digit) <- d;
-      if not is_used.(d) && follows ~requirements digit digits
+      if (not is_used.(d)) && follows ~requirements digit digits
       then (
         is_used.(d) <- true;
         iter (digit + 1) digits ~is_used ~requirements ~f;

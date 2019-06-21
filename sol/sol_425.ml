@@ -71,8 +71,8 @@ let sum_primes_not_2's_relatives limit =
          raise All_2's_relatives_found;
        iter_connected_primes ~from:n ~f:(fun p ->
          let new_distance_for_p = Int.max d p in
-         if not (Hashtbl.mem distance_known p)
-         && (not (Priority_queue.mem distance p)
+         if (not (Hashtbl.mem distance_known p))
+         && ((not (Priority_queue.mem distance p))
              || Priority_queue.find_exn distance p > new_distance_for_p)
          then Priority_queue.replace distance ~key:p ~data:new_distance_for_p)
      done

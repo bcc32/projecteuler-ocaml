@@ -48,8 +48,7 @@ let find_n p =
       in
       match i with
       | None -> return None
-      | Some i
-        when cubes.(i) = cubes.(x) + p -> return (Some cubes.(i))
+      | Some i when cubes.(i) = cubes.(x) + p -> return (Some cubes.(i))
       | _ -> ()
     done;
     assert false)

@@ -4,7 +4,8 @@ open! Import
 module Is_prime = struct
   type t =
     [ `Prime
-    | `Not_prime ]
+    | `Not_prime
+    ]
   [@@deriving compare, equal, quickcheck, sexp_of]
 
   let of_char_exn = function

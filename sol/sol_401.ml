@@ -206,7 +206,8 @@ let%test_unit "coherence" =
       ~sexp_of:[%sexp_of: int]
       ~examples:[ 1; 10; 100; 1_000; 10_000; 100_000 ]
       ~trials:100
-      ~f:(fun n -> [%test_result: Bigint.t] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
+      ~f:(fun n ->
+        [%test_result: Bigint.t] ~expect:(sIGMA2_naive n) (sIGMA2_by_ranges n))
 ;;
 
 let%expect_test "small n SIGMA2 by ranges" =

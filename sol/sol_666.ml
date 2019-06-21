@@ -61,16 +61,16 @@ let find_fixed_point ~k ~m ~iterations =
     let module Array = Array.Permissioned in
     let sum = ref 0. in
     for j = 0 to m - 1 do
-      sum :=
-        !sum
-        +.
-        match r.((i * m) + j) mod 5 with
-        | 0 -> 1.
-        | 1 -> ps.(i) ** 2.
-        | 2 -> ps.(2 * i mod k)
-        | 3 -> ps.(((i * i) + 1) mod k) ** 3.
-        | 4 -> ps.(i) *. ps.((i + 1) mod k)
-        | _ -> assert false
+      sum
+      := !sum
+         +.
+         match r.((i * m) + j) mod 5 with
+         | 0 -> 1.
+         | 1 -> ps.(i) ** 2.
+         | 2 -> ps.(2 * i mod k)
+         | 3 -> ps.(((i * i) + 1) mod k) ** 3.
+         | 4 -> ps.(i) *. ps.((i + 1) mod k)
+         | _ -> assert false
     done;
     !sum /. float m
   in

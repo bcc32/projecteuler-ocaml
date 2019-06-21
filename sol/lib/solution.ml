@@ -12,7 +12,7 @@ let time_unit f () =
 type t = ?print_debug:bool -> ?print_elapsed_time:bool -> unit -> unit
 
 let make ~(problem : Solution_id.t) ~main =
-  ( module struct
+  (module struct
     let name =
       match problem with
       | Number n -> Int.to_string n
@@ -42,6 +42,5 @@ let make ~(problem : Solution_id.t) ~main =
              ~env:(`Extend [ "EULER_DEBUG", "1" ]));
       if print_elapsed_time then time_unit main () else main ()
     ;;
-  end
-  : S )
+  end : S)
 ;;

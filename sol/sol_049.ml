@@ -13,13 +13,13 @@ let main () =
   let visited = Array.create false ~len:10_000 in
   try
     for a = 1000 to 9999 do
-      if not visited.(a) && is_prime.(a)
+      if (not visited.(a)) && is_prime.(a)
       then (
         let prime_permutations =
           a
           |> Number_theory.Int.As_base10.to_list
           |> Sequences.permutations ~compare:Int.compare
-          |> Sequence.map ~f:(fun digits -> digits |> Number_theory.Int.As_base10.of_list)
+          |> Sequence.map ~f:Number_theory.Int.As_base10.of_list
           |> Sequence.filter ~f:(Array.get is_prime)
           |> Sequence.to_array
         in

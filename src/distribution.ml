@@ -45,7 +45,8 @@ module Make (Prob : Prob) : S with module Prob = Prob = struct
   let normalize t = scale t Prob.(one / total t)
 
   let merge t1 t2 =
-    Map.merge t1 t2 ~f:(fun ~key:_ -> function
+    Map.merge t1 t2 ~f:(fun ~key:_ ->
+      function
       | `Both (p1, p2) -> Some Prob.(p1 + p2)
       | `Left p1 -> Some p1
       | `Right p2 -> Some p2)
@@ -169,33 +170,21 @@ module Make (Prob : Prob) : S with module Prob = Prob = struct
   let sexp_of_m__t key t = Map.sexp_of_m__t key [%sexp_of: Prob.t] t
 
   let quickcheck_generator_m__t (type k c) key =
-    let (module Key
-          : Quickcheck_m
-            with type t = k
-             and type comparator_witness = c)
-      =
+    let (module Key : Quickcheck_m with type t = k and type comparator_witness = c) =
       key
     in
     quickcheck_generator (module Key) Key.quickcheck_generator
   ;;
 
   let quickcheck_observer_m__t (type k c) key =
-    let (module Key
-          : Quickcheck_m
-            with type t = k
-             and type comparator_witness = c)
-      =
+    let (module Key : Quickcheck_m with type t = k and type comparator_witness = c) =
       key
     in
     quickcheck_observer Key.quickcheck_observer
   ;;
 
   let quickcheck_shrinker_m__t (type k c) key =
-    let (module Key
-          : Quickcheck_m
-            with type t = k
-             and type comparator_witness = c)
-      =
+    let (module Key : Quickcheck_m with type t = k and type comparator_witness = c) =
       key
     in
     quickcheck_shrinker Key.quickcheck_shrinker

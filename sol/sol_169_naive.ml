@@ -53,8 +53,7 @@ end = struct
     |> String.to_list
     |> List.filter_map ~f:(function
       | '_' -> None
-      | ws
-        when Char.is_whitespace ws -> None
+      | ws when Char.is_whitespace ws -> None
       | '0' -> Some Zero
       | '1' -> Some One
       | _ -> assert false)

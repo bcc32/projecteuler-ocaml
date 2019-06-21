@@ -216,10 +216,8 @@ module Hand = struct
       match rank_counts with
       | [ (quadruple, 4); (single, 1) ] -> Four_of_a_kind (quadruple, single)
       | [ (triple, 3); (double, 2) ] -> Full_house (triple, double)
-      | _
-        when is_flush -> Flush (e.rank, d.rank, c.rank, b.rank, a.rank)
-      | _
-        when is_straight -> Straight high_rank
+      | _ when is_flush -> Flush (e.rank, d.rank, c.rank, b.rank, a.rank)
+      | _ when is_straight -> Straight high_rank
       | [ (triple, 3); (single_hi, 1); (single_lo, 1) ] ->
         Three_of_a_kind (triple, single_hi, single_lo)
       | [ (double_hi, 2); (double_lo, 2); (single, 1) ] ->

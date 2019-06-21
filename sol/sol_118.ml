@@ -3,8 +3,7 @@ open! Import
 
 let set_diff a b ~equal =
   match a, b with
-  | [], _
-  | _, [] -> a
+  | [], _ | _, [] -> a
   | _ -> List.filter a ~f:(Fn.non (List.mem b ~equal))
 ;;
 

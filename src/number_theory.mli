@@ -1,2 +1,1 @@
-(** @inline *)
-include Number_theory_intf.Number_theory
+include Number_theory_intf.Number_theory (** @inline *)

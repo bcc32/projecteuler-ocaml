@@ -65,7 +65,7 @@ module Hand_classification : sig
     | Flush of Rank.t * Rank.t * Rank.t * Rank.t * Rank.t
     | Full_house of Rank.t * Rank.t
     | Four_of_a_kind of Rank.t * Rank.t
-    | Straight_flush of Rank.t  (** [rank < Ace] *)
+    | Straight_flush of Rank.t (** [rank < Ace] *)
     | Royal_flush
   [@@deriving compare, sexp]
 

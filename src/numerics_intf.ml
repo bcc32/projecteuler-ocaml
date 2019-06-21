@@ -19,6 +19,7 @@ end
 module type S = sig
   (** a numeric type capable of representing (possibly approximate) real numbers *)
   type real
+
   (* FIXME either rename to delta or make it a relative error *)
 
   (** [bisect ~f ~epsilon ~lo ~hi] finds a solution [x] to the equation [f x =
@@ -33,13 +34,14 @@ module type S = sig
 
       @param method_ default is [`Simpson's_rule] *)
   val integrate
-    :  ?method_:[`Midpoint | `Trapezoid | `Simpson's_rule]
+    :  ?method_:[ `Midpoint | `Trapezoid | `Simpson's_rule ]
     -> unit
     -> f:(real -> real)
     -> lo:real
     -> hi:real
     -> intervals:int
     -> real
+
   (* FIXME consistent use of error in x or y *)
 
   (** [newton's_method ~f ~f' ~epsilon ~init] finds a solution [x] to the

@@ -1,2 +1,1 @@
-(** @inline *)
-include Numerics_intf.Numerics
+include Numerics_intf.Numerics (** @inline *)

@@ -1,2 +1,1 @@
-(** @inline *)
-include Solution_intf.Solution
+include Solution_intf.Solution (** @inline *)

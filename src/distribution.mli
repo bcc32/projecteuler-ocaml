@@ -1,2 +1,1 @@
-(** @inline *)
-include Distribution_intf.Distribution
+include Distribution_intf.Distribution (** @inline *)

@@ -10,4 +10,4 @@ val quadratic_formula
   :  float
   -> float
   -> float
-  -> [`Two of float * float | `One of float | `None]
+  -> [ `Two of float * float | `One of float | `None ]

@@ -1,7 +1,7 @@
 (executables
  (names main)
  (public_names euler)
- (libraries core core_bench euler euler_benchmark euler_solution_helpers
+ (libraries cmdliner core core_bench euler euler_solution_helpers
    euler_solutions)
  (preprocess
   (pps ppx_jane -annotated-ignores -check-doc-comments)))

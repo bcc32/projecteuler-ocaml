@@ -1,0 +1,6 @@
+(library
+ (name euler_bench)
+ (libraries euler)
+ (library_flags -linkall)
+ (preprocess
+  (pps ppx_jane -annotated-ignores -check-doc-comments)))

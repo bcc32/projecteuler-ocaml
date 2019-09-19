@@ -8,9 +8,5 @@ let main =
 ;;
 
 let () =
-  Term.(
-    eval_choice
-      main
-      [ Euler_benchmark.command; Solutions.list_command; Solutions.run_command ]
-    |> exit)
+  Term.(eval_choice main [ Solutions.list_command; Solutions.run_command ] |> exit)
 ;;

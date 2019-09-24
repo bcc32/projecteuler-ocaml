@@ -1,21 +1,27 @@
 open! Core
 open! Import
 
+exception C_greater_than_limit [@@deriving sexp_of]
+
 let iter_triples ~limit ~f =
   let primes = Number_theory.prime_sieve limit in
   for a = 2 to limit do
     if primes.(a)
-    then
-      for b = a + 1 to limit do
-        if primes.(b)
-        then (
-          let numer = (b + 1) * (b + 1) in
-          let denom = a + 1 in
-          if numer % denom = 0
+    then (
+      try
+        for b = a + 1 to limit do
+          if primes.(b)
           then (
-            let c = (numer / denom) - 1 in
-            if c <= limit && primes.(c) then f a b c))
-      done
+            let numer = (b + 1) * (b + 1) in
+            let denom = a + 1 in
+            if numer % denom = 0
+            then (
+              let c = (numer / denom) - 1 in
+              if c > limit then Exn.raise_without_backtrace C_greater_than_limit;
+              if primes.(c) then f a b c))
+        done
+      with
+      | C_greater_than_limit -> ())
   done
 ;;
 

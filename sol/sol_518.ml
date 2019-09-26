@@ -27,9 +27,11 @@ let iter_triples ~limit ~f =
 
 let sum_triples ~limit =
   let sum = ref 0 in
+  let triples = ref 0 in
   iter_triples ~limit ~f:(fun a b c ->
-    if debug then Debug.eprintf "%d %d %d\n" a b c;
-    sum := !sum + a + b + c);
+    if debug && !triples % 1_000 = 0 then Debug.eprintf "%d %d %d" a b c;
+    sum := !sum + a + b + c;
+    incr triples);
   !sum
 ;;
 

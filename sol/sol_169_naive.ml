@@ -67,12 +67,12 @@ end = struct
   let rec add_from_left t dig =
     match t, dig with
     | _, Zero -> t
-    | [], _ -> raise Can't_add
+    | [], _ -> Exn.raise_without_backtrace Can't_add
     | Zero :: tl, dig -> dig :: tl
     | One :: tl, One -> Two :: tl
     | One :: tl, Two -> Two :: add_from_left tl Two
     | Two :: tl, One -> Two :: add_from_left tl Two
-    | Two :: _, Two -> raise Can't_add
+    | Two :: _, Two -> Exn.raise_without_backtrace Can't_add
   ;;
 
   let rec iter_candidates t ~f =

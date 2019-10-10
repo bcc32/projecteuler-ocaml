@@ -68,7 +68,7 @@ let sum_primes_not_2's_relatives limit =
          (* We know that all of 2's relatives under [limit] have been found now,
             since the chains of any following primes must contain something >
             limit. *)
-         raise All_2's_relatives_found;
+         Exn.raise_without_backtrace All_2's_relatives_found;
        iter_connected_primes ~from:n ~f:(fun p ->
          let new_distance_for_p = Int.max d p in
          if (not (Hashtbl.mem distance_known p))

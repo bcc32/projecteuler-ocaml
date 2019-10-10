@@ -36,7 +36,7 @@ let main () =
               if mem_binary prime_permutations z && x <> example_x
               then (
                 printf "%d%d%d\n" x y z;
-                raise Exit)
+                Exn.raise_without_backtrace Exit)
             done)
         done)
     done

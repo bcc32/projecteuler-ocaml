@@ -17,7 +17,7 @@ let main () =
       try
         for len = 1 to Array.length primes - pos do
           sum := !sum + primes.(pos + len - 1);
-          if !sum > limit then raise Exit;
+          if !sum > limit then Exn.raise_without_backtrace Exit;
           if len > !max && is_prime.(!sum)
           then (
             max := len;

@@ -34,7 +34,8 @@ let count_non_dominating_set_pairs ~k =
           | Left :: tl -> loop tl (left_minus_right_in_prefix + 1)
           | Right :: tl ->
             let left_minus_right_in_prefix = left_minus_right_in_prefix - 1 in
-            if left_minus_right_in_prefix < 0 then raise Not_dominating;
+            if left_minus_right_in_prefix < 0
+            then Exn.raise_without_backtrace Not_dominating;
             loop tl left_minus_right_in_prefix
         in
         loop perm 0

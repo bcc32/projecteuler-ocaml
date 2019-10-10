@@ -23,7 +23,7 @@ let pandigital_multiples () =
         try
           Number_theory.Int.As_base10.iter (k * n) ~f:(fun d ->
             if d = 0 || digits_used.(d)
-            then raise Exit
+            then Exn.raise_without_backtrace Exit
             else (
               digits_used.(d) <- true;
               incr digits_filled));

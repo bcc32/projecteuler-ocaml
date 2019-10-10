@@ -43,7 +43,7 @@ let count_non_dominating_set_pairs ~k =
       | Not_dominating -> true
     in
     if debug && non_dominating
-    then Debug.eprint_s [%message "dominating" (perm : which_set list)];
+    then Debug.eprint_s [%message "non-dominating" (perm : which_set list)];
     non_dominating)
 ;;
 

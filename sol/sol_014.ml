@@ -7,17 +7,17 @@ let collatz n = if n mod 2 = 0 then n / 2 else (3 * n) + 1
 let rec collatz_length =
   let cache =
     lazy
-      (let cache = Array.create (-1) ~len:(limit + 1) in
-       cache.(1) <- 1;
+      (let cache = Option_array.create ~len:(limit + 1) in
+       Option_array.set_some cache 1 1;
        cache)
   in
   fun n ->
     let cache = force cache in
-    if n <= limit && cache.(n) <> -1
-    then cache.(n)
+    if n <= limit && Option_array.is_some cache n
+    then Option_array.unsafe_get_some_exn cache n
     else (
       let length = collatz_length (collatz n) + 1 in
-      if n <= limit then cache.(n) <- length;
+      if n <= limit then Option_array.set_some cache n length;
       length)
 ;;
 
@@ -29,7 +29,7 @@ let main () =
   |> printf "%d\n"
 ;;
 
-(* 72ms *)
+(* 94ms *)
 let%expect_test "answer" =
   main ();
   [%expect {| 837799 |}]

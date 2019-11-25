@@ -23,11 +23,7 @@ let%bench_module "Newton's method" =
 let%bench_module "bisection" =
   (module struct
     let sqrt_bisect x =
-      Numerics.Float.bisect
-        ~f:(fun y -> Float.((y * y) - x))
-        ~epsilon:1e-12
-        ~lo:1.0
-        ~hi:x
+      Numerics.Float.bisect ~f:(fun y -> Float.((y * y) - x)) ~epsilon:1e-12 ~lo:1.0 ~hi:x
     ;;
 
     let%bench "1.0" = sqrt_bisect 1.0

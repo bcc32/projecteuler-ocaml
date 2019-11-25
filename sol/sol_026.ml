@@ -1,9 +1,7 @@
 open! Core
 open! Import
 
-let rec divide_through k n =
-  Bigint.(if n % k = zero then divide_through k (n / k) else n)
-;;
+let rec divide_through k n = Bigint.(if n % k = zero then divide_through k (n / k) else n)
 
 let cycle_length n =
   let n =

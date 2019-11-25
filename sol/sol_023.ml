@@ -17,8 +17,7 @@ let main () =
   let rec iter outer inner =
     match outer, inner with
     | [], [] -> ()
-    | [], _ ->
-      failwiths "unexpected state" (outer, inner) [%sexp_of: int list * int list]
+    | [], _ -> failwiths "unexpected state" (outer, inner) [%sexp_of: int list * int list]
     | _ :: tl, [] -> iter tl tl
     | x :: xs, y :: ys ->
       if x + y > limit

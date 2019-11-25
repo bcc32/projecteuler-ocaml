@@ -20,6 +20,5 @@ let csv_line line ~f =
   | [ row ] -> row
   | rows ->
     raise_s
-      [%message
-        "comma_separated_quoted_words: too many rows" ~_:(List.length rows : int)]
+      [%message "comma_separated_quoted_words: too many rows" ~_:(List.length rows : int)]
 ;;

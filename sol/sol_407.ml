@@ -18,8 +18,7 @@ let main () =
     then ()
     else (
       if debug && m mod 10_000 = 0
-      then
-        Debug.eprintf !"%d %{Percent}" m (Percent.of_mult (float !somes /. float !all));
+      then Debug.eprintf !"%d %{Percent}" m (Percent.of_mult (float !somes /. float !all));
       List.iter m_divisors ~f:(fun x ->
         List.iter m_pred_divisors ~f:(fun y ->
           let n = x * y in

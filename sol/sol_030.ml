@@ -14,9 +14,7 @@ let[@inline always] fifth_power n =
 ;;
 
 let sum_fifth_of_digits n =
-  let rec loop n ac =
-    if n = 0 then ac else loop (n / 10) (ac + fifth_power (n mod 10))
-  in
+  let rec loop n ac = if n = 0 then ac else loop (n / 10) (ac + fifth_power (n mod 10)) in
   loop n 0
 ;;
 

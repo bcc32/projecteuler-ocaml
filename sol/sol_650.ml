@@ -93,8 +93,7 @@ let rec sum_of_powers =
         let open Int_maybe_modulo in
         if max_exponent = 0
         then 1
-        else
-          pow prime max_exponent + sum_of_powers ~prime ~max_exponent:(max_exponent - 1))
+        else pow prime max_exponent + sum_of_powers ~prime ~max_exponent:(max_exponent - 1))
 ;;
 
 let sum_of_divisors_of_factors factors =

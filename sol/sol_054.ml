@@ -10,9 +10,7 @@ let main () =
     let p2 = Array.subo line ~pos:5 |> make_hand in
     p1, p2)
   |> Array.count ~f:(fun (p1, p2) ->
-    Poker.Hand_classification.( > )
-      (Poker.Hand.classify p1)
-      (Poker.Hand.classify p2))
+    Poker.Hand_classification.( > ) (Poker.Hand.classify p1) (Poker.Hand.classify p2))
   |> printf "%d\n"
 ;;
 

@@ -7,6 +7,4 @@ let main =
     , info "euler" ~doc:"Run ProjectEuler solutions" ~version:"%%VERSION%%" ))
 ;;
 
-let () =
-  Term.(eval_choice main [ Solutions.list_command; Solutions.run_command ] |> exit)
-;;
+let () = Term.(eval_choice main [ Solutions.list_command; Solutions.run_command ] |> exit)

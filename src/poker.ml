@@ -181,8 +181,7 @@ module Hand = struct
       Array.sort array ~compare:Card.compare;
       array.(0), array.(1), array.(2), array.(3), array.(4)
     | cards ->
-      raise_s
-        [%message "wrong number of cards" ~expected:(5 : int) (cards : Card.t list)]
+      raise_s [%message "wrong number of cards" ~expected:(5 : int) (cards : Card.t list)]
   ;;
 
   let classify ((a, b, c, d, e) as t : t) : Hand_classification.t =

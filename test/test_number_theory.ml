@@ -90,7 +90,5 @@ let%test_unit "addition_chain_pow vs. Int.pow" =
     b, e
   in
   Quickcheck.test gen ~sexp_of:[%sexp_of: int * int] ~f:(fun (b, e) ->
-    [%test_result: int]
-      (Number_theory.Int.addition_chain_pow b e)
-      ~expect:(Int.pow b e))
+    [%test_result: int] (Number_theory.Int.addition_chain_pow b e) ~expect:(Int.pow b e))
 ;;

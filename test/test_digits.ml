@@ -89,9 +89,7 @@ module Test_container
       ~sexp_of:[%sexp_of: T.t]
       ~f:(fun (int, digits) ->
         [%test_result: int list] ~expect:digits (to_list int);
-        [%test_result: int Sequence.t]
-          ~expect:(Sequence.of_list digits)
-          (to_sequence int);
+        [%test_result: int Sequence.t] ~expect:(Sequence.of_list digits) (to_sequence int);
         [%test_result: int array] ~expect:(Array.of_list digits) (to_array int))
   ;;
 

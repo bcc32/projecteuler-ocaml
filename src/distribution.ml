@@ -18,10 +18,7 @@ module Make (Prob : Prob) : S with module Prob = Prob = struct
       Prob.sexp_of_t
   ;;
 
-  let quickcheck_generator
-        (type k c)
-        ((module Key) : (k, c) key)
-        quickcheck_generator_key
+  let quickcheck_generator (type k c) ((module Key) : (k, c) key) quickcheck_generator_key
     =
     Map.quickcheck_generator
       (module Key)

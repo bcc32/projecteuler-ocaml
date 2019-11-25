@@ -17,7 +17,7 @@ let rec collatz_length =
     then Option_array.unsafe_get_some_exn cache n
     else (
       let length = collatz_length (collatz n) + 1 in
-      if n <= limit then Option_array.set_some cache n length;
+      if n <= limit then Option_array.unsafe_set_some cache n length;
       length)
 ;;
 

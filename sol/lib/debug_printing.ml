@@ -11,7 +11,6 @@ module Export = struct
     | Some _ -> true
   ;;
 
-  (* FIXME: Use [@sexp.option] attribute when public ppx_sexp_conv supports it. *)
   (* TODO: Make [here] and [task] required. *)
   let debug_timing ?here ?task f x =
     if not debug
@@ -21,16 +20,16 @@ module Export = struct
       Debug.eprint_s
         [%message
           "starting"
-            (task : string sexp_option)
-            (here : Source_code_position.t sexp_option)];
+            (task : (string option[@sexp.option]))
+            (here : (Source_code_position.t option[@sexp.option]))];
       protectx ~f x ~finally:(fun _ ->
         let end_ = Time_ns.now () in
         let elapsed = Time_ns.diff end_ start in
         Debug.eprint_s
           [%message
             "done"
-              (task : string sexp_option)
-              (here : Source_code_position.t sexp_option)
+              (task : (string option[@sexp.option]))
+              (here : (Source_code_position.t option[@sexp.option]))
               (elapsed : Time_ns.Span.t)]))
   ;;
 end

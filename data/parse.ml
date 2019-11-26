@@ -18,7 +18,5 @@ let csv_line line ~f =
   match line |> Csv.list_of_string reader with
   | [] -> failwith "no rows"
   | [ row ] -> row
-  | rows ->
-    raise_s
-      [%message "comma_separated_quoted_words: too many rows" ~_:(List.length rows : int)]
+  | rows -> raise_s [%message "csv_line: too many rows" ~_:(List.length rows : int)]
 ;;

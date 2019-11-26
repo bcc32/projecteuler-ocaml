@@ -9,11 +9,9 @@ let space_separated_grid string ~conv =
 ;;
 
 let csv_line line ~f =
-  (* TODO: Use Csv.Let_syntax with infix applicative operators, once it is supported. *)
   let reader =
     let open Csv.Let_syntax in
-    let%map row = Csv.Row.builder in
-    List.init (Csv.Row.length row) ~f:(fun i -> Csv.Row.nth_conv_exn row i [%here] f)
+    Csv.Row.builder >>| Csv.Row.to_list >>| List.map ~f
   in
   match line |> Csv.list_of_string reader with
   | [] -> failwith "no rows"

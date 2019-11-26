@@ -38,7 +38,7 @@ let make ~(problem : Solution_id.t) ~main =
           (Unix.exec
              ()
              ~prog:Sys.executable_name
-             ~argv:(Array.to_list Sys.argv)
+             ~argv:(Array.to_list (Sys.get_argv ()))
              ~env:(`Extend [ "EULER_DEBUG", "1" ]));
       if print_elapsed_time then time_unit main () else main ()
     ;;

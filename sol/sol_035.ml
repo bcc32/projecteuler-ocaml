@@ -31,7 +31,7 @@ let prime_circle n =
 ;;
 
 let main () =
-  let circular_primes = Hash_set.create (module Int) () in
+  let circular_primes = Hash_set.create (module Int) in
   for n = 2 to limit do
     if (force is_prime).(n) && not (Hash_set.mem circular_primes n)
     then Option.iter (prime_circle n) ~f:(List.iter ~f:(Hash_set.add circular_primes))

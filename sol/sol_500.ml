@@ -11,14 +11,14 @@ let main () =
   let queue =
     Number_theory.prime_sieve upper_bound
     |> Array.filter_mapi ~f:(fun i p -> Option.some_if p i)
-    |> Heap.of_array ~cmp:Int.compare
+    |> Pairing_heap.of_array ~cmp:Int.compare
   in
   let number = ref 1 in
   for _ = 1 to 500_500 do
-    let factor = Heap.pop_exn queue in
+    let factor = Pairing_heap.pop_exn queue in
     number := !number * factor mod modulo;
     let factor = factor * factor in
-    if factor < upper_bound then Heap.add queue factor
+    if factor < upper_bound then Pairing_heap.add queue factor
   done;
   !number |> printf "%d\n"
 ;;

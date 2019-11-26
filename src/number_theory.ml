@@ -2,11 +2,9 @@ open! Core
 open! Import
 include Number_theory_intf
 
-let[@inline never] raise_negative_exponent e =
-  raise_s [%message "negative exponent" (e : int)]
-;;
+let[@cold] raise_negative_exponent e = raise_s [%message "negative exponent" (e : int)]
 
-let[@inline never] raise_exponent_too_large e =
+let[@cold] raise_exponent_too_large e =
   raise_s [%message "large exponent not supported" (e : int)]
 ;;
 
@@ -622,7 +620,7 @@ module Int = struct
     1 lsl mantissa_bits
   ;;
 
-  let[@inline never] raise_isqrt_overflow n =
+  let[@cold] raise_isqrt_overflow n =
     raise_s [%message "isqrt would lose precision due to overflow" (n : int)]
   ;;
 
@@ -644,12 +642,15 @@ module Int = struct
 end
 
 module Bigint = struct
-  include Make (struct
-      include Bigint
+  module M : Int_intf.S_unbounded with type t = Bigint.t = struct
+    include Bigint
 
-      (* different signature in Int_intf.S_unbounded *)
-      let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
-    end)
+    (* different signature in Int_intf.S_unbounded *)
+    let to_int64 _t = raise_s [%message "unimplemented" "to_int64"]
+  end
+  [@@alert "-deprecated"]
+
+  include Make (M)
 
   let[@inline always] addition_chain_pow b e =
     addition_chain_pow_gen b e ~one:Bigint.one ~mul:Bigint.( * )

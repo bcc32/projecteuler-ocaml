@@ -6,9 +6,9 @@ open! Import
 
 type ('a, 'b) fn = 'a -> 'b
 
-val simple : (module Base.Hashtbl.Key with type t = 'a) -> ('a -> 'b) -> ('a, 'b) fn
+val simple : (module Base.Hashtbl.Key.S with type t = 'a) -> ('a -> 'b) -> ('a, 'b) fn
 
 val recursive
-  :  (module Base.Hashtbl.Key with type t = 'a)
+  :  (module Base.Hashtbl.Key.S with type t = 'a)
   -> (('a -> 'b) -> 'a -> 'b)
   -> ('a, 'b) fn

@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 let main () =
-  let powers = Hash_set.create (module Bigint) () in
+  let powers = Hash_set.create (module Bigint) in
   for a = 2 to 100 do
     for b = 2 to 100 do
       let power = Bigint.pow (Bigint.of_int a) (Bigint.of_int b) in

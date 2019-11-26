@@ -12,7 +12,7 @@ module Make (Real : Real) : S with type real = Real.t = struct
   let four = of_int 4
   let six = of_int 6
 
-  let[@inline never] raise_expected_positive_epsilon epsilon =
+  let[@cold] raise_expected_positive_epsilon epsilon =
     raise_s [%message "expected positive epsilon" (epsilon : Real.t)]
   ;;
 
@@ -56,7 +56,7 @@ module Make (Real : Real) : S with type real = Real.t = struct
     else newton's_method ~f ~f' ~epsilon ~init:(init - delta)
   ;;
 
-  let[@inline never] raise_expected_lo_hi ~lo ~hi =
+  let[@cold] raise_expected_lo_hi ~lo ~hi =
     raise_s [%message "expected lo < hi" (lo : Real.t) (hi : Real.t)]
   ;;
 
@@ -64,7 +64,7 @@ module Make (Real : Real) : S with type real = Real.t = struct
     if not (lo < hi) then raise_expected_lo_hi ~lo ~hi
   ;;
 
-  let[@inline never] raise_expected_positive_intervals intervals =
+  let[@cold] raise_expected_positive_intervals intervals =
     raise_s [%message "expected intervals > 0" (intervals : int)]
   ;;
 

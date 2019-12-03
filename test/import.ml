@@ -7,5 +7,4 @@ module Q = Quickcheck.Configure (struct
   end)
 
 include Euler
-include Int.Replace_polymorphic_compare
 include Expect_test_helpers_kernel

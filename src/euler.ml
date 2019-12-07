@@ -4,6 +4,7 @@ module Memo = Memo
 open! Core
 open! Import
 module Algebra = Algebra
+module Bitset = Bitset
 module Composition_infix = Composition_infix
 module Distribution = Distribution
 module Geometry = Geometry

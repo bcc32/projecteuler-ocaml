@@ -1,11 +1,19 @@
 open! Core
 open! Import
 
+let split_line_on_spaces =
+  let ws_rex =
+    let open Re in
+    compile (rep1 space)
+  in
+  Re.split ws_rex
+;;
+
 let space_separated_grid string ~conv =
   string
   |> String.split_lines
   |> Array.of_list_map ~f:(fun line ->
-    String.split line ~on:' ' |> Array.of_list_map ~f:conv)
+    line |> split_line_on_spaces |> Array.of_list_map ~f:conv)
 ;;
 
 let csv_line line ~f =

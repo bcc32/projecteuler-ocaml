@@ -48,3 +48,8 @@
  (deps "105.txt")
  (action (with-stdout-to %{targets} (run ./gen-problem.sh 105))))
 
+(rule
+ (targets problem_345.ml)
+ (deps "345.txt")
+ (action (with-stdout-to %{targets} (run ./gen-problem.sh 345))))
+

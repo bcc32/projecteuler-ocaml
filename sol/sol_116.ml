@@ -32,6 +32,7 @@ let main () =
   printf "%d\n" (red + green + blue)
 ;;
 
+(* 46us *)
 let%expect_test "answer" =
   main ();
   [%expect {| 20492570929 |}]

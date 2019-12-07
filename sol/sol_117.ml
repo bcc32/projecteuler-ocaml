@@ -19,6 +19,7 @@ let ways_to_replace =
 
 let main () = printf "%d\n" (ways_to_replace 50)
 
+(* 15us *)
 let%expect_test "answer" =
   main ();
   [%expect {| 100808458960497 |}]

@@ -33,6 +33,7 @@ let max_sum grid =
 
 let main () = max_sum (grid ()) |> printf "%d\n"
 
+(* 60ms *)
 let%expect_test "answer" =
   main ();
   [%expect {| 13938 |}]

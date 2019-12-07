@@ -9,18 +9,18 @@ module Cache_key = struct
   [@@deriving compare, hash, sexp_of]
 end
 
-let rec ways_to_replace =
-  let cache = Hashtbl.create (module Cache_key) in
-  fun key ->
-    Hashtbl.findi_or_add cache key ~default:(fun { total_size; block_size } ->
-      if block_size > total_size
-      then 1
-      else (
-        let gray_tile = ways_to_replace { total_size = total_size - 1; block_size } in
-        let colored_tile =
-          ways_to_replace { total_size = total_size - block_size; block_size }
-        in
-        gray_tile + colored_tile))
+let ways_to_replace =
+  Memo.recursive
+    (module Cache_key)
+    (fun ways_to_replace { total_size; block_size } ->
+       if block_size > total_size
+       then 1
+       else (
+         let gray_tile = ways_to_replace { total_size = total_size - 1; block_size } in
+         let colored_tile =
+           ways_to_replace { total_size = total_size - block_size; block_size }
+         in
+         gray_tile + colored_tile))
 ;;
 
 let main () =

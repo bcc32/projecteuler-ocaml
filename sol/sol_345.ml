@@ -12,17 +12,18 @@ let max_sum grid =
     [@@deriving compare, hash, sexp_of]
   end
   in
-  let cache = Hashtbl.create (module Cache_key) in
-  let rec loop (key : Cache_key.t) =
-    if key.upto_row < 0
-    then 0
-    else
-      Hashtbl.findi_or_add cache key ~default:(fun { upto_row; colset } ->
-        Bitset.fold colset ~init:0 ~f:(fun best col ->
-          let cand =
-            loop { upto_row = upto_row - 1; colset = Bitset.remove colset col }
-          in
-          Int.max best (cand + grid.(upto_row).(col))))
+  let loop =
+    Memo.recursive
+      (module Cache_key)
+      (fun loop { upto_row; colset } ->
+         if upto_row < 0
+         then 0
+         else
+           Bitset.fold colset ~init:0 ~f:(fun best col ->
+             let cand =
+               loop { upto_row = upto_row - 1; colset = Bitset.remove colset col }
+             in
+             Int.max best (cand + grid.(upto_row).(col))))
   in
   loop
     { upto_row = Array.length grid - 1

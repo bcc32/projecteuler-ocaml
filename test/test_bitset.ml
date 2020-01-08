@@ -4,7 +4,7 @@ open! Import
 let%test_module "Compare Bitset with Int.Set" =
   (module (
    struct
-     type t = Bitset.t [@@deriving compare, equal, hash, sexp]
+     type t = Bitset.t [@@deriving compare, equal, hash, quickcheck, sexp]
 
      let empty = Bitset.empty
      let is_allowable_element = Bitset.is_allowable_element
@@ -18,7 +18,12 @@ let%test_module "Compare Bitset with Int.Set" =
        ;;
 
        let quickcheck_observer = Int.quickcheck_observer
-       let quickcheck_shrinker = Int.quickcheck_shrinker
+
+       let quickcheck_shrinker =
+         Quickcheck.Shrinker.create (fun start ->
+           Quickcheck.Shrinker.shrink Int.quickcheck_shrinker start
+           |> Sequence.filter ~f:is_allowable_element)
+       ;;
      end
 
      let of_list = Bitset.of_list
@@ -27,22 +32,63 @@ let%test_module "Compare Bitset with Int.Set" =
      module Test = struct
        type nonrec t = t * Int.Set.t [@@deriving sexp_of]
 
+       let of_list elements = of_list elements, Int.Set.of_list elements
+
        let quickcheck_generator =
          let open Quickcheck.Let_syntax in
          let%map_open elements = list [%quickcheck.generator: Elt.t] in
-         of_list elements, Int.Set.of_list elements
+         of_list elements
        ;;
 
-       let quickcheck_observer = [%quickcheck.observer: _ * Elt.t Set.t]
-       let quickcheck_shrinker = [%quickcheck.shrinker: _ * Elt.t Set.t]
+       let quickcheck_observer = [%quickcheck.observer: t * Elt.t Set.t]
+
+       let quickcheck_shrinker =
+         Quickcheck.Shrinker.create (fun (start, _) ->
+           Quickcheck.Shrinker.shrink
+             [%quickcheck.shrinker: Elt.t Set.t]
+             (to_set start)
+           |> Sequence.map ~f:(fun set -> set |> Set.to_list |> of_list))
+       ;;
      end
+
+     let%test_unit "to_set" =
+       Base_quickcheck.Test.run_exn
+         (module struct
+           type t = Test.t [@@deriving quickcheck, sexp_of]
+         end)
+         ~f:(fun (t, set) -> [%test_result: Int.Set.t] (to_set t) ~expect:set)
+     ;;
+
+     let%test_unit "sexp_of_t" =
+       Base_quickcheck.Test.run_exn
+         (module struct
+           type t = Test.t [@@deriving quickcheck, sexp_of]
+         end)
+         ~f:(fun (t, set) ->
+           [%test_result: Sexp.t]
+             ([%sexp_of: t] t)
+             ~expect:([%sexp_of: Int.Set.t] set))
+     ;;
+
+     let%test_unit "t_of_sexp" =
+       Base_quickcheck.Test.run_exn
+         (module struct
+           type t = Sexp.t [@@deriving quickcheck, sexp_of]
+         end)
+         ~f:(fun sexp ->
+           [%test_result: Int.Set.t option]
+             (Option.map
+                ~f:to_set
+                (Option.try_with (fun () -> [%of_sexp: t] sexp)))
+             ~expect:(Option.try_with (fun () -> [%of_sexp: Int.Set.t] sexp)))
+     ;;
 
      let mem = Bitset.mem
 
      let%test_unit "mem" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t, set), elt) ->
            [%test_result: bool] (mem t elt) ~expect:(Set.mem set elt))
@@ -53,7 +99,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "add" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t, set), elt) ->
            [%test_result: Int.Set.t]
@@ -66,7 +112,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "remove" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Elt.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t, set), elt) ->
            [%test_result: Int.Set.t]
@@ -79,7 +125,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "union" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t1, set1), (t2, set2)) ->
            [%test_result: Int.Set.t]
@@ -92,7 +138,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "inter" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t1, set1), (t2, set2)) ->
            [%test_result: Int.Set.t]
@@ -105,7 +151,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "diff" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun ((t1, set1), (t2, set2)) ->
            [%test_result: Int.Set.t]
@@ -118,7 +164,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "fold" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun (t, set) ->
            let init = [] in
@@ -133,7 +179,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "iter" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun (t, set) ->
            let iter_result t ~iter =
@@ -151,7 +197,7 @@ let%test_module "Compare Bitset with Int.Set" =
      let%test_unit "length" =
        Base_quickcheck.Test.run_exn
          (module struct
-           type nonrec t = Test.t [@@deriving quickcheck, sexp_of]
+           type t = Test.t [@@deriving quickcheck, sexp_of]
          end)
          ~f:(fun (t, set) ->
            [%test_result: int] (length t) ~expect:(Set.length set))

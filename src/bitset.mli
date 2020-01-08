@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 (** Represents a subset of \(\[0, 62)\). *)
-type t [@@immediate] [@@deriving compare, equal, hash, sexp]
+type t [@@immediate] [@@deriving compare, equal, hash, quickcheck, sexp]
 
 include Container.S0 with type t := t and type elt := int
 

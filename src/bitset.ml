@@ -3,7 +3,7 @@ open! Import
 
 let max_elt_plus_one = 62
 
-type t = int [@@deriving compare, equal, hash]
+type t = int [@@deriving compare, equal, hash, quickcheck]
 
 let empty = 0
 let is_allowable_element int = Int.between int ~low:0 ~high:(max_elt_plus_one - 1)

@@ -7,6 +7,7 @@ type t [@@immediate] [@@deriving compare, equal, hash, sexp]
 include Container.S0 with type t := t and type elt := int
 
 val empty : t
+val is_allowable_element : int -> bool
 val add : t -> int -> t
 val remove : t -> int -> t
 val union : t -> t -> t

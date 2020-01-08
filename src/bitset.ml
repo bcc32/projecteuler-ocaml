@@ -6,6 +6,7 @@ let max_elt_plus_one = 62
 type t = int [@@deriving compare, equal, hash]
 
 let empty = 0
+let is_allowable_element int = Int.between int ~low:0 ~high:(max_elt_plus_one - 1)
 let mem t int = t land (1 lsl int) <> 0
 let add t int = t lor (1 lsl int)
 let remove t int = t land lnot (1 lsl int)

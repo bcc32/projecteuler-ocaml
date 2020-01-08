@@ -14,6 +14,7 @@ let union t u = t lor u
 let inter t u = t land u
 let diff t u = t land lnot u
 let of_list ints = ints |> List.fold ~init:empty ~f:add
+let is_subset subset ~of_:supserset = diff subset supserset = empty
 
 let fold t ~init ~f =
   Sequence.range 0 max_elt_plus_one

@@ -203,6 +203,19 @@ let%test_module "Compare Bitset with Int.Set" =
            [%test_result: int] (length t) ~expect:(Set.length set))
      ;;
 
+     let is_subset = Bitset.is_subset
+
+     let%test_unit "is_subset" =
+       Base_quickcheck.Test.run_exn
+         (module struct
+           type t = Test.t * Test.t [@@deriving quickcheck, sexp_of]
+         end)
+         ~f:(fun ((t1, set1), (t2, set2)) ->
+           [%test_result: bool]
+             (is_subset t1 ~of_:t2)
+             ~expect:(Set.is_subset set1 ~of_:set2))
+     ;;
+
      (* Derived from container interface. *)
 
      let is_empty = Bitset.is_empty

@@ -517,6 +517,16 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
     loop a one zero b zero one
   ;;
 
+  let invmod a ~modulus =
+    let inv, _, g = bezout a modulus in
+    if g <> one
+    then
+      raise_s
+        [%message
+          "invmod: arguments not relatively prime" (a : integer) (modulus : integer)];
+    inv % modulus
+  ;;
+
   let chinese_remainder_theorem residues =
     List.reduce_balanced_exn residues ~f:(fun (r1, m1) (r2, m2) ->
       let s, t, g = bezout m1 m2 in

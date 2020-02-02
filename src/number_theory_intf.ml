@@ -109,6 +109,10 @@ module type S = sig
    * b = g] *)
   val bezout : integer -> integer -> integer * integer * integer
 
+  (** [invmod a ~modulus] returns [a^(-1) mod modulus], if it exists.  It raises
+      if [gcd(a, m) <> 1]. *)
+  val invmod : integer -> modulus:integer -> integer
+
   (** [chinese_remainder_theorem [(r_1, m_1); ...]] returns [(x, m)] such that
       [x % m_1 = r_1], and so on. All of [m_i] must be pairwise coprime. [m] is
       the product of [m_i]. *)

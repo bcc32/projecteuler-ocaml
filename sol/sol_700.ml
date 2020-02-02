@@ -2,42 +2,41 @@ open! Core
 open! Import
 
 let birthday = 1504170715041707
-let modulus = 4503599627370517 (* prime *)
+let modulus = 4503599627370517
 
 let main () =
   let seq = Queue.of_list [ birthday ] in
-  let x = ref birthday in
-  try
-    while !x <> 0 do
-      let expected_guesses = 0.5 *. float modulus /. float !x in
-      if Float.( < ) (float !x) expected_guesses then (* switch strategy *)
-        raise Exit;
-      (* advance x *)
-      x := (!x + birthday) % modulus;
-      if !x < Queue.last_exn seq
+  let smallest_so_far = ref birthday in
+  let should_guess = ref true in
+  while !should_guess do
+    let expected_guesses = 0.5 *. float modulus /. float !smallest_so_far in
+    if Float.( < ) (float !smallest_so_far) expected_guesses
+    then (* switch strategy *)
+      should_guess := false
+    else (
+      (* advance [smallest_so_far] *)
+      smallest_so_far := (!smallest_so_far + birthday) % modulus;
+      if !smallest_so_far < Queue.last_exn seq
       then (
-        if debug then Debug.eprintf "%d" !x;
-        Queue.enqueue seq !x)
-    done;
-    assert false
-  with
-  | Exit ->
-    let birthday', _, _ = Number_theory.Int.bezout birthday modulus in
-    let birthday' = birthday' % modulus in
-    let index_of =
-      Array.init !x ~f:(fun k -> if k > 0 then birthday' * k % modulus else modulus)
-    in
-    let remaining_candidates = Array.init !x ~f:Fn.id in
-    Array.sort
-      remaining_candidates
-      ~compare:(Comparable.lift Int.compare ~f:(fun k -> index_of.(k)));
-    Array.iter remaining_candidates ~f:(fun x ->
-      if x < Queue.last_exn seq
-      then (
-        if debug then Debug.eprintf "%d" x;
-        Queue.enqueue seq x));
-    if debug then Debug.eprint_s [%sexp (seq : int Queue.t)];
-    printf "%d\n" (Queue.sum (module Int) seq ~f:Fn.id)
+        if debug then Debug.eprintf "%d" !smallest_so_far;
+        Queue.enqueue seq !smallest_so_far))
+  done;
+  let modinv = Number_theory.Int.invmod birthday ~modulus in
+  let index_of =
+    Array.init !smallest_so_far ~f:(fun k ->
+      if k > 0 then modinv * k % modulus else modulus)
+  in
+  let remaining_candidates = Array.init !smallest_so_far ~f:Fn.id in
+  Array.sort
+    remaining_candidates
+    ~compare:(Comparable.lift Int.compare ~f:(fun k -> index_of.(k)));
+  Array.iter remaining_candidates ~f:(fun smallest_so_far ->
+    if smallest_so_far < Queue.last_exn seq
+    then (
+      if debug then Debug.eprintf "%d" smallest_so_far;
+      Queue.enqueue seq smallest_so_far));
+  if debug then Debug.eprint_s [%sexp (seq : int Queue.t)];
+  printf "%d\n" (Queue.sum (module Int) seq ~f:Fn.id)
 ;;
 
 (* 24.629867s *)

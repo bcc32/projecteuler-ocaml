@@ -100,6 +100,8 @@ module type S = sig
 
   (** {1 Modular arithmetic} *)
 
+  (*_ FIXME: Implement negative exponents *)
+
   (** [powmod a b ~modulus] returns [a^b mod modulus], without overflowing *)
   val powmod : integer -> integer -> modulus:integer -> integer
 

@@ -39,6 +39,7 @@ let main () =
   printf "%d\n" (Queue.sum (module Int) seq ~f:Fn.id)
 ;;
 
-(* 24.629867s *)
+(* 24.629867s
+   1517926517777556 *)
 
 include (val Solution.make ~problem:(Number 700) ~main)

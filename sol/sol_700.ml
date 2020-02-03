@@ -29,7 +29,7 @@ let main () =
   let remaining_candidates = Array.init !smallest_so_far ~f:Fn.id in
   Array.sort
     remaining_candidates
-    ~compare:(Comparable.lift Int.compare ~f:(fun k -> index_of.(k)));
+    ~compare:(Comparable.lift Int.compare ~f:(fun k -> Array.unsafe_get index_of k));
   Array.iter remaining_candidates ~f:(fun smallest_so_far ->
     if smallest_so_far < Queue.last_exn seq
     then (

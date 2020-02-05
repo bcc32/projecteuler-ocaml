@@ -11,7 +11,7 @@
 - Switch from Core.Command to Cmdliner for CLI interface
   - Solutions are now run by the `run` command, not top-level commands.
   - Solutions can be listed by the `list` command.
-- Upgrade to Jane Street libs v0.120.0
+- Upgrade to Jane Street libs v0.12.0
 - Use Base-style map and set interfaces, preparing to reduce the dependencies to
   just Base where possible.
 

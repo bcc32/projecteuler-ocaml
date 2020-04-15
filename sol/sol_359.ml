@@ -45,12 +45,24 @@ let%expect_test "examples" =
   |> List.iter ~f:(fun (f, r) -> print_s [%message (f : int) (r : int) (p f r : int)]);
   [%expect
     {|
-    ((f 1) (r 1) ("p f r" 1))
-    ((f 1) (r 2) ("p f r" 3))
-    ((f 2) (r 1) ("p f r" 2))
-    ((f 10) (r 20) ("p f r" 440))
-    ((f 25) (r 75) ("p f r" 4863))
-    ((f 99) (r 100) ("p f r" 19454)) |}]
+    ((f       1)
+     (r       1)
+     ("p f r" 1))
+    ((f       1)
+     (r       2)
+     ("p f r" 3))
+    ((f       2)
+     (r       1)
+     ("p f r" 2))
+    ((f       10)
+     (r       20)
+     ("p f r" 440))
+    ((f       25)
+     (r       75)
+     ("p f r" 4863))
+    ((f       99)
+     (r       100)
+     ("p f r" 19454)) |}]
 ;;
 
 let%expect_test "small numbers" =
@@ -207,12 +219,24 @@ let%expect_test "examples" =
     print_s [%message (f : int) (r : int) (p_by_pattern f r : int)]);
   [%expect
     {|
-    ((f 1) (r 1) ("p_by_pattern f r" 1))
-    ((f 1) (r 2) ("p_by_pattern f r" 3))
-    ((f 2) (r 1) ("p_by_pattern f r" 2))
-    ((f 10) (r 20) ("p_by_pattern f r" 440))
-    ((f 25) (r 75) ("p_by_pattern f r" 4863))
-    ((f 99) (r 100) ("p_by_pattern f r" 19454)) |}]
+    ((f                  1)
+     (r                  1)
+     ("p_by_pattern f r" 1))
+    ((f                  1)
+     (r                  2)
+     ("p_by_pattern f r" 3))
+    ((f                  2)
+     (r                  1)
+     ("p_by_pattern f r" 2))
+    ((f                  10)
+     (r                  20)
+     ("p_by_pattern f r" 440))
+    ((f                  25)
+     (r                  75)
+     ("p_by_pattern f r" 4863))
+    ((f                  99)
+     (r                  100)
+     ("p_by_pattern f r" 19454)) |}]
 ;;
 
 (* https://projecteuler.net/thread=359#43305 *)
@@ -229,12 +253,24 @@ let%expect_test "examples" =
     print_s [%message (f : int) (r : int) (p_simple_by_leonid f r : int)]);
   [%expect
     {|
-    ((f 1) (r 1) ("p_simple_by_leonid f r" 1))
-    ((f 1) (r 2) ("p_simple_by_leonid f r" 3))
-    ((f 2) (r 1) ("p_simple_by_leonid f r" 2))
-    ((f 10) (r 20) ("p_simple_by_leonid f r" 440))
-    ((f 25) (r 75) ("p_simple_by_leonid f r" 4863))
-    ((f 99) (r 100) ("p_simple_by_leonid f r" 19454)) |}]
+    ((f                        1)
+     (r                        1)
+     ("p_simple_by_leonid f r" 1))
+    ((f                        1)
+     (r                        2)
+     ("p_simple_by_leonid f r" 3))
+    ((f                        2)
+     (r                        1)
+     ("p_simple_by_leonid f r" 2))
+    ((f                        10)
+     (r                        20)
+     ("p_simple_by_leonid f r" 440))
+    ((f                        25)
+     (r                        75)
+     ("p_simple_by_leonid f r" 4863))
+    ((f                        99)
+     (r                        100)
+     ("p_simple_by_leonid f r" 19454)) |}]
 ;;
 
 let main () =

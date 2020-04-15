@@ -23,7 +23,11 @@ let%expect_test "u(10)" =
   pi_sequences 10 ~is_prime:Number_theory.Int.is_prime ~prime_pi:prime_pi_naive
   |> [%sexp_of: (int * int) Sequence.t]
   |> print_s;
-  [%expect {| ((10 1) (4 2) (2 2) (1 3)) |}]
+  [%expect {|
+    ((10 1)
+     (4  2)
+     (2  2)
+     (1  3)) |}]
 ;;
 
 let big_p n ( * ) ~is_prime ~prime_pi =

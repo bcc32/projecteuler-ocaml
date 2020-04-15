@@ -10,7 +10,16 @@ let rec power_set list =
 
 let%expect_test _ =
   power_set [ 1; 2; 3 ] |> [%sexp_of: int list list] |> print_s;
-  [%expect {| (() (1) (2) (1 2) (3) (1 3) (2 3) (1 2 3)) |}]
+  [%expect
+    {|
+    (()
+     (1)
+     (2)
+     (1 2)
+     (3)
+     (1 3)
+     (2 3)
+     (1 2 3)) |}]
 ;;
 
 let is_special list =

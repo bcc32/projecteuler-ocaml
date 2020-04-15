@@ -94,7 +94,10 @@ let divisor_frontiers n =
 
 let%expect_test "divisor_frontiers" =
   divisor_frontiers 10 |> [%sexp_of: (int * int) Sequence.t] |> print_s;
-  [%expect {| ((1 10) (2 5) (3 3)) |}]
+  [%expect {|
+    ((1 10)
+     (2 5)
+     (3 3)) |}]
 ;;
 
 (** [divisor_frontier_ranges n] returns a sequence of triples [(k, d1, d2)]
@@ -121,7 +124,10 @@ let divisor_frontier_ranges n =
 
 let%expect_test "divisor_frontier_ranges" =
   divisor_frontier_ranges 10 |> [%sexp_of: (int * int * int) Sequence.t] |> print_s;
-  [%expect {| ((3 3 3) (2 4 5) (1 6 10)) |}]
+  [%expect {|
+    ((3 3 3)
+     (2 4 5)
+     (1 6 10)) |}]
 ;;
 
 let%test_unit "divisor_frontier_ranges covers all numbers in [1,n]" =

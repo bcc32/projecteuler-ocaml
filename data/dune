@@ -14,13 +14,13 @@
    %{targets}
    (run ./gen-dune.sh))))
 
-(alias
- (name runtest)
+(rule
+ (alias runtest)
  (action
   (diff dune.inc dune.inc.gen)))
 
-(alias
- (name runtest)
+(rule
+ (alias runtest)
  (deps
   (glob_files *.sh))
  (action

@@ -28,8 +28,8 @@
    %{targets}
    (run grep -L "\\<expect_test\\>.*\\<answer\\>" --exclude=*.pp.ml %{deps}))))
 
-(alias
- (name runtest)
+(rule
+ (alias runtest)
  (action
   (diff solutions_without_answer_expect_tests.txt
     solutions_without_answer_expect_tests.txt.gen)))

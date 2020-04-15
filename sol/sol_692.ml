@@ -203,6 +203,7 @@ let%expect_test "debug" =
 
 let main () = g_fibonacci 80 |> [%sexp_of: int] |> print_s
 
+(* 72.248us *)
 let%expect_test "answer" =
   main ();
   [%expect {| 842043391019219959 |}]

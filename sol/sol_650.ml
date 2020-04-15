@@ -34,13 +34,15 @@ end
 
 open Infix
 
-let factors_as_map n = Number_theory.Int.prime_factor n |> Int.Map.of_alist_exn
+let factors_as_map n = Number_theory.Int.prime_factor n |> Map.of_alist_exn (module Int)
 
 let rec factors_of_factorial =
-  let cache = Int.Table.create () in
+  let cache = Hashtbl.create (module Int) in
   fun n ->
     Hashtbl.findi_or_add cache n ~default:(fun n ->
-      if n = 0 then Int.Map.empty else factors_of_factorial (n - 1) *% factors_as_map n)
+      if n = 0
+      then Map.empty (module Int)
+      else factors_of_factorial (n - 1) *% factors_as_map n)
 ;;
 
 (* Corresponds to B(n)*)
@@ -48,7 +50,9 @@ let factors_of_product_of_binomials n =
   (factors_of_factorial n **% (n + 1))
   /% ((Sequence.range 0 n ~stop:`inclusive
        |> Sequence.map ~f:factors_of_factorial
-       |> Sequence.fold ~init:Int.Map.empty ~f:(fun acc factors -> acc *% factors))
+       |> Sequence.fold
+            ~init:(Map.empty (module Int))
+            ~f:(fun acc factors -> acc *% factors))
       **% 2)
 ;;
 

@@ -10,22 +10,22 @@
   (:standard \ template)))
 
 (rule
- (targets euler_solutions.ml)
+ (target euler_solutions.ml)
  (deps
   (:script ./module-list.pl)
   (glob_files sol*.ml))
  (action
   (with-stdout-to
-   %{targets}
+   %{target}
    (run %{script}))))
 
 (rule
- (targets solutions_without_answer_expect_tests.txt.gen)
+ (target solutions_without_answer_expect_tests.txt.gen)
  (deps
   (glob_files sol*.ml))
  (action
   (with-stdout-to
-   %{targets}
+   %{target}
    (run grep -L "\\<expect_test\\>.*\\<answer\\>" --exclude=*.pp.ml %{deps}))))
 
 (rule

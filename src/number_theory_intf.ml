@@ -30,8 +30,7 @@ module type As_digits = sig
   module Right_to_left : As_digits_one_direction with type integer := integer
 
   (** Equivalent to Left_to_right. *)
-  include
-    As_digits_one_direction with type integer := integer
+  include As_digits_one_direction with type integer := integer
 end
 
 module type S = sig

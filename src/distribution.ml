@@ -42,8 +42,7 @@ module Make (Prob : Prob) : S with module Prob = Prob = struct
   let normalize t = scale t Prob.(one / total t)
 
   let merge t1 t2 =
-    Map.merge t1 t2 ~f:(fun ~key:_ ->
-      function
+    Map.merge t1 t2 ~f:(fun ~key:_ -> function
       | `Both (p1, p2) -> Some Prob.(p1 + p2)
       | `Left p1 -> Some p1
       | `Right p2 -> Some p2)

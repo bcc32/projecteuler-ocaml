@@ -43,6 +43,18 @@ module Bigint_with_modulus = struct
   let ( + ) a b = Bigint.( % ) (Bigint.( + ) a b) modulus
 end
 
+(* TODO: Move this function into [Number_theory]. *)
+let bigint_multinomial ints =
+  let num =
+    Number_theory.Bigint.factorial (Bigint.of_int (List.sum (module Int) ints ~f:Fn.id))
+  in
+  let den =
+    List.map ints ~f:(fun n -> Number_theory.Bigint.factorial (Bigint.of_int n))
+    |> List.fold ~init:Bigint.one ~f:Bigint.( * )
+  in
+  Bigint.( / ) num den
+;;
+
 let sum_of_ways_to_arrange num_digits ~nonzero_digits =
   if List.length nonzero_digits > num_digits
   then Bigint.zero
@@ -53,19 +65,7 @@ let sum_of_ways_to_arrange num_digits ~nonzero_digits =
       |> Sequences.run_length_encode ~equal:Int.equal
     in
     let all_digits_contribution_to_each_pos =
-      (* TODO: Create [multinomial] function for bigints. *)
-      let total_combinations =
-        let num =
-          Number_theory.Bigint.factorial
-            (Bigint.of_int (List.sum (module Int) digits ~f:snd))
-        in
-        let den =
-          List.map digits ~f:(fun (_, count) ->
-            Number_theory.Bigint.factorial (Bigint.of_int count))
-          |> List.reduce_exn ~f:Bigint.( * )
-        in
-        Bigint.( / ) num den
-      in
+      let total_combinations = bigint_multinomial (List.map digits ~f:snd) in
       List.sum
         (module Bigint_with_modulus)
         digits
@@ -74,6 +74,9 @@ let sum_of_ways_to_arrange num_digits ~nonzero_digits =
           then Bigint.zero
           else
             let open Bigint.O in
+            (* Basically, this is the number of possible DS-numbers times the
+               probability that a given position takes the value of this
+               digit. *)
             let number_of_times_this_digit_appers_in_arbitrary_position =
               total_combinations
               * Bigint.of_int count

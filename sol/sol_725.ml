@@ -85,9 +85,12 @@ let sum_of_ways_to_arrange num_digits ~nonzero_digits =
     |> List.sum
          (module Bigint_with_modulus)
          ~f:(fun pos ->
-           let open Bigint.O in
-           Bigint.pow (Bigint.of_int 10) (Bigint.of_int pos)
-           * all_digits_contribution_to_each_pos))
+           if pos >= 16
+           then Bigint.zero
+           else
+             let open Bigint.O in
+             Bigint.pow (Bigint.of_int 10) (Bigint.of_int pos)
+             * all_digits_contribution_to_each_pos))
 ;;
 
 let digit_sum_numbers num_digits =
@@ -153,7 +156,7 @@ let%expect_test "S(7)" =
 
 let main () = print_s [%sexp (s 2020 : int)]
 
-(* 445.472ms *)
+(* 246.333ms *)
 let%expect_test "answer" =
   main ();
   [%expect {| 4598797036650685 |}]

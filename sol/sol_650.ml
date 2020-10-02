@@ -54,6 +54,7 @@ let factors_of_product_of_binomials n =
       **% 2)
 ;;
 
+(* TODO: Move this module into the Euler library. *)
 module Int_modulo_1e9_7 : sig
   type t = int
 

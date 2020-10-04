@@ -68,6 +68,33 @@ module For_63_bits = struct
     distinct_states 9 3 |> [%sexp_of: int] |> print_s;
     [%expect {| 128 |}]
   ;;
+
+  let%expect_test "table" =
+    for n = 1 to 14 do
+      printf "%2d\t" n;
+      for k = 1 to n do
+        printf "%d\t" (distinct_states n k)
+        (* printf "n = %d, k = %d, F(n,k) = %d\n" n k (distinct_states n k) *)
+      done;
+      printf "\n"
+    done;
+    [%expect
+      {|
+       1	2
+       2	4	2
+       3	8	4	2
+       4	16	8	16	2
+       5	32	16	32	16	2
+       6	64	32	16	16	64	2
+       7	128	64	128	64	128	64	2
+       8	256	128	256	32	256	128	256	2
+       9	512	256	128	256	512	64	512	256	2
+      10	1024	512	1024	256	64	512	1024	256	1024	2
+      11	2048	1024	2048	1024	2048	1024	2048	1024	2048	1024	2
+      12	4096	2048	1024	512	4096	128	4096	256	1024	2048	4096	2
+      13	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	2
+      14	16384	8192	16384	4096	16384	8192	256	4096	16384	8192	16384	4096	16384	2 |}]
+  ;;
 end
 
 let main () = raise_s [%message "unimplemented" [%here]]

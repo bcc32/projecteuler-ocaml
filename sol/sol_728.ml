@@ -69,283 +69,6 @@ module For_63_bits = struct
     [%expect {| 128 |}]
   ;;
 
-  let%expect_test "table" =
-    let max = 15 in
-    printf "%2d\t" 0;
-    for k = 1 to max do
-      printf "%d\t" k
-    done;
-    printf "\n";
-    for n = 1 to max do
-      printf "%2d\t" n;
-      for k = 1 to n do
-        printf "%d\t" (distinct_states n k)
-      done;
-      printf "\n"
-    done;
-    [%expect
-      {|
-       0	1	2	3	4	5	6	7	8	9	10	11	12	13	14	15
-       1	2
-       2	4	2
-       3	8	4	2
-       4	16	8	16	2
-       5	32	16	32	16	2
-       6	64	32	16	16	64	2
-       7	128	64	128	64	128	64	2
-       8	256	128	256	32	256	128	256	2
-       9	512	256	128	256	512	64	512	256	2
-      10	1024	512	1024	256	64	512	1024	256	1024	2
-      11	2048	1024	2048	1024	2048	1024	2048	1024	2048	1024	2
-      12	4096	2048	1024	512	4096	128	4096	256	1024	2048	4096	2
-      13	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	2
-      14	16384	8192	16384	4096	16384	8192	256	4096	16384	8192	16384	4096	16384	2
-      15	32768	16384	8192	16384	2048	4096	32768	16384	8192	1024	32768	4096	32768	16384	2 |}]
-  ;;
-
-  (* For each row n, the entries mostly alternate between two different powers
-     of 2, 2^n and 2^(n - 1), except:
-
-     For n = k, F(n, k) = 2.
-
-     For gcd(n, k) > 1, the entries may be a smaller power of 2.
-
-     In particular,
-
-     F(n, k) = 2 if n = k
-
-     F(n, k) = 2^(n - a) where
-
-     a = (1 - k mod 2) + b
-
-     b = 2p if n and k share a prime factor greater than 2 (p is the index of
-     that prime number, where p = 1 if the prime factor is 3)
-
-     F(n, k) = 2^n otherwise *)
-
-  let%expect_test "pattern" =
-    let max = 20 in
-    for n = 1 to max do
-      for k = 1 to n do
-        let base = Int.pow 2 n in
-        let diff = Int.floor_log2 (base / distinct_states n k) in
-        printf "%d %d %d\n" n k diff
-      done
-    done;
-    [%expect
-      {|
-      1 1 0
-      2 1 0
-      2 2 1
-      3 1 0
-      3 2 1
-      3 3 2
-      4 1 0
-      4 2 1
-      4 3 0
-      4 4 3
-      5 1 0
-      5 2 1
-      5 3 0
-      5 4 1
-      5 5 4
-      6 1 0
-      6 2 1
-      6 3 2
-      6 4 2
-      6 5 0
-      6 6 5
-      7 1 0
-      7 2 1
-      7 3 0
-      7 4 1
-      7 5 0
-      7 6 1
-      7 7 6
-      8 1 0
-      8 2 1
-      8 3 0
-      8 4 3
-      8 5 0
-      8 6 1
-      8 7 0
-      8 8 7
-      9 1 0
-      9 2 1
-      9 3 2
-      9 4 1
-      9 5 0
-      9 6 3
-      9 7 0
-      9 8 1
-      9 9 8
-      10 1 0
-      10 2 1
-      10 3 0
-      10 4 2
-      10 5 4
-      10 6 1
-      10 7 0
-      10 8 2
-      10 9 0
-      10 10 9
-      11 1 0
-      11 2 1
-      11 3 0
-      11 4 1
-      11 5 0
-      11 6 1
-      11 7 0
-      11 8 1
-      11 9 0
-      11 10 1
-      11 11 10
-      12 1 0
-      12 2 1
-      12 3 2
-      12 4 3
-      12 5 0
-      12 6 5
-      12 7 0
-      12 8 4
-      12 9 2
-      12 10 1
-      12 11 0
-      12 12 11
-      13 1 0
-      13 2 1
-      13 3 0
-      13 4 1
-      13 5 0
-      13 6 1
-      13 7 0
-      13 8 1
-      13 9 0
-      13 10 1
-      13 11 0
-      13 12 1
-      13 13 12
-      14 1 0
-      14 2 1
-      14 3 0
-      14 4 2
-      14 5 0
-      14 6 1
-      14 7 6
-      14 8 2
-      14 9 0
-      14 10 1
-      14 11 0
-      14 12 2
-      14 13 0
-      14 14 13
-      15 1 0
-      15 2 1
-      15 3 2
-      15 4 1
-      15 5 4
-      15 6 3
-      15 7 0
-      15 8 1
-      15 9 2
-      15 10 5
-      15 11 0
-      15 12 3
-      15 13 0
-      15 14 1
-      15 15 14
-      16 1 0
-      16 2 1
-      16 3 0
-      16 4 3
-      16 5 0
-      16 6 1
-      16 7 0
-      16 8 7
-      16 9 0
-      16 10 1
-      16 11 0
-      16 12 3
-      16 13 0
-      16 14 1
-      16 15 0
-      16 16 15
-      17 1 0
-      17 2 1
-      17 3 0
-      17 4 1
-      17 5 0
-      17 6 1
-      17 7 0
-      17 8 1
-      17 9 0
-      17 10 1
-      17 11 0
-      17 12 1
-      17 13 0
-      17 14 1
-      17 15 0
-      17 16 1
-      17 17 16
-      18 1 0
-      18 2 1
-      18 3 2
-      18 4 2
-      18 5 0
-      18 6 5
-      18 7 0
-      18 8 2
-      18 9 8
-      18 10 1
-      18 11 0
-      18 12 6
-      18 13 0
-      18 14 1
-      18 15 2
-      18 16 2
-      18 17 0
-      18 18 17
-      19 1 0
-      19 2 1
-      19 3 0
-      19 4 1
-      19 5 0
-      19 6 1
-      19 7 0
-      19 8 1
-      19 9 0
-      19 10 1
-      19 11 0
-      19 12 1
-      19 13 0
-      19 14 1
-      19 15 0
-      19 16 1
-      19 17 0
-      19 18 1
-      19 19 18
-      20 1 0
-      20 2 1
-      20 3 0
-      20 4 3
-      20 5 4
-      20 6 1
-      20 7 0
-      20 8 4
-      20 9 0
-      20 10 9
-      20 11 0
-      20 12 3
-      20 13 0
-      20 14 1
-      20 15 4
-      20 16 4
-      20 17 0
-      20 18 1
-      20 19 0
-      20 20 19 |}]
-  ;;
-
   let s n =
     Sequence.range 1 n ~stop:`inclusive
     |> Sequence.sum
@@ -363,6 +86,74 @@ module For_63_bits = struct
   let%expect_test "S(10)" =
     print_s [%sexp (s 10 : int)];
     [%expect {| 10444 |}]
+  ;;
+
+  let%expect_test "table" =
+    let max = 10 in
+    printf "%2d\t" 0;
+    for k = 1 to max do
+      printf "%d\t" k
+    done;
+    printf "\n";
+    for n = 1 to max do
+      printf "%2d\t" n;
+      for k = 1 to n do
+        printf "%d\t" (distinct_states n k)
+      done;
+      printf "\n"
+    done;
+    [%expect
+      {|
+       0	1	2	3	4	5	6	7	8	9	10
+       1	2
+       2	4	2
+       3	8	4	2
+       4	16	8	16	2
+       5	32	16	32	16	2
+       6	64	32	16	16	64	2
+       7	128	64	128	64	128	64	2
+       8	256	128	256	32	256	128	256	2
+       9	512	256	128	256	512	64	512	256	2
+      10	1024	512	1024	256	64	512	1024	256	1024	2 |}]
+  ;;
+
+  (* F(n, k) = 2^(n - diff) where
+
+     diff = 0 if k = 1
+     diff = k - 1 if k divides n
+     something a bit more complicated otherwise:
+
+     If k divides 2n, add one to the following; otherwise, continue.
+     For each prime divisor p of k, find diff(n, k / p).
+     Take the maximum of the above, or zero. *)
+
+  let rec guessed_diff n k =
+    if k = 1
+    then 0
+    else if n % k = 0
+    then k - 1
+    else
+      (if n * 2 % k = 0 then 1 else 0)
+      + (Number_theory.Int.prime_factor k
+         |> List.map ~f:(fun (p, _) -> k / p)
+         |> List.map ~f:(fun k_divisor -> guessed_diff n k_divisor)
+         |> List.max_elt ~compare:Int.compare
+         |> Option.value ~default:0)
+  ;;
+
+  let%expect_test "pattern" =
+    (* This [max] has been tested up to 20. *)
+    let max = 10 in
+    for n = 1 to max do
+      for k = 1 to n do
+        let base = Int.pow 2 n in
+        let diff = Int.floor_log2 (base / distinct_states n k) in
+        let guessed_diff = guessed_diff n k in
+        if diff <> guessed_diff
+        then printf "%2d %2d %d %d %d\n" n k diff guessed_diff (diff - guessed_diff)
+      done
+    done;
+    [%expect {| |}]
   ;;
 end
 

@@ -157,6 +157,65 @@ module For_63_bits = struct
   ;;
 end
 
+let prime_factor = Memo.simple (module Int) Number_theory.Int.prime_factor
+
+let diff n =
+  stage
+    (Memo.recursive
+       (module Int)
+       (fun diff k ->
+          if k = 1
+          then 0
+          else if n % k = 0
+          then k - 1
+          else
+            (if n * 2 % k = 0 then 1 else 0)
+            + (prime_factor k
+               |> List.map ~f:(fun (p, _) -> diff (k / p))
+               |> List.max_elt ~compare:Int.compare
+               |> Option.value ~default:0)))
+;;
+
+let f n =
+  stage
+    (let diff = unstage (diff n) in
+     fun k -> Int.pow 2 (n - diff k))
+;;
+
+let%expect_test "F(3,2)" =
+  unstage (f 3) 2 |> [%sexp_of: int] |> print_s;
+  [%expect {| 4 |}]
+;;
+
+let%expect_test "F(8,3)" =
+  unstage (f 8) 3 |> [%sexp_of: int] |> print_s;
+  [%expect {| 256 |}]
+;;
+
+let%expect_test "F(9,3)" =
+  unstage (f 9) 3 |> [%sexp_of: int] |> print_s;
+  [%expect {| 128 |}]
+;;
+
+let s n =
+  Sequence.range 1 n ~stop:`inclusive
+  |> Sequence.sum
+       (module Int)
+       ~f:(fun n ->
+         let f = unstage (f n) in
+         Sequence.range 1 n ~stop:`inclusive |> Sequence.sum (module Int) ~f)
+;;
+
+let%expect_test "S(3)" =
+  s 3 |> [%sexp_of: int] |> print_s;
+  [%expect {| 22 |}]
+;;
+
+let%expect_test "S(10)" =
+  s 10 |> [%sexp_of: int] |> print_s;
+  [%expect {| 10444 |}]
+;;
+
 let main () = raise_s [%message "unimplemented" [%here]]
 
 include (val Solution.make ~problem:(Number 728) ~main)

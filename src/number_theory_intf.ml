@@ -83,7 +83,7 @@ module type S = sig
       repeated entries corresponding to multiplicity. *)
   val factor : integer -> integer list
 
-  (** [prime_factor n] returns a non-descending list of prime factors of [n]
+  (** [prime_factor n] returns an increasing list of prime factors of [n]
       with their multiplicities. *)
   val prime_factor : integer -> (integer * int) list
 

@@ -95,6 +95,25 @@ module For_63_bits = struct
       13	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	8192	4096	2
       14	16384	8192	16384	4096	16384	8192	256	4096	16384	8192	16384	4096	16384	2 |}]
   ;;
+
+  let s n =
+    Sequence.range 1 n ~stop:`inclusive
+    |> Sequence.sum
+         (module Int)
+         ~f:(fun n ->
+           Sequence.range 1 n ~stop:`inclusive
+           |> Sequence.sum (module Int) ~f:(fun k -> distinct_states n k))
+  ;;
+
+  let%expect_test "S(3)" =
+    print_s [%sexp (s 3 : int)];
+    [%expect {| 22 |}]
+  ;;
+
+  let%expect_test "S(10)" =
+    print_s [%sexp (s 10 : int)];
+    [%expect {| 10444 |}]
+  ;;
 end
 
 let main () = raise_s [%message "unimplemented" [%here]]

@@ -35,4 +35,5 @@ sol_613.ml
 sol_650.ml
 sol_662.ml
 sol_700.ml
+sol_719.ml
 sol_blank.ml

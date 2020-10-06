@@ -46,12 +46,22 @@ let%expect_test "sum_with_sep_mask" =
   [%expect {| |}]
 ;;
 
+(* As noted by ecnerwala, https://projecteuler.net/thread=719#359366,
+
+   Splitting numbers preserves the digit sum and thus the value mod 9.
+   Therefore, we only need to check the numbers whose squares are congruent to
+   them mod 9, i.e., sqrt in {0, 1} mod 9. *)
+
 let is_s_number ~sqrt ~n =
-  let n_digits = Number_theory.Int.As_base10.to_array n in
-  Sequence.range 0 (Int.pow 2 (Array.length n_digits - 1))
-  |> Sequence.find_map ~f:(fun sep_mask ->
-    let summed = sum_with_sep_mask ~n_digits ~sep_mask in
-    if sqrt = summed then Some (sqrt, n, sep_mask) else None)
+  let mod_9 = sqrt % 9 in
+  if not (mod_9 = 0 || mod_9 = 1)
+  then None
+  else (
+    let n_digits = Number_theory.Int.As_base10.to_array n in
+    Sequence.range 0 (Int.pow 2 (Array.length n_digits - 1))
+    |> Sequence.find_map ~f:(fun sep_mask ->
+      let summed = sum_with_sep_mask ~n_digits ~sep_mask in
+      if sqrt = summed then Some (sqrt, n, sep_mask) else None))
 ;;
 
 let t ~max_sqrt =
@@ -70,7 +80,7 @@ let%expect_test "T(10^4)" =
 ;;
 
 (* 128088830547982
-   1m59.823267706s *)
+   25.844323874s *)
 let main () =
   let max_sqrt = 1_000_000 in
   let s_numbers = t ~max_sqrt in

@@ -9,13 +9,14 @@ let rec can_sum ~digits_of:n ~target =
   else if n < target
   then false
   else (
-    let m = ref 10 in
-    with_return (fun { return } ->
-      while !m < n do
-        if can_sum ~digits_of:(n / !m) ~target:(target - (n % !m)) then return true;
-        m := !m * 10
-      done;
-      false))
+    let rec loop pow10 =
+      if pow10 >= n
+      then false
+      else if can_sum ~digits_of:(n / pow10) ~target:(target - (n % pow10))
+      then true
+      else loop (pow10 * 10)
+    in
+    loop 10)
 ;;
 
 (* As noted by ecnerwala, https://projecteuler.net/thread=719#359366,
@@ -47,7 +48,7 @@ let%expect_test "T(10^4)" =
 ;;
 
 (* 128088830547982
-   1.17600172s *)
+   981.608194ms *)
 let main () =
   let max_sqrt = 1_000_000 in
   let s_numbers = t ~max_sqrt in

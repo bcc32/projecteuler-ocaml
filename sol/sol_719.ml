@@ -27,18 +27,14 @@ let rec can_sum ~digits_of:n ~target =
 
 let is_s_number ~sqrt ~n =
   let mod_9 = sqrt % 9 in
-  if not (mod_9 = 0 || mod_9 = 1)
-  then None
-  else if can_sum ~digits_of:n ~target:sqrt
-  then Some (sqrt, n)
-  else None
+  (mod_9 = 0 || mod_9 = 1) && can_sum ~digits_of:n ~target:sqrt
 ;;
 
 let t ~max_sqrt =
   let squares =
     Sequence.range 2 max_sqrt ~stop:`inclusive |> Sequence.map ~f:(fun x -> x, x * x)
   in
-  Sequence.filter_map squares ~f:(fun (sqrt, n) -> is_s_number ~sqrt ~n)
+  Sequence.filter squares ~f:(fun (sqrt, n) -> is_s_number ~sqrt ~n)
 ;;
 
 let%expect_test "T(10^4)" =

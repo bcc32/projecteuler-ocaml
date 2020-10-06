@@ -3,6 +3,7 @@ open! Import
 
 let main () = Number_theory.Int.factor 600851475143 |> List.last_exn |> printf "%d\n"
 
+(* 97.713us *)
 let%expect_test "answer" =
   main ();
   [%expect {| 6857 |}]

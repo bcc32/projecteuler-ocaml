@@ -25,10 +25,7 @@ let rec can_sum ~digits_of:n ~target =
    Therefore, we only need to check the numbers whose squares are congruent to
    them mod 9, i.e., sqrt in {0, 1} mod 9. *)
 
-let is_s_number ~sqrt ~n =
-  let mod_9 = sqrt % 9 in
-  (mod_9 = 0 || mod_9 = 1) && can_sum ~digits_of:n ~target:sqrt
-;;
+let is_s_number ~sqrt ~n = sqrt % 9 <= 1 && can_sum ~digits_of:n ~target:sqrt
 
 let t ~max_sqrt =
   let squares =

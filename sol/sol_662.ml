@@ -41,7 +41,7 @@ let moves =
 ;;
 
 let%expect_test "moves" =
-  Expect_test_helpers_kernel.print_s [%sexp (force moves : (int * int) list)];
+  print_s [%sexp (force moves : (int * int) list)];
   [%expect
     {|
     ((0    1)

@@ -7,4 +7,4 @@ module Q = Quickcheck.Configure (struct
   end)
 
 include Euler
-include Expect_test_helpers_kernel
+include Expect_test_helpers_core

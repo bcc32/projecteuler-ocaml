@@ -8,7 +8,7 @@ let propagate bot top =
       let max = t + Int.max b1 b2 in
       iter (b2 :: bs) ts (max :: acc)
     | _, [] -> acc
-    | _ -> Error.failwiths "length mismatched" (bot, top) [%sexp_of: int list * int list]
+    | _ -> raise_s [%message "length mismatched" (bot : int list) (top : int list)]
   in
   iter (Array.to_list bot) (Array.to_list top) [] |> Array.of_list_rev
 ;;

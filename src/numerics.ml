@@ -36,12 +36,12 @@ module Make (Real : Real) : S with type real = Real.t = struct
           (match sign_exn y_lo with
            | Neg -> loop x_mi x_hi y_mi y_hi
            | Pos -> loop x_lo x_mi y_lo y_mi
-           | Zero -> raise (Bug "zero y-value endpoint"))
+           | Zero -> failwith "BUG: zero y-value endpoint")
         | Pos ->
           (match sign_exn y_lo with
            | Neg -> loop x_lo x_mi y_lo y_mi
            | Pos -> loop x_mi x_hi y_mi y_hi
-           | Zero -> raise (Bug "zero y-value endpoint")))
+           | Zero -> failwith "BUG: zero y-value endpoint"))
     in
     let y_lo = f x_lo in
     let y_hi = f x_hi in

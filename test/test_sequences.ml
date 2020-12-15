@@ -72,3 +72,41 @@ let%test_unit "run_length_encode" =
       ~expect:None
       (List.find_consecutive_duplicate enc ~equal:(fun (e1, _) (e2, _) -> e1 = e2)))
 ;;
+
+let%test_module "cycle detection" =
+  (module struct
+    module Result = struct
+      type t = (int * int) option [@@deriving compare, equal, hash, sexp_of]
+    end
+
+    let sequence_without_cycle = Sequence.of_list [ 1; 2; 3; 4; 5 ]
+
+    let sequence_with_cycle =
+      Sequence.shift_right_with_list (Sequence.cycle_list_exn [ 6; 3; 1 ]) [ 2; 0 ]
+    ;;
+
+    let examples = [ sequence_without_cycle, None; sequence_with_cycle, Some (3, 2) ]
+
+    let%expect_test "find_cycle'" =
+      List.iter examples ~f:(fun (sequence, result) ->
+        require_equal
+          [%here]
+          (module Result)
+          (Sequences.find_cycle' sequence ~equal:Int.equal)
+          result)
+    ;;
+
+    let%expect_test "find_cycle" =
+      (* This function cycles: 0, 1, 2, 1, 2, 1, 2, ... *)
+      require_equal
+        [%here]
+        (module Result)
+        (Some
+           (Sequences.find_cycle
+              ~start:0
+              ~f:(fun x -> if x = 0 then 1 else 3 - x)
+              ~equal:Int.equal))
+        (Some (2, 1))
+    ;;
+  end)
+;;

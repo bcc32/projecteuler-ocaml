@@ -72,3 +72,33 @@ let iter_permutations list ~compare ~f =
   in
   loop ()
 ;;
+
+let find_cycle' sequence ~equal =
+  with_return (fun { return } ->
+    let lambda =
+      Sequence.fold_until
+        (Sequence.tl_eagerly_exn sequence)
+        ~init:(Sequence.hd_exn sequence, 1, 1)
+        ~f:(fun (tortoise, power, lambda) hare ->
+          if equal tortoise hare
+          then Stop lambda
+          else if power = lambda
+          then Continue (hare, power * 2, 1)
+          else Continue (tortoise, power, lambda + 1))
+        ~finish:(fun _ ->
+          (* Reached the end of the sequence without finding a cycle. *)
+          return None)
+    in
+    let mu =
+      Sequence.zip sequence (Sequence.drop_eagerly sequence lambda)
+      |> Sequence.take_while ~f:(fun (tortoise, hare) -> not (equal tortoise hare))
+      |> Sequence.length
+    in
+    Some (lambda, mu))
+;;
+
+let find_cycle ~start ~f ~equal =
+  (* We should never reach the end of this infinite sequence. *)
+  find_cycle' ~equal (Sequence.unfold_step ~init:start ~f:(fun x -> Yield (x, f x)))
+  |> Option.value_exn
+;;

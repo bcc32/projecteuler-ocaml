@@ -51,3 +51,16 @@ val iter_permutations
   -> compare:('a -> 'a -> int)
   -> f:(('a, read) Array.Permissioned.t -> unit)
   -> unit
+
+(** {1 Cycle detection}
+
+    Cycle detection implementation is based on Brent's algorithm:
+    https://en.wikipedia.org/wiki/Cycle_detection#Brent's_algorithm. *)
+
+(** [find_cycle'] returns the length and starting index of the cycle in the
+    sequence, if one exists. *)
+val find_cycle' : 'a Sequence.t -> equal:'a Equal.t -> (int * int) option
+
+(** [find_cycle] returns the length and starting index of the cycle in the
+    sequence [[ start; f start; f (f start); ... ]]. *)
+val find_cycle : start:'a -> f:('a -> 'a) -> equal:'a Equal.t -> int * int

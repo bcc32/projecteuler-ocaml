@@ -1,11 +1,7 @@
-with import <nixpkgs> { };
+{ lib, nix-gitignore, buildDunePackage, bignum, cmdliner, core, core_bench
+, delimited_parsing, expect_test_helpers_core, perl, re, shellcheck }:
 
-let
-  inherit (ocamlPackages)
-    buildDunePackage bignum cmdliner core core_bench delimited_parsing
-    expect_test_helpers_core re;
-
-in buildDunePackage rec {
+buildDunePackage {
   pname = "euler";
   version = "0.5.0";
   useDune2 = true;

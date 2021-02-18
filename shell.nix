@@ -1,2 +1,13 @@
 { pkgs ? import <nixpkgs> { } }:
-pkgs.mkShell { buildInputs = with pkgs; [ m4 gmp ]; }
+
+with pkgs;
+mkShell {
+  buildInputs = [
+    # For opam
+    m4
+    opam
+    pkgconfig
+    # For this package
+    gmp
+  ];
+}

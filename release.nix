@@ -1,3 +1,3 @@
 { pkgs ? import <nixpkgs> { } }:
 
-pkgs.ocamlPackage.callPackage ./. { }
+pkgs.ocamlPackages.callPackage ./. { }

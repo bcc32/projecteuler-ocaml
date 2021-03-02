@@ -1,7 +1,7 @@
 { lib, nix-gitignore, buildDunePackage, bignum, cmdliner, core, core_bench
 , delimited_parsing, expect_test_helpers_core, perl, re, shellcheck }:
 
-buildDunePackage {
+buildDunePackage rec {
   pname = "euler";
   version = "0.5.0";
   useDune2 = true;
@@ -20,5 +20,6 @@ buildDunePackage {
     re
   ];
   checkInputs = [ shellcheck ];
+  passthru.checkInputs = checkInputs;
   meta = { homepage = "https://github.com/bcc32/projecteuler-ocaml"; };
 }

@@ -175,8 +175,8 @@ let main () = Number.n_initial |> Number.count_candidates |> printf "%d\n"
 (* 178653872807
    2.09186h *)
 
-include (val Solution.make
-               ~problem:
-                 (Tagged
-                    { number = 169; tag = "naive"; description = "slow, naive counting" })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Tagged { number = 169; tag = "naive"; description = "slow, naive counting" })
+         ~main)

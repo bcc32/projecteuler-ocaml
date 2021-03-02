@@ -26,7 +26,7 @@ let main () =
 (* 2240
    354ms *)
 
-include (val Solution.make
-               ~problem:
-                 (Tagged { number = 587; tag = "int"; description = "integration" })
-               ~main)
+include
+  (val Solution.make
+         ~problem:(Tagged { number = 587; tag = "int"; description = "integration" })
+         ~main)

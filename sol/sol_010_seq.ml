@@ -11,8 +11,8 @@ let main () =
 (* 142913828922
    912.866719ms *)
 
-include (val Solution.make
-               ~problem:
-                 (Tagged
-                    { number = 10; tag = "seq"; description = "using primes Sequence.t" })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Tagged { number = 10; tag = "seq"; description = "using primes Sequence.t" })
+         ~main)

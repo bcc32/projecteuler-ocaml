@@ -28,8 +28,8 @@ let main () =
 (* 837799
    484.910406ms *)
 
-include (val Solution.make
-               ~problem:
-                 (Tagged
-                    { number = 14; tag = "naive"; description = "brute-force method" })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Tagged { number = 14; tag = "naive"; description = "brute-force method" })
+         ~main)

@@ -22,11 +22,12 @@ let main () =
 
 (* 837799
    3.37354s *)
-include (val Solution.make
-               ~problem:
-                 (Tagged
-                    { number = 14
-                    ; tag = "memo"
-                    ; description = "slower method using hashtbl-memoized collatz_length"
-                    })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Tagged
+              { number = 14
+              ; tag = "memo"
+              ; description = "slower method using hashtbl-memoized collatz_length"
+              })
+         ~main)

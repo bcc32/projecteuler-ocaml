@@ -42,7 +42,8 @@ let main () =
 (* 6.3551679500
    39s *)
 
-include (val Solution.make
-               ~problem:
-                 (Tagged { number = 323; tag = "sim"; description = "Monte Carlo method" })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Tagged { number = 323; tag = "sim"; description = "Monte Carlo method" })
+         ~main)

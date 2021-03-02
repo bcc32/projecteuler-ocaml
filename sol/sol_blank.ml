@@ -6,11 +6,12 @@ let main () =
   printf "<dummy answer>\n"
 ;;
 
-include (val Solution.make
-               ~problem:
-                 (Custom
-                    { name = "blank"
-                    ; description =
-                        "dummy solution for benchmarking solution apparatus overhead"
-                    })
-               ~main)
+include
+  (val Solution.make
+         ~problem:
+           (Custom
+              { name = "blank"
+              ; description =
+                  "dummy solution for benchmarking solution apparatus overhead"
+              })
+         ~main)

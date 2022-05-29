@@ -28,17 +28,17 @@ let count_hybrids limit =
     Number_theory.prime_sieve max_q
     |> Array.filter_mapi ~f:(fun i b -> Option.some_if b (float i))
   in
+  (* Keep track of the maximum value of [p] for each value of [q].  The max [p] for [q']
+     is probably close to the max [p] for [q]. *)
+  let p_index = ref (-1) in
   Array.fold primes ~init:0 ~f:(fun count q ->
-    Array.fold_until
-      primes
-      ~init:count
-      ~f:(fun count p ->
-        if Float.( >= ) p q
-        then Stop count
-        else if compare_powers ~p ~q ~limit > 0
-        then Stop count
-        else Continue (count + 1))
-      ~finish:Fn.id)
+    (* If [p] is bounded by [q] and not [limit], increase it. *)
+    if Float.equal primes.(!p_index + 2) q then incr p_index;
+    (* Bound [p] by [limit] *)
+    while !p_index >= 0 && compare_powers ~p:primes.(!p_index) ~q ~limit > 0 do
+      decr p_index
+    done;
+    count + (!p_index + 1))
 ;;
 
 let main () =
@@ -46,7 +46,7 @@ let main () =
   print_s [%sexp (ans : int)]
 ;;
 
-(* 26.183500358s *)
+(* 348.114382ms *)
 let%expect_test "answer" =
   main ();
   [%expect {| 1412403576 |}]

@@ -3,9 +3,6 @@ open! Import
 
 (* Compare [p^q q^p] and [limit^limit] *)
 let compare_powers ~p ~q ~limit =
-  let p = float p in
-  let q = float q in
-  let limit = float limit in
   Float.compare ((p *. Float.log q) +. (q *. Float.log p)) (limit *. Float.log limit)
 ;;
 
@@ -25,19 +22,18 @@ let compare_powers ~p ~q ~limit =
 
    q <= limit log(limit) / log(2) *)
 let count_hybrids limit =
-  let max_q =
-    Float.iround_down_exn (float limit *. Float.log (float limit) /. Float.log 2.)
-  in
+  let limit = float limit in
+  let max_q = Float.iround_down_exn (limit *. Float.log limit /. Float.log 2.) in
   let primes =
     Number_theory.prime_sieve max_q
-    |> Array.filter_mapi ~f:(fun i b -> Option.some_if b i)
+    |> Array.filter_mapi ~f:(fun i b -> Option.some_if b (float i))
   in
   Array.fold primes ~init:0 ~f:(fun count q ->
     Array.fold_until
       primes
       ~init:count
       ~f:(fun count p ->
-        if p >= q
+        if Float.( >= ) p q
         then Stop count
         else if compare_powers ~p ~q ~limit > 0
         then Stop count
@@ -50,7 +46,7 @@ let main () =
   print_s [%sexp (ans : int)]
 ;;
 
-(* 27.452682727s *)
+(* 26.183500358s *)
 let%expect_test "answer" =
   main ();
   [%expect {| 1412403576 |}]

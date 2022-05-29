@@ -24,8 +24,9 @@ let compare_powers ~p ~q ~limit =
 let count_hybrids limit =
   let limit = float limit in
   let max_q = Float.iround_down_exn (limit *. Float.log limit /. Float.log 2.) in
+  if debug then Debug.eprint_s [%message (max_q : int)];
   let primes =
-    Number_theory.prime_sieve max_q
+    debug_timing ~here:[%here] ~task:"prime sieve" Number_theory.prime_sieve max_q
     |> Array.filter_mapi ~f:(fun i b -> Option.some_if b (float i))
   in
   (* Keep track of the maximum value of [p] for each value of [q].  The max [p] for [q']

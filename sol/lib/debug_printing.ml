@@ -11,13 +11,13 @@ module Export = struct
     | Some _ -> true
   ;;
 
-  let debug_timing here name f x =
+  let debug_timing here name f =
     if not debug
-    then f x
+    then f ()
     else (
       let start = Time_ns.now () in
       Debug.eprint_s [%message "starting" (name : string) (here : Source_code_position.t)];
-      protectx ~f x ~finally:(fun _ ->
+      protect ~f ~finally:(fun () ->
         let end_ = Time_ns.now () in
         let elapsed = Time_ns.diff end_ start in
         Debug.eprint_s

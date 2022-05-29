@@ -47,15 +47,11 @@ let%test_unit "vs naive" =
 
 let main () =
   let tiles_by_type = Hashtbl.create (module Int) in
-  debug_timing
-    [%here]
-    "iterating"
-    (fun () ->
-       for t = 1 to 1_000_000 do
-         if debug && t % 10_000 = 0 then Debug.eprintf "%d" t;
-         Hashtbl.add_multi tiles_by_type ~key:(count_square_laminae t) ~data:t
-       done)
-    ();
+  debug_timing [%here] "iterating" (fun () ->
+    for t = 1 to 1_000_000 do
+      if debug && t % 10_000 = 0 then Debug.eprintf "%d" t;
+      Hashtbl.add_multi tiles_by_type ~key:(count_square_laminae t) ~data:t
+    done);
   [%test_result: int]
     ~expect:832
     (Hashtbl.find_multi tiles_by_type 15 |> List.length)

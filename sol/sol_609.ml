@@ -64,17 +64,15 @@ module Int_with_modulus = struct
 end
 
 let main () =
-  let is_prime = debug_timing [%here] "sieving" Number_theory.prime_sieve limit in
+  let is_prime =
+    debug_timing [%here] "sieving" (fun () -> Number_theory.prime_sieve limit)
+  in
   let prime_pi =
     let cumulative_prime_count =
-      debug_timing
-        [%here]
-        "cumulative prime count"
-        (fun is_prime ->
-           Array.folding_map is_prime ~init:0 ~f:(fun num_primes is_prime ->
-             let num_primes = if is_prime then num_primes + 1 else num_primes in
-             num_primes, num_primes))
-        is_prime
+      debug_timing [%here] "cumulative prime count" (fun () ->
+        Array.folding_map is_prime ~init:0 ~f:(fun num_primes is_prime ->
+          let num_primes = if is_prime then num_primes + 1 else num_primes in
+          num_primes, num_primes))
     in
     fun n -> cumulative_prime_count.(n)
   in

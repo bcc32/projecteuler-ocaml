@@ -11,5 +11,5 @@ module Export : sig
 
   (** When [debug] is true, [debug_timing here f x] prints the elapsed time taken to
       evaluate (f x) and returns the result. *)
-  val debug_timing : Source_code_position.t -> string -> ('a -> 'b) -> 'a -> 'b
+  val debug_timing : Source_code_position.t -> string -> (unit -> 'a) -> 'a
 end

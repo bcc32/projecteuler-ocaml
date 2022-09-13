@@ -20,7 +20,7 @@ let main () =
   Sequence.range 1 1000
   |> Sequence.map ~f:(fun n -> n, cycle_length n)
   |> Sequence.max_elt ~compare:[%compare: _ * int]
-  |> uw
+  |> Option.value_exn
   |> fst
   |> printf "%d\n"
 ;;

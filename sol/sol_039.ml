@@ -13,7 +13,7 @@ let main () =
     done;
     p, !solutions)
   |> Sequence.max_elt ~compare:(fun (_, a) (_, b) -> Int.compare a b)
-  |> uw
+  |> Option.value_exn
   |> fst
   |> printf "%d\n"
 ;;

@@ -30,7 +30,7 @@
  (name euler_data)
  (libraries core delimited_parsing re)
  (preprocess
-  (pps ppx_jane -annotated-ignores -check-doc-comments)))
+  (pps ppx_jane)))
 
 (rule
  (targets euler_data.ml)

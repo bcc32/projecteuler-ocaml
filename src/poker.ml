@@ -160,12 +160,7 @@ module Hand_classification = struct
   let invariant t =
     Invariant.invariant [%here] t [%sexp_of: t] (fun () ->
       match t with
-      | High_card _
-      | One_pair _
-      | Two_pairs _
-      | Three_of_a_kind _
-      | Straight _
-      | Flush _
+      | High_card _ | One_pair _ | Two_pairs _ | Three_of_a_kind _ | Straight _ | Flush _
       | Full_house (_, _)
       | Four_of_a_kind _ | Royal_flush -> ()
       | Straight_flush r -> assert (Rank.( < ) r Rank.Ace))
@@ -224,7 +219,7 @@ module Hand = struct
       | [ (double, 2); (single_hi, 1); (single_md, 1); (single_lo, 1) ] ->
         One_pair (double, single_hi, single_md, single_lo)
       | [ (e, 1); (d, 1); (c, 1); (b, 1); (a, 1) ] -> High_card (e, d, c, b, a)
-      | _ -> failwithp [%here] "bug" t [%sexp_of: t])
+      | _ -> failwiths ~here:[%here] "bug" t [%sexp_of: t])
   ;;
 
   (* Examples taken from https://projecteuler.net/problem=54 *)

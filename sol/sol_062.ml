@@ -22,7 +22,7 @@ let find min_permutations =
     Hashtbl.add_multi cubes_by_digit_set ~key:ds ~data:c;
     let cubes = Hashtbl.find_multi cubes_by_digit_set ds in
     if List.length cubes >= min_permutations
-    then uw (List.min_elt cubes ~compare:Int.compare)
+    then Option.value_exn (List.min_elt cubes ~compare:Int.compare)
     else loop (n + 1)
   in
   loop 1

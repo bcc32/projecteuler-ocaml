@@ -35,9 +35,9 @@ let make ~(problem : Solution_id.t) ~main =
       if print_debug && not Debug_printing.Export.debug
       then
         never_returns
-          (Unix.exec
+          (Core_unix.exec
              ()
-             ~prog:Sys.executable_name
+             ~prog:Sys_unix.executable_name
              ~argv:(Array.to_list (Sys.get_argv ()))
              ~env:(`Extend [ "EULER_DEBUG", "1" ]));
       if print_elapsed_time then time_unit main () else main ()

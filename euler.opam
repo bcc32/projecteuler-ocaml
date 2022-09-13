@@ -16,11 +16,11 @@ build: [
 depends: [
   "dune" {build}
 
-  "bignum"                     {>= "v0.14.0" & < "v0.15.0"}
-  "core"                       {>= "v0.14.0" & < "v0.15.0"}
-  "core_bench"                 {>= "v0.14.0" & < "v0.15.0"}
-  "delimited_parsing"          {>= "v0.14.0" & < "v0.15.0"}
-  "expect_test_helpers_core"   {>= "v0.14.0" & < "v0.15.0"}
+  "bignum"                     {>= "v0.15.0" & < "v0.16.0"}
+  "core"                       {>= "v0.15.0" & < "v0.16.0"}
+  "core_bench"                 {>= "v0.15.0" & < "v0.16.0"}
+  "delimited_parsing"          {>= "v0.15.0" & < "v0.16.0"}
+  "expect_test_helpers_core"   {>= "v0.15.0" & < "v0.16.0"}
 
   "cmdliner" {>= "1.0.0" & < "2.0.0"}
   "re" {>= "1.0" & < "2.0"}

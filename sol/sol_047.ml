@@ -10,14 +10,16 @@ let main () =
   in
   let each_consecutive_4 =
     let dpf = distinct_prime_factors in
-    let a, dpf = uw (Sequence.next dpf) in
-    let b, dpf = uw (Sequence.next dpf) in
-    let c, dpf = uw (Sequence.next dpf) in
+    let a, dpf = Option.value_exn (Sequence.next dpf) in
+    let b, dpf = Option.value_exn (Sequence.next dpf) in
+    let c, dpf = Option.value_exn (Sequence.next dpf) in
     Sequence.folding_map dpf ~init:(a, b, c) ~f:(fun (a, b, c) d ->
       (b, c, d), (a, b, c, d))
   in
   let rec loop seq =
-    let ((a, apf), (_, bpf), (_, cpf), (_, dpf)), seq = uw (Sequence.next seq) in
+    let ((a, apf), (_, bpf), (_, cpf), (_, dpf)), seq =
+      Option.value_exn (Sequence.next seq)
+    in
     (* Check [dpf] first à la Boyer-Moore:
        https://en.wikipedia.org/wiki/Boyer%E2%80%93Moore_string-search_algorithm.
 

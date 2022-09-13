@@ -4,4 +4,4 @@
  (libraries cmdliner core core_bench euler euler_solution_helpers
    euler_solutions)
  (preprocess
-  (pps ppx_jane -annotated-ignores -check-doc-comments)))
+  (pps ppx_jane)))

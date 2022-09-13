@@ -97,7 +97,7 @@ let main () =
     if debug then Debug.eprint_s [%sexp (x : int list)];
     List.sum (module Int) x ~f:Fn.id)
   |> Sequence.min_elt ~compare:Int.compare
-  |> uw
+  |> Option.value_exn
   |> printf "%d\n"
 ;;
 

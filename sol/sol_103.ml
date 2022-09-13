@@ -56,7 +56,7 @@ let optimum_special_set n ~ubound =
   sets n ~ubound
   |> Sequence.filter ~f:is_special
   |> Sequence.min_elt ~compare:compare_by_sum
-  |> uw
+  |> Option.value_exn
 ;;
 
 let%expect_test _ =

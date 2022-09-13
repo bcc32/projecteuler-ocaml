@@ -1,6 +1,6 @@
 (library
  (name euler_solution_helpers)
- (libraries core)
+ (libraries core core_unix core_unix.sys_unix)
  (preprocess
-  (pps ppx_jane -annotated-ignores -check-doc-comments))
+  (pps ppx_jane))
  (inline_tests))

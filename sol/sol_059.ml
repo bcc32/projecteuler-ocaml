@@ -28,11 +28,10 @@ let best_key_char ~key_index ~ciphertext =
   List.map Char.all ~f:(fun c ->
     ( c
     , String.foldi ciphertext ~init:0 ~f:(fun i ac x ->
-        if i mod key_length = key_index && is_english_char (c lxor x)
-        then ac + 1
-        else ac) ))
+        if i mod key_length = key_index && is_english_char (c lxor x) then ac + 1 else ac)
+    ))
   |> List.max_elt ~compare:[%compare: _ * int]
-  |> uw
+  |> Option.value_exn
   |> fst
 ;;
 

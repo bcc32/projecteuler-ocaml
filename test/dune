@@ -2,5 +2,5 @@
  (name euler_test)
  (libraries bignum core euler expect_test_helpers_core)
  (preprocess
-  (pps ppx_jane -annotated-ignores -check-doc-comments))
+  (pps ppx_jane))
  (inline_tests))

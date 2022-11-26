@@ -13,7 +13,9 @@ let verbose_arg =
 ;;
 
 let list_command =
-  Term.(const list_solutions $ verbose_arg, info "list" ~doc:"List solution commands")
+  Cmd.v
+    (Cmd.info "list" ~doc:"List solution commands")
+    Term.(const list_solutions $ verbose_arg)
 ;;
 
 let debug_arg =
@@ -21,7 +23,7 @@ let debug_arg =
     value
     & flag
     & info
-        ~env:(env_var "EULER_DEBUG")
+        ~env:(Cmd.Env.info "EULER_DEBUG")
         [ "d"; "debug" ]
         ~doc:"Enable debug/progress printing")
 ;;
@@ -39,7 +41,7 @@ let run_solution name debug time =
 ;;
 
 let run_command =
-  Term.(
-    ( term_result (const run_solution $ name_arg $ debug_arg $ time_arg)
-    , info "run" ~doc:"Run a solution (by name)" ))
+  Cmd.v
+    (Cmd.info "run" ~doc:"Run a solution (by name)")
+    Term.(term_result (const run_solution $ name_arg $ debug_arg $ time_arg))
 ;;

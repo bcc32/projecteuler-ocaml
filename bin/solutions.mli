@@ -1,5 +1,5 @@
 open! Core
 open! Import
 
-val list_command : unit Term.t * Term.info
-val run_command : unit Term.t * Term.info
+val list_command : unit Cmd.t
+val run_command : unit Cmd.t

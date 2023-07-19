@@ -8,32 +8,32 @@ let iter_connected_primes limit =
   stage
     ( is_prime
     , fun ~from:base_prime ~f ->
-      let digits = Number_theory.Int.As_base10.to_array base_prime in
-      let call_f_if_prime p = if p < Array.length is_prime && is_prime.(p) then f p in
-      (* One digit changed *)
-      for i = 0 to Array.length digits - 1 do
-        let base_prime_digit = digits.(i) in
-        for d = 0 to 9 do
-          if d <> base_prime_digit
-          then (
-            digits.(i) <- d;
-            call_f_if_prime (of_digits digits))
+        let digits = Number_theory.Int.As_base10.to_array base_prime in
+        let call_f_if_prime p = if p < Array.length is_prime && is_prime.(p) then f p in
+        (* One digit changed *)
+        for i = 0 to Array.length digits - 1 do
+          let base_prime_digit = digits.(i) in
+          for d = 0 to 9 do
+            if d <> base_prime_digit
+            then (
+              digits.(i) <- d;
+              call_f_if_prime (of_digits digits))
+          done;
+          digits.(i) <- base_prime_digit
         done;
-        digits.(i) <- base_prime_digit
-      done;
-      (* Digit added *)
-      let digits_with_one_added =
-        Array.init
-          (Array.length digits + 1)
-          ~f:(fun i -> if i = 0 then 0 else digits.(i - 1))
-      in
-      for new_digit = 0 to 9 do
-        digits_with_one_added.(0) <- new_digit;
-        call_f_if_prime (of_digits digits_with_one_added)
-      done;
-      (* Digit removed *)
-      if Array.length digits > 1
-      then call_f_if_prime (Array.subo digits ~pos:1 |> of_digits) )
+        (* Digit added *)
+        let digits_with_one_added =
+          Array.init
+            (Array.length digits + 1)
+            ~f:(fun i -> if i = 0 then 0 else digits.(i - 1))
+        in
+        for new_digit = 0 to 9 do
+          digits_with_one_added.(0) <- new_digit;
+          call_f_if_prime (of_digits digits_with_one_added)
+        done;
+        (* Digit removed *)
+        if Array.length digits > 1
+        then call_f_if_prime (Array.subo digits ~pos:1 |> of_digits) )
 ;;
 
 let%expect_test _ =
@@ -72,8 +72,8 @@ let sum_primes_not_2's_relatives limit =
        iter_connected_primes ~from:n ~f:(fun p ->
          let new_distance_for_p = Int.max d p in
          if (not (Hashtbl.mem distance_known p))
-         && ((not (Priority_queue.mem distance p))
-             || Priority_queue.find_exn distance p > new_distance_for_p)
+            && ((not (Priority_queue.mem distance p))
+                || Priority_queue.find_exn distance p > new_distance_for_p)
          then Priority_queue.replace distance ~key:p ~data:new_distance_for_p)
      done
    with

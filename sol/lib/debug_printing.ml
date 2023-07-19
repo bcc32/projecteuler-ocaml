@@ -2,7 +2,7 @@ open! Core
 open! Import
 
 (* TODO: Shadow Debug module so that functions automatically check
-   [debug] flag.  *)
+   [debug] flag. *)
 
 module Export = struct
   let debug =

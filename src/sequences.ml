@@ -57,7 +57,7 @@ let permutations list ~compare =
       if next_permutation_inplace a ~compare
       then (
         let next = Array.to_list a in
-        Yield (next, next))
+        Yield { value = next; state = next })
       else Done)
   in
   Sequence.shift_right next_permutations init
@@ -99,6 +99,8 @@ let find_cycle' sequence ~equal =
 
 let find_cycle ~start ~f ~equal =
   (* We should never reach the end of this infinite sequence. *)
-  find_cycle' ~equal (Sequence.unfold_step ~init:start ~f:(fun x -> Yield (x, f x)))
+  find_cycle'
+    ~equal
+    (Sequence.unfold_step ~init:start ~f:(fun x -> Yield { value = x; state = f x }))
   |> Option.value_exn
 ;;

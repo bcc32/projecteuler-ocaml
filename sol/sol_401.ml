@@ -3,7 +3,7 @@ open! Import
 
 let run_all_unit_tests = false
 
-(* TODO: Add this to euler_lib.  *)
+(* TODO: Add this to euler_lib. *)
 (*
    {[
      module Int_detecting_overflow = struct
@@ -40,7 +40,8 @@ let run_all_unit_tests = false
 
      module Strict_integer_division = struct
        let ( / ) a b =
-         if a % b <> 0 then raise_s [%message "division would truncate" (a : int) (b : int)];
+         if a % b <> 0
+         then raise_s [%message "division would truncate" (a : int) (b : int)];
          a / b
        ;;
      end

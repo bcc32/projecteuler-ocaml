@@ -19,7 +19,7 @@ end
     functions. *)
 module type Monad2_with_explicit_key = sig
   type ('key, 'cmp) t
-  type ('key, 'cmp) key = ('key, 'cmp) Map.comparator
+  type ('key, 'cmp) key = ('key, 'cmp) Comparator.Module.t
 
   val return : ('k, 'c) key -> 'k -> ('k, 'c) t
 
@@ -60,7 +60,7 @@ end
     versions. *)
 module type Monad2_with_fixed_key = sig
   type ('key, 'cmp) t
-  type ('key, 'cmp) key = ('key, 'cmp) Map.comparator
+  type ('key, 'cmp) key = ('key, 'cmp) Comparator.Module.t
 
   val return : ('k, 'c) key -> 'k -> ('k, 'c) t
 
@@ -114,11 +114,11 @@ module type Quickcheck_m = sig
 end
 
 (** This module exists only to test that [(module Quickcheck_m)]
-    satisfies [Map.comparator]. *)
+    satisfies [Comparator.Module.t]. *)
 module Test_key_with_quickcheck_contains_comparator = struct
   module K : Quickcheck_m = Int
 
-  let (_ : (_, _) Map.comparator) = (module K)
+  let (_ : (_, _) Comparator.Module.t) = (module K)
 end
 
 (** Discrete probability distributions *)
@@ -128,7 +128,7 @@ module type S = sig
 
   val sexp_of_t : ('k -> Sexp.t) -> ('k, 'c) t -> Sexp.t
 
-  type ('key, 'cmp) key = ('key, 'cmp) Map.comparator
+  type ('key, 'cmp) key = ('key, 'cmp) Comparator.Module.t
 
   module Prob : Prob
 
@@ -143,13 +143,13 @@ module type S = sig
 
   include
     Monad2_with_fixed_key
-    with type ('key, 'cmp) t := ('key, 'cmp) t
-    with type ('key, 'cmp) key := ('key, 'cmp) key
+      with type ('key, 'cmp) t := ('key, 'cmp) t
+      with type ('key, 'cmp) key := ('key, 'cmp) key
 
   include
     Monad2_with_explicit_key
-    with type ('key, 'cmp) t := ('key, 'cmp) t
-    with type ('key, 'cmp) key := ('key, 'cmp) key
+      with type ('key, 'cmp) t := ('key, 'cmp) t
+      with type ('key, 'cmp) key := ('key, 'cmp) key
 
   (** [support t] returns a list of the possible outcomes described by the
       distribution [t] *)

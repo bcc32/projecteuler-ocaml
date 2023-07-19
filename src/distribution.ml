@@ -5,7 +5,7 @@ include Distribution_intf
 module Make (Prob : Prob) : S with module Prob = Prob = struct
   module Prob = Prob
 
-  type ('key, 'cmp) key = ('key, 'cmp) Map.comparator
+  type ('key, 'cmp) key = ('key, 'cmp) Comparator.Module.t
   type ('key, 'cmp) t = ('key, Prob.t, 'cmp) Map.t
 
   let compare a b = Map.compare_direct Prob.compare a b

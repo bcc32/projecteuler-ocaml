@@ -250,8 +250,8 @@ end = struct
      probably give the same result but (shrug). *)
   type t =
     { square : (Square.t, Square.comparator_witness) D.t
-    (* chance and community_chest are stored in order of the top of the stack to
-       the bottom *)
+        (* chance and community_chest are stored in order of the top of the stack to
+           the bottom *)
     ; chance : (Chance_card.t, Chance_card.comparator_witness) D.t list
     ; community_chest :
         (Community_chest_card.t, Community_chest_card.comparator_witness) D.t list

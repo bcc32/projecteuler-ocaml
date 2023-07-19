@@ -29,8 +29,7 @@ let primes_with_runs ~main_digit ~num_digits =
         if digits.(0) <> 0
         then (
           let n =
-            Array.to_sequence_mutable digits
-            |> Number_theory.Int.As_base10.of_sequence
+            Array.to_sequence_mutable digits |> Number_theory.Int.As_base10.of_sequence
           in
           if Number_theory.Int.is_prime n then sum := !sum + n));
       if !sum <> 0 then return !sum

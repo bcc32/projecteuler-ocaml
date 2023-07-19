@@ -13,7 +13,7 @@ let main () =
     let init = of_int 1 + (1 // 2) in
     Sequence.unfold_step ~init ~f:(fun s ->
       let next = of_int 1 + (of_int 1 / (of_int 1 + s)) in
-      Yield (s, next))
+      Yield { value = s; state = next })
   in
   expansions
   |> Fn.flip Sequence.take 1000

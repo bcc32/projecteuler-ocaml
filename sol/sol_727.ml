@@ -61,14 +61,12 @@ let re ({ ra; rb; rc } : Givens.t) =
 (* Find a point whose distance from B is rb + re and whose distance from C is rc + re.
 
    {v
-
      x^2 + y^2 = (rb + re)^2                                 (1)
      (x - (rb + rc))^2 + y^2 = (rc + re)^2                   (2)
      x^2 - 2(rb + rc)x + (rb + rc)^2 + y^2 = (rc + re)^2     (2)
      2(rb + rc)x = (rb + re)^2 + (rb + rc)^2 - (rc + re)^2   (1) - (2)
      x = ((rb + re)^2 + (rb + rc)^2 - (rc + re)^2) / (2(rb + rc))
-
-     v} *)
+   v} *)
 let coord_e ({ ra = _; rb; rc } as givens : Givens.t) =
   let open Float.O in
   let re = re givens in

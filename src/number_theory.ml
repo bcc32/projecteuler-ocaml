@@ -269,7 +269,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   let primes =
     Sequence.unfold_step ~init:two ~f:(fun p ->
       let next = next_prime p in
-      Yield (p, next))
+      Yield { value = p; state = next })
   ;;
 
   let range ?(stride = one) ?(start = `inclusive) ?(stop = `exclusive) a b =
@@ -290,7 +290,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
       | Zero -> invalid_arg "stride is zero"
     in
     Sequence.unfold_step ~init ~f:(fun n ->
-      if n <= b then Yield (n, n + stride) else Done)
+      if n <= b then Yield { value = n; state = n + stride } else Done)
   ;;
 
   (* TODO handle negative numbers? *)
@@ -537,7 +537,8 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let fibonacci =
-    Sequence.unfold_step ~init:(zero, one) ~f:(fun (a, b) -> Yield (a, (b, a + b)))
+    Sequence.unfold_step ~init:(zero, one) ~f:(fun (a, b) ->
+      Yield { value = a; state = b, a + b })
   ;;
 
   (* https://www.nayuki.io/page/fast-fibonacci-algorithms *)
@@ -556,7 +557,7 @@ module Make (Integer : Int_intf.S_unbounded) : S with type integer = Integer.t =
   ;;
 
   let natural_numbers ?(init = zero) () =
-    Sequence.unfold_step ~init ~f:(fun n -> Yield (n, Integer.succ n))
+    Sequence.unfold_step ~init ~f:(fun n -> Yield { value = n; state = Integer.succ n })
   ;;
 
   let addition_chain_pow = addition_chain_pow_gen ~one ~mul:( * )

@@ -29,8 +29,8 @@ let main () =
             let z = y - y_z in
             if z <= 0 then break ();
             if is_perfect_square (y + z)
-            && is_perfect_square (x + z)
-            && is_perfect_square (x - z)
+               && is_perfect_square (x + z)
+               && is_perfect_square (x - z)
             then return (x + y + z))));
     loop return (x + 1)
   in

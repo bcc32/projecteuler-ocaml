@@ -98,21 +98,21 @@ end = struct
     | One :: tl ->
       count_candidates tl
       +
-      (match add_from_left tl Two with
-       | carry -> count_candidates carry (* equal to count of (Zero :: carry) *)
-       | exception Can't_add -> 0)
+        (match add_from_left tl Two with
+        | carry -> count_candidates carry (* equal to count of (Zero :: carry) *)
+        | exception Can't_add -> 0)
     | Two :: tl ->
       count_candidates tl
       +
-      (match add_from_left tl Two with
-       | carry ->
-         (* count_candidates (One :: carry) *)
-         count_candidates carry
-         +
-         (match add_from_left carry Two with
-          | carry -> count_candidates carry
-          | exception Can't_add -> 0)
-       | exception Can't_add -> 0)
+        (match add_from_left tl Two with
+        | carry ->
+          (* count_candidates (One :: carry) *)
+          count_candidates carry
+          +
+            (match add_from_left carry Two with
+            | carry -> count_candidates carry
+            | exception Can't_add -> 0)
+        | exception Can't_add -> 0)
   ;;
 
   let sexp_of_t t =
@@ -146,7 +146,7 @@ let%expect_test "pattern" =
     print_s
       [%sexp
         (i : Int.Hex.t)
-      , (Number.count_candidates (i |> Bigint.of_int |> Number.of_bigint) : int)]
+        , (Number.count_candidates (i |> Bigint.of_int |> Number.of_bigint) : int)]
   done;
   [%expect
     {|

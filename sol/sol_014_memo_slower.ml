@@ -7,9 +7,9 @@ let collatz_length =
   Memo.recursive
     (module Int)
     (fun collatz_length n ->
-       match n with
-       | 1 -> 1
-       | n -> 1 + collatz_length (collatz n))
+      match n with
+      | 1 -> 1
+      | n -> 1 + collatz_length (collatz n))
 ;;
 
 let main () =

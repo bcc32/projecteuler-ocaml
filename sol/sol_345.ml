@@ -16,14 +16,14 @@ let max_sum grid =
     Memo.recursive
       (module Cache_key)
       (fun loop { upto_row; colset } ->
-         if upto_row < 0
-         then 0
-         else
-           Bitset.fold colset ~init:0 ~f:(fun best col ->
-             let cand =
-               loop { upto_row = upto_row - 1; colset = Bitset.remove colset col }
-             in
-             Int.max best (cand + grid.(upto_row).(col))))
+        if upto_row < 0
+        then 0
+        else
+          Bitset.fold colset ~init:0 ~f:(fun best col ->
+            let cand =
+              loop { upto_row = upto_row - 1; colset = Bitset.remove colset col }
+            in
+            Int.max best (cand + grid.(upto_row).(col))))
   in
   loop
     { upto_row = Array.length grid - 1

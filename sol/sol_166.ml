@@ -9,7 +9,7 @@ let[@inline always] is_in_range x = x >= 0 && x <= 9
        e f g h
        i j k l
        m n o p
-     v}
+   v}
 *)
 
 let main () =

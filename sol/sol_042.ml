@@ -10,8 +10,8 @@ let is_triangle_number =
   Memo.simple
     (module Int)
     (fun t ->
-       let n = Float.(sqrt (of_int t * 2.0) |> to_int) in
-       t = n * (n + 1) / 2)
+      let n = Float.(sqrt (of_int t * 2.0) |> to_int) in
+      t = n * (n + 1) / 2)
 ;;
 
 let main () =

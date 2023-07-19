@@ -5,18 +5,18 @@ let partition_int : int -> int list list =
   Memo.simple
     (module Int)
     (fun n ->
-       let rec partition_int n ~largest_part =
-         if n = 0
-         then [ [] ]
-         else (
-           let largest_part = Int.min n largest_part in
-           List.range 1 largest_part ~stop:`inclusive
-           |> List.concat_map ~f:(fun k ->
-             List.map
-               (partition_int (n - k) ~largest_part:k)
-               ~f:(fun partition -> k :: partition)))
-       in
-       partition_int n ~largest_part:n)
+      let rec partition_int n ~largest_part =
+        if n = 0
+        then [ [] ]
+        else (
+          let largest_part = Int.min n largest_part in
+          List.range 1 largest_part ~stop:`inclusive
+          |> List.concat_map ~f:(fun k ->
+            List.map
+              (partition_int (n - k) ~largest_part:k)
+              ~f:(fun partition -> k :: partition)))
+      in
+      partition_int n ~largest_part:n)
 ;;
 
 let ways_to_arrange num_digits ~nonzero_digits =

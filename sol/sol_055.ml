@@ -9,7 +9,7 @@ let is_palindrome n =
 let is_lychrel n =
   Sequence.unfold_step ~init:n ~f:(fun n ->
     let next = Bigint.(n + (n |> to_string |> String.rev |> of_string)) in
-    Yield (next, next))
+    Yield { value = next; state = next })
   |> Fn.flip Sequence.take 50
   |> Sequence.exists ~f:is_palindrome
   |> not

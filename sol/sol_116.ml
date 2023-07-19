@@ -13,14 +13,14 @@ let ways_to_replace =
   Memo.recursive
     (module Cache_key)
     (fun ways_to_replace { total_size; block_size } ->
-       if block_size > total_size
-       then 1
-       else (
-         let gray_tile = ways_to_replace { total_size = total_size - 1; block_size } in
-         let colored_tile =
-           ways_to_replace { total_size = total_size - block_size; block_size }
-         in
-         gray_tile + colored_tile))
+      if block_size > total_size
+      then 1
+      else (
+        let gray_tile = ways_to_replace { total_size = total_size - 1; block_size } in
+        let colored_tile =
+          ways_to_replace { total_size = total_size - block_size; block_size }
+        in
+        gray_tile + colored_tile))
 ;;
 
 let main () =

@@ -5,8 +5,8 @@ let sum_proper_divisors =
   Memo.simple
     (module Int)
     (fun n ->
-       let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in
-       sd - n)
+      let sd = List.sum (module Int) (Number_theory.Int.divisors n) ~f:Fn.id in
+      sd - n)
 ;;
 
 let amicable n =

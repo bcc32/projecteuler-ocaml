@@ -13,21 +13,20 @@ let can_win =
   Memo.recursive
     (module State)
     (fun can_win ({ heap_size; last_taken } : State.t) ->
-       if heap_size = 0
-       then false
-       else if heap_size <= last_taken * 2
-       then true
-       else
-         Sequence.range 1 (last_taken * 2) ~stop:`inclusive
-         |> Sequence.exists ~f:(fun move ->
-           not (can_win { heap_size = heap_size - move; last_taken = move })))
+      if heap_size = 0
+      then false
+      else if heap_size <= last_taken * 2
+      then true
+      else
+        Sequence.range 1 (last_taken * 2) ~stop:`inclusive
+        |> Sequence.exists ~f:(fun move ->
+          not (can_win { heap_size = heap_size - move; last_taken = move })))
 ;;
 
 let siegbert_min_winning_move heap_size =
   Sequence.range 1 heap_size ~stop:`inclusive
   |> Sequence.find_exn ~f:(fun siegbert_move ->
-    not
-      (can_win { heap_size = heap_size - siegbert_move; last_taken = siegbert_move }))
+    not (can_win { heap_size = heap_size - siegbert_move; last_taken = siegbert_move }))
 ;;
 
 let%expect_test "examples" =
@@ -151,7 +150,6 @@ let%expect_test "pattern" =
 
 (* The 80th Fibonacci number *)
 let ubound = 23_416_728_348_467_685
-
 let%test _ = ubound = (Number_theory.Int.fibonacci |> Fn.flip Sequence.nth_exn 80)
 
 let g_fibonacci =
@@ -165,11 +163,11 @@ let g_fibonacci =
   Memo.recursive
     (module Int)
     (fun g_fibonacci n ->
-       if n = 1 || n = 2
-       then 1
-       else (
-         let fibonacci = force fibonacci in
-         g_fibonacci (n - 2) + g_fibonacci (n - 1) + fibonacci (n - 1)))
+      if n = 1 || n = 2
+      then 1
+      else (
+        let fibonacci = force fibonacci in
+        g_fibonacci (n - 2) + g_fibonacci (n - 1) + fibonacci (n - 1)))
 ;;
 
 let%expect_test "debug" =

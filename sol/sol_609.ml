@@ -11,11 +11,9 @@ let pi_sequences u0 ~is_prime ~prime_pi =
     then Done
     else (
       let next = prime_pi n in
-      Yield (n, next)))
+      Yield { value = n; state = next }))
   |> Sequence.folding_map ~init:0 ~f:(fun num_non_prime n ->
-    let num_non_prime =
-      if not (is_prime n) then num_non_prime + 1 else num_non_prime
-    in
+    let num_non_prime = if not (is_prime n) then num_non_prime + 1 else num_non_prime in
     num_non_prime, (n, num_non_prime))
 ;;
 

@@ -11,7 +11,7 @@ val is_palindrome : (module Equal.S with type t = 'a) -> 'a list -> bool
 
 (** {1 Run-length encoding}
 
-    See {{:https://en.wikipedia.org/wiki/Run-length_encoding}Wikipedia} for
+    See {{:https://en.wikipedia.org/wiki/Run-length_encoding} Wikipedia} for
     background. *)
 
 (** [run_length_encode xs] returns a list of [(element, count)] pairs in the

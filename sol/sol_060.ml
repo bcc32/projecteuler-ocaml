@@ -5,9 +5,7 @@ let limit = 100_000_000
 
 (* log10(limit) *)
 let limit_digits = 8
-
 let%test "limit_digits" = Int.pow 10 limit_digits = limit
-
 let is_prime = lazy (Number_theory.prime_sieve limit)
 
 let primes : (int, immutable) Array.Permissioned.t Lazy.t =
@@ -91,7 +89,7 @@ let length = 5
 let main () =
   ignore
     (debug_timing [%here] "sieving" (fun () -> force primes)
-     : (int, _) Array.Permissioned.t);
+      : (int, _) Array.Permissioned.t);
   find_prime_pair_sets length length
   |> Sequence.map ~f:(fun x ->
     if debug then Debug.eprint_s [%sexp (x : int list)];

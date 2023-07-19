@@ -26,7 +26,7 @@ module type S = sig
       0].
 
       @return a value in [[lo, hi]] no farther than [epsilon] from a solution to
-      [f x = 0]. *)
+              [f x = 0]. *)
   val bisect : f:(real -> real) -> epsilon:real -> lo:real -> hi:real -> real
 
   (** Integrate [f] numerically on the interval (lo, hi), approximating with

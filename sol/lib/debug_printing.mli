@@ -6,7 +6,7 @@ module Export : sig
       solutions.
 
       Enabled by setting the [EULER_DEBUG] environment variable to a non-empty
-      string.  *)
+      string. *)
   val debug : bool
 
   (** When [debug] is true, [debug_timing here f x] prints the elapsed time taken to

@@ -4,22 +4,24 @@ open! Import
 (* TODO: Make an int-as-prime-factors-representation arithmetic library. *)
 
 let multiply_factors a b =
-  Map.merge a b ~f:(fun ~key:_ -> function
-    | `Both (x, y) -> Some (x + y)
-    | `Left x -> Some x
-    | `Right x -> Some x)
+  Map.merge a b ~f:(fun ~key:_ ->
+      function
+      | `Both (x, y) -> Some (x + y)
+      | `Left x -> Some x
+      | `Right x -> Some x)
 ;;
 
 let divide_factors a b =
-  Map.merge a b ~f:(fun ~key:_ -> function
-    | `Both (x, y) ->
-      if x = y
-      then None
-      else (
-        assert (x > y);
-        Some (x - y))
-    | `Left x -> Some x
-    | `Right _ -> assert false)
+  Map.merge a b ~f:(fun ~key:_ ->
+      function
+      | `Both (x, y) ->
+        if x = y
+        then None
+        else (
+          assert (x > y);
+          Some (x - y))
+      | `Left x -> Some x
+      | `Right _ -> assert false)
 ;;
 
 let pow_factors base expt = Map.map base ~f:(fun e -> e * expt)

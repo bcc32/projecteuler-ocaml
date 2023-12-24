@@ -89,7 +89,7 @@ let length = 5
 let main () =
   ignore
     (debug_timing [%here] "sieving" (fun () -> force primes)
-      : (int, _) Array.Permissioned.t);
+     : (int, _) Array.Permissioned.t);
   find_prime_pair_sets length length
   |> Sequence.map ~f:(fun x ->
     if debug then Debug.eprint_s [%sexp (x : int list)];

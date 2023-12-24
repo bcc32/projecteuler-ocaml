@@ -2,7 +2,7 @@
   description = "Solutions to ProjectEuler problems in OCaml";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     ocaml-overlays.url = "github:nix-ocaml/nix-overlays";
     ocaml-overlays.inputs.nixpkgs.follows = "nixpkgs";

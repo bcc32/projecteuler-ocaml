@@ -30,6 +30,7 @@
           buildInputs = lib.optional stdenv.isLinux inotify-tools ++ [
             ocamlPackages.merlin
             ocamlformat
+            ocamlPackages.ocaml-lsp
             ocamlPackages.ocp-indent
             ocamlPackages.utop
           ];

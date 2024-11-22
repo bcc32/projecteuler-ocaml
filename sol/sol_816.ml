@@ -58,8 +58,10 @@ let%expect_test "example" =
    b.  Substituting, we get num_calculations ~= 5 k^2 z^2 / modulus^2.
 
    Based on the example, we know that z < 550_000, but we can guess a smaller number and
-   check our assumption at the end for correctness. *)
-let solve points z =
+   check our assumption at the end for correctness.
+
+   Similar to griff's solution at https://projecteuler.net/thread=816#409577. *)
+let solve_with_grid points z =
   let num_buckets_1d = (modulus / z) + 1 in
   let grid =
     debug_timing [%here] "allocate grid" (fun () ->
@@ -71,22 +73,31 @@ let solve points z =
       let grid_y = y / z in
       grid.(grid_x).(grid_y) <- (x, y) :: grid.(grid_x).(grid_y)));
   let best_dist2 = ref Int.max_value in
+  let try_points p1 p2 =
+    let d = dist2 p1 p2 in
+    if d < !best_dist2 then best_dist2 := d
+  in
   let check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2 =
     let points1 = grid.(grid_x_1).(grid_y_1) in
     let points2 = grid.(grid_x_2).(grid_y_2) in
-    List.iter points1 ~f:(fun p1 ->
-      List.iter points2 ~f:(fun p2 ->
-        let d = dist2 p1 p2 in
-        if d <> 0 && d < !best_dist2 then best_dist2 := d))
+    if phys_equal points1 points2
+    then (
+      let rec loop list =
+        match list with
+        | [] -> ()
+        | p1 :: tl ->
+          List.iter tl ~f:(fun p2 -> try_points p1 p2);
+          loop tl
+      in
+      loop points1)
+    else
+      List.iter points1 ~f:(fun p1 -> List.iter points2 ~f:(fun p2 -> try_points p1 p2))
   in
   debug_timing [%here] "check points in adjacent buckets" (fun () ->
     for grid_x_1 = 0 to num_buckets_1d - 1 do
       for grid_y_1 = 0 to num_buckets_1d - 1 do
         List.iter
-          [ ( grid_x_1
-            , grid_y_1
-              (* We could be more clever and avoid symmetrically trying pairs within the
-                 same bucket, but meh. *) )
+          [ grid_x_1, grid_y_1
           ; grid_x_1 + 1, grid_y_1
           ; grid_x_1 + 1, grid_y_1 + 1
           ; grid_x_1 + 1, grid_y_1 - 1
@@ -105,16 +116,51 @@ let solve points z =
   best_dist
 ;;
 
-let example_with_grid () = solve (points 14) 600_000 |> printf "%.9f\n"
+let example_with_grid () = solve_with_grid (points 14) 600_000 |> printf "%.9f\n"
 
 let%expect_test "example_with_grid" =
   example_with_grid ();
   [%expect {| 546446.466846479 |}]
 ;;
 
-let main () = solve (points 2_000_000) 100_000 |> printf "%.9f\n"
+let main_with_grid () = solve_with_grid (points 2_000_000) 100_000 |> printf "%.9f\n"
 
 (* 900ms *)
+let%expect_test "answer_with_grid" =
+  main_with_grid ();
+  [%expect {| 20.880613018 |}]
+;;
+
+let solve_dynamic points =
+  let points =
+    debug_timing [%here] "allocating points" (fun () -> Sequence.to_array points)
+  in
+  let best_dist = ref Float.infinity in
+  debug_timing [%here] "sorting points by x-coord" (fun () ->
+    Array.sort points ~compare:[%compare: int * int]);
+  debug_timing [%here] "comparing points along x-axis" (fun () ->
+    for i = 0 to Array.length points - 1 do
+      with_return (fun { return = break } ->
+        for j = i + 1 to Array.length points - 1 do
+          if Float.( <= ) !best_dist (float (fst points.(j) - fst points.(i)))
+          then break ();
+          let d = dist2 points.(i) points.(j) |> float |> sqrt in
+          if Float.( < ) d !best_dist then best_dist := d
+        done)
+    done);
+  !best_dist
+;;
+
+let example_dynamic () = solve_dynamic (points 14) |> printf "%.9f\n"
+
+let%expect_test "example_dynamic" =
+  example_dynamic ();
+  [%expect {| 546446.466846479 |}]
+;;
+
+let main () = solve_dynamic (points 2_000_000) |> printf "%.9f\n"
+
+(* 1.06s *)
 let%expect_test "answer" =
   main ();
   [%expect {| 20.880613018 |}]

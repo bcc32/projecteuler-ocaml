@@ -13,15 +13,13 @@ let points k =
   |> Fn.flip Sequence.take k
 ;;
 
-let dist (x1, y1) (x2, y2) =
-  sqrt (float ((x2 - x1) * (x2 - x1)) +. float ((y2 - y1) * (y2 - y1)))
-;;
+let dist2 (x1, y1) (x2, y2) = ((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1))
 
 let solve_naive points =
-  let best_dist = ref Float.infinity in
+  let best_dist2 = ref Int.max_value in
   let consider p1 p2 =
-    let d = dist p1 p2 in
-    if Float.( < ) d !best_dist then best_dist := d
+    let d = dist2 p1 p2 in
+    if d < !best_dist2 then best_dist2 := d
   in
   let points = Sequence.to_array points in
   for i = 0 to Array.length points - 2 do
@@ -29,7 +27,7 @@ let solve_naive points =
       consider points.(i) points.(j)
     done
   done;
-  !best_dist
+  !best_dist2 |> float |> sqrt
 ;;
 
 let example () = solve_naive (points 14) |> printf "%.9f\n"
@@ -72,14 +70,14 @@ let solve points z =
       let grid_x = x / z in
       let grid_y = y / z in
       grid.(grid_x).(grid_y) <- (x, y) :: grid.(grid_x).(grid_y)));
-  let best_dist = ref Float.infinity in
+  let best_dist2 = ref Int.max_value in
   let check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2 =
     let points1 = grid.(grid_x_1).(grid_y_1) in
     let points2 = grid.(grid_x_2).(grid_y_2) in
     List.iter points1 ~f:(fun p1 ->
       List.iter points2 ~f:(fun p2 ->
-        let d = dist p1 p2 in
-        if Float.( <> ) d 0. && Float.( < ) d !best_dist then best_dist := d))
+        let d = dist2 p1 p2 in
+        if d <> 0 && d < !best_dist2 then best_dist2 := d))
   in
   debug_timing [%here] "check points in adjacent buckets" (fun () ->
     for grid_x_1 = 0 to num_buckets_1d - 1 do
@@ -102,8 +100,9 @@ let solve points z =
             then check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2)
       done
     done);
-  assert (Float.( < ) !best_dist (float z));
-  !best_dist
+  let best_dist = !best_dist2 |> float |> sqrt in
+  assert (Float.( < ) best_dist (float z));
+  best_dist
 ;;
 
 let example_with_grid () = solve (points 14) 600_000 |> printf "%.9f\n"
@@ -115,7 +114,7 @@ let%expect_test "example_with_grid" =
 
 let main () = solve (points 2_000_000) 100_000 |> printf "%.9f\n"
 
-(* 1.24s *)
+(* 900ms *)
 let%expect_test "answer" =
   main ();
   [%expect {| 20.880613018 |}]

@@ -64,12 +64,14 @@ let%expect_test "example" =
 let solve points z =
   let num_buckets_1d = (modulus / z) + 1 in
   let grid =
-    Array.init num_buckets_1d ~f:(fun _ -> Array.init num_buckets_1d ~f:(fun _ -> []))
+    debug_timing [%here] "allocate grid" (fun () ->
+      Array.init num_buckets_1d ~f:(fun _ -> Array.init num_buckets_1d ~f:(fun _ -> [])))
   in
-  Sequence.iter points ~f:(fun (x, y) ->
-    let grid_x = x / z in
-    let grid_y = y / z in
-    grid.(grid_x).(grid_y) <- (x, y) :: grid.(grid_x).(grid_y));
+  debug_timing [%here] "insert points into grid" (fun () ->
+    Sequence.iter points ~f:(fun (x, y) ->
+      let grid_x = x / z in
+      let grid_y = y / z in
+      grid.(grid_x).(grid_y) <- (x, y) :: grid.(grid_x).(grid_y)));
   let best_dist = ref Float.infinity in
   let check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2 =
     let points1 = grid.(grid_x_1).(grid_y_1) in
@@ -79,26 +81,27 @@ let solve points z =
         let d = dist p1 p2 in
         if Float.( <> ) d 0. && Float.( < ) d !best_dist then best_dist := d))
   in
-  for grid_x_1 = 0 to num_buckets_1d - 1 do
-    for grid_y_1 = 0 to num_buckets_1d - 1 do
-      List.iter
-        [ ( grid_x_1
-          , grid_y_1
-            (* We could be more clever and avoid symmetrically trying pairs within the
-               same bucket, but meh. *) )
-        ; grid_x_1 + 1, grid_y_1
-        ; grid_x_1 + 1, grid_y_1 + 1
-        ; grid_x_1 + 1, grid_y_1 - 1
-        ; grid_x_1, grid_y_1 + 1
-        ]
-        ~f:(fun (grid_x_2, grid_y_2) ->
-          if 0 <= grid_x_2
-             && grid_x_2 < num_buckets_1d
-             && 0 <= grid_y_2
-             && grid_y_2 < num_buckets_1d
-          then check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2)
-    done
-  done;
+  debug_timing [%here] "check points in adjacent buckets" (fun () ->
+    for grid_x_1 = 0 to num_buckets_1d - 1 do
+      for grid_y_1 = 0 to num_buckets_1d - 1 do
+        List.iter
+          [ ( grid_x_1
+            , grid_y_1
+              (* We could be more clever and avoid symmetrically trying pairs within the
+                 same bucket, but meh. *) )
+          ; grid_x_1 + 1, grid_y_1
+          ; grid_x_1 + 1, grid_y_1 + 1
+          ; grid_x_1 + 1, grid_y_1 - 1
+          ; grid_x_1, grid_y_1 + 1
+          ]
+          ~f:(fun (grid_x_2, grid_y_2) ->
+            if 0 <= grid_x_2
+               && grid_x_2 < num_buckets_1d
+               && 0 <= grid_y_2
+               && grid_y_2 < num_buckets_1d
+            then check_grid_points ~grid_x_1 ~grid_y_1 ~grid_x_2 ~grid_y_2)
+      done
+    done);
   assert (Float.( < ) !best_dist (float z));
   !best_dist
 ;;

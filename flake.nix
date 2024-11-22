@@ -8,14 +8,23 @@
     ocaml-overlays.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, flake-utils, nixpkgs, ocaml-overlays }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      self,
+      flake-utils,
+      nixpkgs,
+      ocaml-overlays,
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = import nixpkgs {
           inherit system;
           overlays = [ ocaml-overlays.overlays.default ];
         };
-      in with pkgs; rec {
+      in
+      with pkgs;
+      rec {
         devShells.default = mkShell {
           inputsFrom = [ packages.default ];
           buildInputs = lib.optional stdenv.isLinux inotify-tools ++ [
@@ -30,8 +39,7 @@
           pname = "euler";
           version = "0.5.0";
           useDune2 = true;
-          src =
-            nix-gitignore.gitignoreFilterSource lib.cleanSourceFilter [ ] ./.;
+          src = nix-gitignore.gitignoreFilterSource lib.cleanSourceFilter [ ] ./.;
           postPatch = ''
             patchShebangs sol/module-list.pl
           '';
@@ -47,7 +55,10 @@
           ];
           checkInputs = [ shellcheck ];
           passthru.checkInputs = checkInputs;
-          meta = { homepage = "https://github.com/bcc32/projecteuler-ocaml"; };
+          meta = {
+            homepage = "https://github.com/bcc32/projecteuler-ocaml";
+          };
         };
-      });
+      }
+    );
 }

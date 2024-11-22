@@ -110,9 +110,9 @@ let%expect_test "example_with_grid" =
   [%expect {| 546446.466846479 |}]
 ;;
 
-let main () = solve (points 2_000_000) 50_000 |> printf "%.9f\n"
+let main () = solve (points 2_000_000) 100_000 |> printf "%.9f\n"
 
-(* 1.68s *)
+(* 1.24s *)
 let%expect_test "answer" =
   main ();
   [%expect {| 20.880613018 |}]

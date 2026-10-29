@@ -21,7 +21,7 @@
           inherit system;
           overlays = [ ocaml-overlays.overlays.default ];
         };
-        ocamlPackages = pkgs.ocaml-ng.ocamlPackages_5_4;
+        ocamlPackages = pkgs.ocaml-ng.ocamlPackages_5_5;
       in
       with pkgs;
       rec {
